@@ -1,7 +1,7 @@
 package com.bob.ktssts.encryption.sm4;
 
-/**
- * Created by $(USER) on $(DATE)
+/*
+  Created by $(USER) on $(DATE)
  */
 
 import com.bob.ktssts.encryption.Util;
