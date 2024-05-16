@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
-public class RestfulController {
+public class ApiUserRestController {
 
-	private static final Logger LOGGER = LogManager.getLogger(RestfulController.class);
+	private static final Logger LOGGER = LogManager.getLogger(ApiUserRestController.class);
 
 	@Autowired
 	ApiUserService apiUserService;
@@ -20,7 +20,7 @@ public class RestfulController {
 
 	@GetMapping("/test")
 	public String test() {
-		return "abc test";
+		return "Hello World";
 	}
 
 //	@PostMapping("/login")
