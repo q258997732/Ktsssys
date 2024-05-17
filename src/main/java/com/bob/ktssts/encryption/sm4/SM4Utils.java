@@ -4,7 +4,7 @@ package com.bob.ktssts.encryption.sm4;
   Created by $(USER) on $(DATE)
  */
 
-import com.bob.ktssts.encryption.Util;
+import com.bob.ktssts.encryption.EncryptionUtil;
 import org.apache.commons.codec.binary.Base64;
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -15,9 +15,9 @@ public class SM4Utils {
 //    private String iv = "";
 //    private boolean hexString = false;
 
-    public String secretKey = "";
-    public String iv = "";
-    public boolean hexString = false;
+    private final String secretKey = "KTABOBLZS20192NBCH2016T20240517E";
+    private final String iv = "21029471021091031234871012942814";
+    public boolean hexString = true;
 
     public SM4Utils() {
     }
@@ -31,16 +31,16 @@ public class SM4Utils {
 
             byte[] keyBytes;
             if (hexString) {
-                keyBytes = Util.hexStringToBytes(secretKey);
+                keyBytes = EncryptionUtil.hexStringToBytes(secretKey);
             } else {
                 //keyBytes = secretKey.getBytes();
-                keyBytes = Util.hexStringToBytes(secretKey);
+                keyBytes = EncryptionUtil.hexStringToBytes(secretKey);
             }
 
             SM4 sm4 = new SM4();
             sm4.sm4_setkey_enc(ctx, keyBytes);
             byte[] encrypted = sm4.sm4_crypt_ecb(ctx, plainText.getBytes("UTF-8"));
-            return Util.byteToHex(encrypted);
+            return EncryptionUtil.byteToHex(encrypted);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -49,7 +49,7 @@ public class SM4Utils {
 
     public String decryptData_ECB(String cipherText) {
         try {
-            byte[] encrypted = Util.hexToByte(cipherText);
+            byte[] encrypted = EncryptionUtil.hexToByte(cipherText);
             cipherText=Base64.encodeBase64String(encrypted);;
             //cipherText = new BASE64Encoder().encode(encrypted);
             if (cipherText != null && cipherText.trim().length() > 0) {
@@ -64,7 +64,7 @@ public class SM4Utils {
 
             byte[] keyBytes;
             if (hexString) {
-                keyBytes = Util.hexStringToBytes(secretKey);
+                keyBytes = EncryptionUtil.hexStringToBytes(secretKey);
             } else {
                 keyBytes = secretKey.getBytes();
             }
@@ -89,8 +89,8 @@ public class SM4Utils {
             byte[] keyBytes;
             byte[] ivBytes;
             if (hexString) {
-                keyBytes = Util.hexStringToBytes(secretKey);
-                ivBytes = Util.hexStringToBytes(iv);
+                keyBytes = EncryptionUtil.hexStringToBytes(secretKey);
+                ivBytes = EncryptionUtil.hexStringToBytes(iv);
             } else {
                 keyBytes = secretKey.getBytes();
                 ivBytes = iv.getBytes();
@@ -99,7 +99,7 @@ public class SM4Utils {
             SM4 sm4 = new SM4();
             sm4.sm4_setkey_enc(ctx, keyBytes);
             byte[] encrypted = sm4.sm4_crypt_cbc(ctx, ivBytes, plainText.getBytes("UTF-8"));
-            return Util.byteToHex(encrypted);
+            return EncryptionUtil.byteToHex(encrypted);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -108,7 +108,7 @@ public class SM4Utils {
 
     public String decryptData_CBC(String cipherText) {
         try {
-            byte[] encrypted = Util.hexToByte(cipherText);
+            byte[] encrypted = EncryptionUtil.hexToByte(cipherText);
             cipherText=Base64.encodeBase64String(encrypted);;
             //cipherText = new BASE64Encoder().encode(encrypted);
             if (cipherText != null && cipherText.trim().length() > 0) {
@@ -123,8 +123,8 @@ public class SM4Utils {
             byte[] keyBytes;
             byte[] ivBytes;
             if (hexString) {
-                keyBytes = Util.hexStringToBytes(secretKey);
-                ivBytes = Util.hexStringToBytes(iv);
+                keyBytes = EncryptionUtil.hexStringToBytes(secretKey);
+                ivBytes = EncryptionUtil.hexStringToBytes(iv);
             } else {
                 keyBytes = secretKey.getBytes();
                 ivBytes = iv.getBytes();
@@ -143,32 +143,18 @@ public class SM4Utils {
         }
     }
 
+
     public static void main(String[] args) throws IOException {
-        String plainText = "I Love You Every Day";
-        String s = Util.byteToHex(plainText.getBytes());
-        System.out.println("原文" + s);
-        SM4Utils sm4 = new SM4Utils();
-        //sm4.secretKey = "JeF8U9wHFOMfs2Y8";
-        sm4.secretKey = "64EC7C763AB7BF64E2D75FF83A319918";
-        sm4.hexString = true;
+        SM4Utils sm4Utils = new SM4Utils();
 
-        System.out.println("ECB模式加密");
-        String cipherText = sm4.encryptData_ECB(plainText);
-        System.out.println("密文: " + cipherText);
-        System.out.println("");
+        String plainText = "test";
+        String string = sm4Utils.encryptData_CBC(plainText);
+        System.out.println("CBC加密后字符：" + string);
+        string = sm4Utils.decryptData_CBC(string);
+        System.out.println("CBC解密后字符：" + string);
 
-        String plainText2 = sm4.decryptData_ECB(cipherText);
-        System.out.println("明文: " + plainText2);
-        System.out.println("");
 
-        System.out.println("CBC模式加密");
-        sm4.iv = "31313131313131313131313131313131";
-        String cipherText2 = sm4.encryptData_CBC(plainText);
-        System.out.println("加密密文: " + cipherText2);
-        System.out.println("");
 
-        String plainText3 = sm4.decryptData_CBC(cipherText2);
-        System.out.println("解密明文: " + plainText3);
 
     }
 }

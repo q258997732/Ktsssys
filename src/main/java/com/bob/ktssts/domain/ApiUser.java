@@ -1,59 +1,99 @@
 package com.bob.ktssts.domain;
 
-
-import java.io.Serializable;
 import java.util.Date;
 
-public class ApiUser implements Serializable {
-
+public class ApiUser {
+    /**
+    * 唯一标识
+    */
     private String id;
 
+    /**
+    * 接口账号
+    */
     private String user;
 
+    /**
+    * 接口密码
+    */
     private String pass;
 
+    /**
+    * 授权信息
+    */
     private String token;
 
+    /**
+    * 过期时间
+    */
     private Date expire;
 
-    public void setId(String id){
-    this.id = id;
+    /**
+    * 角色
+    */
+    private String role;
+
+    public String getId() {
+        return id;
     }
 
-    public void setUser(String user){
-    this.user = user;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setPass(String pass){
-    this.pass = pass;
+    public String getUser() {
+        return user;
     }
 
-    public void setToken(String token){
-    this.token = token;
+    public void setUser(String user) {
+        this.user = user;
     }
 
-    public void setExpire(Date expire){
-    this.expire = expire;
+    public String getPass() {
+        return pass;
     }
 
-    public String getId(){
-    return this.id;
+    public void setPass(String pass) {
+        this.pass = pass;
     }
 
-    public String getUser(){
-    return this.user;
+    public String getToken() {
+        return token;
     }
 
-    public String getPass(){
-    return this.pass;
+    public void setToken(String token) {
+        this.token = token;
     }
 
-    public String getToken(){
-    return this.token;
+    public Date getExpire() {
+        return expire;
     }
 
-    public Date getExpire(){
-    return this.expire;
+    public void setExpire(Date expire) {
+        this.expire = expire;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
+        sb.append(", user=").append(user);
+        sb.append(", pass=").append(pass);
+        sb.append(", token=").append(token);
+        sb.append(", expire=").append(expire);
+        sb.append(", role=").append(role);
+        sb.append("]");
+        return sb.toString();
+    }
 }
