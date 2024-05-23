@@ -5,11 +5,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@SpringBootApplication(scanBasePackages = "com")
-@MapperScan("com.bob.ktssts.dao")
+@SpringBootApplication(scanBasePackages = "com.bob.ktssts")
+//@MapperScan("com.bob.ktssts.mapper")
 public class KtsstsApplication {
 
 	static Logger logger = Logger.getLogger("com.bob.ktssts");

@@ -33,6 +33,8 @@ public class ApiUser {
     */
     private String role;
 
+    private String permission;
+
     public String getId() {
         return id;
     }
@@ -81,6 +83,14 @@ public class ApiUser {
         this.role = role;
     }
 
+    public String getPermission() {
+        return permission;
+    }
+
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -93,6 +103,7 @@ public class ApiUser {
         sb.append(", token=").append(token);
         sb.append(", expire=").append(expire);
         sb.append(", role=").append(role);
+        sb.append(", permission=").append(permission);
         sb.append("]");
         return sb.toString();
     }

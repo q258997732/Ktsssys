@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +20,8 @@ public class ApiUserRestController {
 	@Autowired
 	ApiUserService apiUserService;
 
-
 	@GetMapping("/testGet")
+	@RequiresRoles(logical = Logical.OR,value = {"api_user","admin"})
 	public String testGet() {
 		String token = apiUserService.getToken("test","test");
 //		String token = apiUserService.getUserById("6884558f141d11ef8cc6525400485ee1");
@@ -28,8 +30,7 @@ public class ApiUserRestController {
 
 	@PostMapping("/testPost")
 	public String testPost(@RequestBody JsonNode jsonNode ){
-		String string = jsonNode.get("username").textValue();
-		return string;
+		return jsonNode.get("username").textValue();
 	}
 
 	@PostMapping("/getToken")

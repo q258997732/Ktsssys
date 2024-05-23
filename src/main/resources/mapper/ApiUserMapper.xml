@@ -1,60 +1,58 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.bob.ktssts.dao.ApiUserDao">
+<mapper namespace="com.bob.ktssts.mapper.ApiUserMapper">
 	<resultMap id="BaseResultMap" type="com.bob.ktssts.domain.ApiUser">
 		<!--@mbg.generated-->
 		<!--@Table api_user-->
-		<id column="id" jdbcType="VARCHAR" property="id"/>
-		<result column="user" jdbcType="VARCHAR" property="user"/>
-		<result column="pass" jdbcType="VARCHAR" property="pass"/>
-		<result column="token" jdbcType="VARCHAR" property="token"/>
-		<result column="expire" jdbcType="TIMESTAMP" property="expire"/>
-		<result column="role" jdbcType="VARCHAR" property="role"/>
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="user" jdbcType="VARCHAR" property="user" />
+		<result column="pass" jdbcType="VARCHAR" property="pass" />
+		<result column="token" jdbcType="VARCHAR" property="token" />
+		<result column="expire" jdbcType="TIMESTAMP" property="expire" />
+		<result column="role" jdbcType="VARCHAR" property="role" />
+		<result column="permission" jdbcType="VARCHAR" property="permission" />
 	</resultMap>
 	<sql id="Base_Column_List">
 		<!--@mbg.generated-->
-		id,
-		`user`,
-		pass,
-		token,
-		expire,
-		`role`
+		id, `user`, pass, token, expire, `role`, permission
 	</sql>
-
-	<select id="getUser" resultMap="BaseResultMap">
+	<select id="getUser" parameterType="java.lang.String" resultMap="BaseResultMap">
 		select
-		<include refid="Base_Column_List"/>
+		<include refid="Base_Column_List" />
 		from ktssts_user
-		where user = #{user,jdbcType=VARCHAR} and pass = #{pass,jdbcType=VARCHAR}
-		limit 1
+		where user = #{user,jdbcType=VARCHAR} and `pass` = #{param1,jdbcType=VARCHAR}
 	</select>
 
 	<select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
 		<!--@mbg.generated-->
 		select
-		<include refid="Base_Column_List"/>
+		<include refid="Base_Column_List" />
 		from ktssts_user
 		where id = #{id,jdbcType=VARCHAR}
 	</select>
-
+	<select id="getUserByUsername" parameterType="java.lang.String" resultType="com.bob.ktssts.domain.ApiUser">
+		select
+		<include refid="Base_Column_List" />
+		from ktssts_user
+		where user = #{username,jdbcType=VARCHAR}
+	</select>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		<!--@mbg.generated-->
-		delete
-		from ktssts_user
+		delete from ktssts_user
 		where id = #{id,jdbcType=VARCHAR}
 	</delete>
-
 	<insert id="insert" parameterType="com.bob.ktssts.domain.ApiUser">
 		<!--@mbg.generated-->
-		insert into api_user (id, `user`, pass,
-							  token, expire, `role`)
+		insert into ktssts_user (id, `user`, pass,
+		token, expire, `role`,
+		permission)
 		values (#{id,jdbcType=VARCHAR}, #{user,jdbcType=VARCHAR}, #{pass,jdbcType=VARCHAR},
-				#{token,jdbcType=VARCHAR}, #{expire,jdbcType=TIMESTAMP}, #{role,jdbcType=VARCHAR})
+		#{token,jdbcType=VARCHAR}, #{expire,jdbcType=TIMESTAMP}, #{role,jdbcType=VARCHAR},
+		#{permission,jdbcType=VARCHAR})
 	</insert>
-
 	<insert id="insertSelective" parameterType="com.bob.ktssts.domain.ApiUser">
 		<!--@mbg.generated-->
-		insert into api_user
+		insert into ktssts_user
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">
 				id,
@@ -73,6 +71,9 @@
 			</if>
 			<if test="role != null">
 				`role`,
+			</if>
+			<if test="permission != null">
+				permission,
 			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -94,11 +95,14 @@
 			<if test="role != null">
 				#{role,jdbcType=VARCHAR},
 			</if>
+			<if test="permission != null">
+				#{permission,jdbcType=VARCHAR},
+			</if>
 		</trim>
 	</insert>
-
 	<update id="updateByPrimaryKeySelective" parameterType="com.bob.ktssts.domain.ApiUser">
-		update api_user
+		<!--@mbg.generated-->
+		update ktssts_user
 		<set>
 			<if test="user != null">
 				`user` = #{user,jdbcType=VARCHAR},
@@ -115,18 +119,21 @@
 			<if test="role != null">
 				`role` = #{role,jdbcType=VARCHAR},
 			</if>
+			<if test="permission != null">
+				permission = #{permission,jdbcType=VARCHAR},
+			</if>
 		</set>
 		where id = #{id,jdbcType=VARCHAR}
 	</update>
-
 	<update id="updateByPrimaryKey" parameterType="com.bob.ktssts.domain.ApiUser">
 		<!--@mbg.generated-->
-		update api_user
+		update ktssts_user
 		set `user` = #{user,jdbcType=VARCHAR},
-			pass   = #{pass,jdbcType=VARCHAR},
-			token  = #{token,jdbcType=VARCHAR},
-			expire = #{expire,jdbcType=TIMESTAMP},
-			`role` = #{role,jdbcType=VARCHAR}
+		pass = #{pass,jdbcType=VARCHAR},
+		token = #{token,jdbcType=VARCHAR},
+		expire = #{expire,jdbcType=TIMESTAMP},
+		`role` = #{role,jdbcType=VARCHAR},
+		permission = #{permission,jdbcType=VARCHAR}
 		where id = #{id,jdbcType=VARCHAR}
 	</update>
 </mapper>
