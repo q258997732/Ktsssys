@@ -144,10 +144,9 @@ public class SM4Util {
 
     public static void main(String[] args) throws IOException {
         String plainText = "test";
-        String string = SM4Util.encryptData_CBC(plainText);
-        System.out.println("CBC加密后字符：" + string);
-        string = SM4Util.decryptData_CBC(string);
-        System.out.println("CBC解密后字符：" + string);
+//        String string = SM4Util.encryptData_CBC(plainText);
+//        System.out.println("CBC加密后字符：" + string);
+        System.out.println("CBC解密后字符：" + SM4Util.decryptData_CBC("b283e92e5f15a0e8c53442bbd554f827"));
 
 
 

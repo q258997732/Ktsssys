@@ -20,7 +20,7 @@
 		select
 		<include refid="Base_Column_List" />
 		from ktssts_user
-		where user = #{user,jdbcType=VARCHAR} and `pass` = #{param1,jdbcType=VARCHAR}
+		where user = #{user,jdbcType=VARCHAR} and `pass` = #{pass,jdbcType=VARCHAR}
 	</select>
 
 	<select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">

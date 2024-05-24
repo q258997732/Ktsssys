@@ -10,14 +10,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class ApiUserImpl implements ApiUserService {
 
-	SM4Util sm4 = new SM4Util();
-
 	@Autowired
 	private ApiUserMapper apiUserMapper;
 
 	@Override
 	public String getToken(String username, String password) {
-		ApiUser apiUser = apiUserMapper.getUser(username,sm4.encryptData_CBC(password));
+		ApiUser apiUser = apiUserMapper.getUser(username, SM4Util.encryptData_CBC(password));
 		if(apiUser != null) {
 			return apiUser.getToken();
 		}else return "user not found";
@@ -31,7 +29,8 @@ public class ApiUserImpl implements ApiUserService {
 
 	@Override
 	public ApiUser getUserByUserPass(String username, String password) {
-		return apiUserMapper.getUser(username,sm4.decryptData_CBC(password));
+		//System.out.println("加密后的字符串为: " + SM4Util.encryptData_CBC(password));
+		return apiUserMapper.getUser(username, SM4Util.encryptData_CBC(password));
 	}
 
 	@Override

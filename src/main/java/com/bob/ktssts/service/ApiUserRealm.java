@@ -1,12 +1,16 @@
 package com.bob.ktssts.service;
 
+import com.auth0.jwt.JWT;
 import com.bob.ktssts.domain.ApiUser;
+import com.bob.ktssts.util.JWTUtil;
+import com.bob.ktssts.util.SM4Util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -20,7 +24,12 @@ import java.util.Set;
 public class ApiUserRealm extends AuthorizingRealm {
 
 	@Autowired
-	ApiUserService apiUserService;
+	private ApiUserService apiUserService;
+
+	@Autowired
+	public void setApiUserService(ApiUserService apiUserService) {
+		this.apiUserService = apiUserService;
+	}
 
 	/* 检测用户权限使用 */
 	@Override
@@ -50,19 +59,22 @@ public class ApiUserRealm extends AuthorizingRealm {
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
 		/* 提取token */
-		String tokenStr = (String) authenticationToken.getCredentials();
-		ObjectMapper objectMapper = new ObjectMapper();
-		try {
-			JsonNode jsonNode = objectMapper.readTree(tokenStr);
-			String token = jsonNode.get("user").textValue();
-		} catch (JsonProcessingException e) {
-			throw new RuntimeException(e);
+		String token = (String) authenticationToken.getCredentials();
+		/* 提取账号 */
+		String userName = JWTUtil.getUserName(token);
+		if (userName == null) {
+			throw new AuthenticationException("token不可用");
+		}
+		/* 验证用户是否存在 */
+		ApiUser apiUser = apiUserService.getUserByUsername(userName);
+		if (apiUser == null) {
+			throw new AuthenticationException("用户不存在");
 		}
 
-		/* 验证token是否合法 */
-		ApiUser apiUser = apiUserService.getUserByUsername("");
-
-
-		return null;
+		/* 验证密码 */
+		if (!JWTUtil.verifyToken(token,apiUser.getUser(), SM4Util.encryptData_CBC(apiUser.getPass()))){
+			throw new AuthenticationException("用户名或密码错误");
+		}
+		return new SimpleAuthenticationInfo(token, token, "api_user_realm");
 	}
 }

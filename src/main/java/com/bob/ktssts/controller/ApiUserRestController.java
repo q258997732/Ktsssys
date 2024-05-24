@@ -1,13 +1,20 @@
 package com.bob.ktssts.controller;
 
+import com.bob.ktssts.bean.ECode;
+import com.bob.ktssts.bean.ResponseBean;
+import com.bob.ktssts.domain.ApiUser;
 import com.bob.ktssts.service.ApiUserService;
+import com.bob.ktssts.util.JWTUtil;
+import com.bob.ktssts.util.SM4Util;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,13 +36,31 @@ public class ApiUserRestController {
 	}
 
 	@PostMapping("/testPost")
+	@RequiresRoles(logical = Logical.OR,value = {"api_user","admin"})
 	public String testPost(@RequestBody JsonNode jsonNode ){
 		return jsonNode.get("username").textValue();
 	}
 
 	@PostMapping("/getToken")
-	public String getToken( String user , String password){
-		return apiUserService.getToken(user,password);
+	public ResponseBean getToken(@RequestBody JsonNode jsonNode){
+		String user = jsonNode.get("username").textValue();
+		String password = jsonNode.get("password").textValue();
+		String token = null;
+		ApiUser apiUser = apiUserService.getUserByUserPass(user, password);
+		if(apiUser != null){
+			return new ResponseBean(ECode.SUCCESS.getCode(),"SUCCESS",JWTUtil.createJWT(user, password));
+		}
+		return new ResponseBean(ECode.CLIENT_ERROR.getCode(),"User Or Password Error .",null);
+	}
+
+	@GetMapping("/article")
+	public ResponseBean article() {
+		Subject subject = SecurityUtils.getSubject();
+		if (subject.isAuthenticated()) {
+			return new ResponseBean(ECode.SUCCESS.getCode(), "You are already logged in", null);
+		} else {
+			return new ResponseBean(ECode.SUCCESS.getCode(), "You are guest", null);
+		}
 	}
 
 //	@PostMapping("/login")

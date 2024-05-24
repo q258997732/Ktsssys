@@ -17,4 +17,5 @@ public interface ApiUserService {
 	String getPermissionByUser(String username);
 
 	String getRoleByUser(String username);
+
 }
