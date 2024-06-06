@@ -8,7 +8,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import java.util.logging.Logger;
 
 @SpringBootApplication(scanBasePackages = "com.bob.ktssts")
-//@MapperScan("com.bob.ktssts.mapper")
 public class KtsstsApplication {
 
 	static Logger logger = Logger.getLogger("com.bob.ktssts");

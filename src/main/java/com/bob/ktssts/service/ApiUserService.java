@@ -1,10 +1,13 @@
 package com.bob.ktssts.service;
 
 import com.bob.ktssts.domain.ApiUser;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface ApiUserService {
+
+	Boolean getToken(JsonNode jsonNode);
 
 	String getToken(String username, String password);
 
@@ -17,5 +20,7 @@ public interface ApiUserService {
 	String getPermissionByUser(String username);
 
 	String getRoleByUser(String username);
+
+
 
 }

@@ -16,17 +16,17 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+@Component
 public class ApiUserRealm extends AuthorizingRealm {
 
-	@Autowired
 	private ApiUserService apiUserService;
 
-	@Autowired
 	public void setApiUserService(ApiUserService apiUserService) {
 		this.apiUserService = apiUserService;
 	}
@@ -60,6 +60,7 @@ public class ApiUserRealm extends AuthorizingRealm {
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
 		/* 提取token */
 		String token = (String) authenticationToken.getCredentials();
+		System.out.println("token: " + token);
 		/* 提取账号 */
 		String userName = JWTUtil.getUserName(token);
 		if (userName == null) {

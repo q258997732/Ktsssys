@@ -1,8 +1,10 @@
 package com.bob.ktssts.config;
 
+import com.bob.ktssts.filter.JWTFilter;
 import com.bob.ktssts.service.ApiUserRealm;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
+import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -11,18 +13,21 @@ import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreato
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.stereotype.Component;
 
+import javax.servlet.Filter;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Configuration
 public class ShiroConfig {
 
     @Bean("securityManager")
-    public DefaultWebSecurityManager getManager(ApiUserRealm realm) {
+    public DefaultWebSecurityManager getManager(ApiUserRealm apiUserRealm) {
+//        System.out.println("getManager");
         DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
-        // 使用自己的realm
-        manager.setRealm(realm);
+        manager.setRealm(apiUserRealm);
 
         /*
          * 关闭shiro自带的session，详情见文档
