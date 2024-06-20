@@ -1,4 +1,4 @@
-package com.bob.ktssts.bean;
+package com.bob.ktssts.entity;
 
 public enum ECode {
   INFO(100),

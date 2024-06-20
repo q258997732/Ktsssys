@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.bob.ktssts.mapper.ApiUserMapper">
-	<resultMap id="BaseResultMap" type="com.bob.ktssts.domain.ApiUser">
+	<resultMap id="BaseResultMap" type="com.bob.ktssts.entity.ApiUser">
 		<!--@mbg.generated-->
 		<!--@Table api_user-->
 		<id column="id" jdbcType="VARCHAR" property="id" />
@@ -30,7 +30,7 @@
 		from ktssts_user
 		where id = #{id,jdbcType=VARCHAR}
 	</select>
-	<select id="getUserByUsername" parameterType="java.lang.String" resultType="com.bob.ktssts.domain.ApiUser">
+	<select id="getUserByUsername" parameterType="java.lang.String" resultType="com.bob.ktssts.entity.ApiUser">
 		select
 		<include refid="Base_Column_List" />
 		from ktssts_user
@@ -41,7 +41,7 @@
 		delete from ktssts_user
 		where id = #{id,jdbcType=VARCHAR}
 	</delete>
-	<insert id="insert" parameterType="com.bob.ktssts.domain.ApiUser">
+	<insert id="insert" parameterType="com.bob.ktssts.entity.ApiUser">
 		<!--@mbg.generated-->
 		insert into ktssts_user (id, `user`, pass,
 		token, expire, `role`,
@@ -50,7 +50,7 @@
 		#{token,jdbcType=VARCHAR}, #{expire,jdbcType=TIMESTAMP}, #{role,jdbcType=VARCHAR},
 		#{permission,jdbcType=VARCHAR})
 	</insert>
-	<insert id="insertSelective" parameterType="com.bob.ktssts.domain.ApiUser">
+	<insert id="insertSelective" parameterType="com.bob.ktssts.entity.ApiUser">
 		<!--@mbg.generated-->
 		insert into ktssts_user
 		<trim prefix="(" suffix=")" suffixOverrides=",">
@@ -100,7 +100,7 @@
 			</if>
 		</trim>
 	</insert>
-	<update id="updateByPrimaryKeySelective" parameterType="com.bob.ktssts.domain.ApiUser">
+	<update id="updateByPrimaryKeySelective" parameterType="com.bob.ktssts.entity.ApiUser">
 		<!--@mbg.generated-->
 		update ktssts_user
 		<set>
@@ -125,7 +125,7 @@
 		</set>
 		where id = #{id,jdbcType=VARCHAR}
 	</update>
-	<update id="updateByPrimaryKey" parameterType="com.bob.ktssts.domain.ApiUser">
+	<update id="updateByPrimaryKey" parameterType="com.bob.ktssts.entity.ApiUser">
 		<!--@mbg.generated-->
 		update ktssts_user
 		set `user` = #{user,jdbcType=VARCHAR},

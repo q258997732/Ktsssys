@@ -1,6 +1,6 @@
 package com.bob.ktssts.mapper;
 
-import com.bob.ktssts.domain.ApiUser;
+import com.bob.ktssts.entity.ApiUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;

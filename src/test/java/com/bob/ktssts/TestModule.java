@@ -9,5 +9,5 @@ public class TestModule {
 	private static final Logger logger = LogManager.getLogger(TestModule.class);
 	public static void main(String[] args) {
 
-	}、
+	}
 }

@@ -1,8 +1,25 @@
-package com.bob.ktssts.domain;
+package com.bob.ktssts.entity;
 
 import java.util.Date;
 
 public class ApiUser {
+
+    public ApiUser() {
+        super();
+    }
+
+    public ApiUser(String user, String pass) {
+        this.user = user;
+        this.pass = pass;
+    }
+
+    public ApiUser(String user, String pass, Date expire, String token) {
+        this.user = user;
+        this.pass = pass;
+        this.expire = expire;
+        this.token = token;
+    }
+
     /**
     * 唯一标识
     */
