@@ -7,6 +7,8 @@ import com.bob.ktssts.service.ApiUserService;
 import com.bob.ktssts.util.JsonUtil;
 import com.bob.ktssts.util.TokenUtil;
 import com.fasterxml.jackson.databind.JsonNode;
+import jakarta.servlet.http.HttpServletRequest;
+import org.apache.el.parser.Token;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +41,14 @@ public class ApiUserRestController {
 	}
 
 	@RequestMapping("/test")
-	public ResponseBean test() {
-		return new ResponseBean(ECode.SUCCESS.getCode(), "test scuess .", "test");
+	public ResponseBean test(HttpServletRequest request) {
+		String userId = TokenUtil.getUserId(request.getHeader("Authorization"));
+		boolean bo = apiUserService.verifyTokenUser(userId);
+		if(bo)
+			return new ResponseBean(ECode.SUCCESS.getCode(), "test scuess .", "test");
+		else
+			return new ResponseBean(ECode.SUCCESS.getCode(), "user id not exist .", "test");
+
 	}
 
 

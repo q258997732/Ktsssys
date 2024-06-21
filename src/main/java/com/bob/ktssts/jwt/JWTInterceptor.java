@@ -1,12 +1,15 @@
 package com.bob.ktssts.jwt;
 
+
 import com.bob.ktssts.service.ApiUserService;
 import com.bob.ktssts.util.TokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+@Component
 public class JWTInterceptor implements HandlerInterceptor
 {
 
@@ -19,6 +22,5 @@ public class JWTInterceptor implements HandlerInterceptor
 		//验证令牌，如果令牌不正确会出现异常会被全局异常处理
 		return TokenUtil.VerifyJWTToken(token);
 	}
-
 
 }

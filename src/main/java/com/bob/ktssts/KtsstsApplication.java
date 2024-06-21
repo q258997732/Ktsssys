@@ -13,6 +13,11 @@ public class KtsstsApplication {
 
 	public static void main(String[] args) {
 		ConfigurableApplicationContext applicationContext = SpringApplication.run(KtsstsApplication.class, args);
+//		String[] beans = applicationContext.getBeanDefinitionNames();
+//		LOGGER.info("------------------------this------------------------");
+//		for (String bean : beans) {
+//			LOGGER.info(bean);
+//		}
 
 //		logger.log(Level.parse("INFO"),run.getBean("apiUserDao").toString());
 	}

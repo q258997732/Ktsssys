@@ -8,7 +8,7 @@ import com.auth0.jwt.exceptions.AlgorithmMismatchException;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.bob.ktssts.entity.ApiUser;
+import org.apache.el.parser.Token;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,7 +16,7 @@ import java.util.*;
 
 public class TokenUtil {
 
-	// Issuer
+	// Issuer 所有者
 	public static final String ISSUER = "kingsware.cn";
 	// Audience
 	public static final String AUDIENCE = "Client";
@@ -35,6 +35,11 @@ public class TokenUtil {
 	};
 	private static final Logger LOGGER = LogManager.getLogger(TokenUtil.class);
 
+	/**
+	 *
+	 * @param userId 数据库中的UserID
+	 * @return 验证成功则返回ApiUser对象，否则返回null
+	 */
 	public static String GenerateToken(String userId) {
 		Map<String, String> claims = new HashMap<String, String>();
 		if (userId != null && !userId.isEmpty()) {
@@ -43,6 +48,25 @@ public class TokenUtil {
 			return TokenUtil.GenerateToken(claims);
 		}
 		return null;
+	}
+
+	public static String getUserId(String token) {
+		token = token.replaceFirst("Bearer ", "");
+//		LOGGER.info("正在解吗token : {}", token);
+		JWTVerifier verifier = JWT.require(TokenUtil.ALGORITHM).withIssuer(TokenUtil.ISSUER).withAudience(TokenUtil.AUDIENCE).build();
+		DecodedJWT decodedJWT;
+		try {
+			decodedJWT = verifier.verify(token);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		String subject = decodedJWT.getSubject();
+		Date issuedAt = decodedJWT.getIssuedAt();
+		Date expiresAt = decodedJWT.getExpiresAt();
+
+		return decodedJWT.getClaim("userId").asString();
 	}
 
 	/**
@@ -100,6 +124,7 @@ public class TokenUtil {
 	 * @throws Exception 异常信息
 	 */
 	public static boolean VerifyJWTToken(String webToken) {
+		webToken = webToken.replaceFirst("Bearer ", "");
 		JWTVerifier verifier = JWT.require(TokenUtil.ALGORITHM).withIssuer(TokenUtil.ISSUER).build();
 		try {
 			DecodedJWT jwt = verifier.verify(webToken);
