@@ -1,14 +1,13 @@
 package com.bob.ktssts.controller;
 
 import com.bob.ktssts.entity.ApiUser;
-import com.bob.ktssts.entity.ECode;
 import com.bob.ktssts.entity.ResponseBean;
 import com.bob.ktssts.service.ApiUserService;
 import com.bob.ktssts.util.JsonUtil;
 import com.bob.ktssts.util.TokenUtil;
 import com.fasterxml.jackson.databind.JsonNode;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.el.parser.Token;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,7 @@ public class ApiUserRestController {
 
 	private static final Logger LOGGER = LogManager.getLogger(ApiUserRestController.class);
 
-	@Autowired
+	@Resource
 	ApiUserService apiUserService;
 
 	@PostMapping("/login")
@@ -31,12 +30,12 @@ public class ApiUserRestController {
 		if (JsonUtil.userInfoNotNull(jsonNode)) {
 			ApiUser apiUser = apiUserService.getUserByUserPass(JsonUtil.getUserFromJson(jsonNode), JsonUtil.getPassFromJson(jsonNode));
 			if (apiUser!= null) {
-				return new ResponseBean(ECode.SUCCESS.getCode(), "login scuess .", TokenUtil.GenerateToken(apiUser.getId()));
+				return new ResponseBean(ResponseBean.ECode.SUCCESS.getCode(), "login scuess .", TokenUtil.GenerateToken(apiUser.getId()));
 			}else {
-				return new ResponseBean(ECode.CLIENT_ERROR.getCode(), "user/pass is error .", "check user or pass Params and try again");
+				return new ResponseBean(ResponseBean.ECode.CLIENT_ERROR.getCode(), "user/pass is error .", "check user or pass Params and try again");
 			}
 		} else {
-			return new ResponseBean(ECode.CLIENT_ERROR.getCode(), "user/pass is null .", "check user or pass Params and try again");
+			return new ResponseBean(ResponseBean.ECode.CLIENT_ERROR.getCode(), "user/pass is null .", "check user or pass Params and try again");
 		}
 	}
 
@@ -45,9 +44,9 @@ public class ApiUserRestController {
 		String userId = TokenUtil.getUserId(request.getHeader("Authorization"));
 		boolean bo = apiUserService.verifyTokenUser(userId);
 		if(bo)
-			return new ResponseBean(ECode.SUCCESS.getCode(), "test scuess .", "test");
+			return new ResponseBean(ResponseBean.ECode.SUCCESS.getCode(), "test scuess .", "test");
 		else
-			return new ResponseBean(ECode.SUCCESS.getCode(), "user id not exist .", "test");
+			return new ResponseBean(ResponseBean.ECode.SUCCESS.getCode(), "user id not exist .", "test");
 
 	}
 
