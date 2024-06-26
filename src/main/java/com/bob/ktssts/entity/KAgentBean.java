@@ -1,6 +1,6 @@
 package com.bob.ktssts.entity;
 
-import java.awt.*;
+import java.util.Map;
 import java.util.Objects;
 
 public class KAgentBean {
@@ -18,6 +18,21 @@ public class KAgentBean {
 	private String ExecTime;
 
 	public KAgentBean() {
+	}
+
+	public KAgentBean(Map<String,Object> beanParamsMap){
+		this.FlowID = beanParamsMap.get("FlowID").toString();
+		this.FlowName = beanParamsMap.get("FlowName").toString();
+		this.Department = beanParamsMap.get("Department").toString();
+		this.ScenesName = beanParamsMap.get("ScenesName").toString();
+		this.BeginTime = beanParamsMap.get("BeginTime").toString();
+		this.EndTime = beanParamsMap.get("EndTime").toString();
+		this.Remark = beanParamsMap.get("Remark").toString();
+		this.ExecState = beanParamsMap.get("ExecState").toString();
+		this.IP = beanParamsMap.get("IP").toString();
+		this.AgentName = beanParamsMap.get("AgentName").toString();
+		this.ExecTime = beanParamsMap.get("ExecTime").toString();
+
 	}
 
 	public KAgentBean(String flowID, String flowName, String department, String scenesName, String beginTime, String endTime, String remark, String execState, String IP, String agentName, String execTime) {

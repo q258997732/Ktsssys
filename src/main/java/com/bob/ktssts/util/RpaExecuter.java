@@ -68,7 +68,6 @@ public class RpaExecuter {
 	}
 
 	public boolean callRpaComponent(String script, String params, String agentIp) {
-
 		/* 拼接请求主体 */
 		List<RpaRequestBean> rpaRequestBeans = new ArrayList<RpaRequestBean>();
 		// 调用的AgentIP,多个IP用逗号隔开
@@ -85,9 +84,8 @@ public class RpaExecuter {
 		rpaRequestBeans.add(new RpaRequestBean(false, 1, "VCLBlockInput"));
 		rpaRequestBeans.add(new RpaRequestBean(5000, 0, "TimeOut"));
 		rpaRequestBeans.add(new RpaRequestBean(0, 0, "AomScript"));
-
-		// 调用K-RPA RESTFul接口
-		return sendKRpaRequest(rpaRequestBeans);
+		List<RpaRequestBean> rpaRequestBeanList = sendKRpaRequest(rpaRequestBeans);
+		return  RpaUtil.callFunStatus(rpaRequestBeanList);
 	}
 
 	public boolean addRpaProcess(String flowType, String flow, String data, String agentIp,int level) {
@@ -115,14 +113,13 @@ public class RpaExecuter {
 		rpaRequestBeans.add(new RpaRequestBean(getUser(), 4, "AppName"));
 		rpaRequestBeans.add(new RpaRequestBean(getPass(), 4, "AppPass"));
 		rpaRequestBeans.add(new RpaRequestBean("AddDataQueue", 4, "{2881E26D-62CE-4937-B4BB-8998440417C4}"));
-		return sendKRpaRequest(rpaRequestBeans);
+		List<RpaRequestBean> rpaRequestBeanList = sendKRpaRequest(rpaRequestBeans);
+		return RpaUtil.callFunStatus(rpaRequestBeanList);
 	}
 
-	public boolean getSXFAgentFlowQuery(){
-
+	public List<RpaRequestBean> getSXFAgentFlowQuery(){
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String date = simpleDateFormat.format(new Date());
-
 		/* 拼接请求主体 */
 		List<RpaRequestBean> rpaRequestBeans = new ArrayList<RpaRequestBean>();
 		rpaRequestBeans.add(new RpaRequestBean(date, 4, "AppPass"));
@@ -138,48 +135,38 @@ public class RpaExecuter {
 	 * @param rpaRequestBeans K-RPA的请求主体List
 	 * @return 执行是否成功
 	 */
-	public boolean sendKRpaRequest(List<RpaRequestBean> rpaRequestBeans) {
+	private List<RpaRequestBean> sendKRpaRequest(List<RpaRequestBean> rpaRequestBeans) {
 		String json;
 		try {
 			ObjectMapper objectMapper = new ObjectMapper().setPropertyNamingStrategy(new PascalCaseNamingStrategy());
 			json = objectMapper.writeValueAsString(rpaRequestBeans);
-			LOGGER.info("Request json : {}", json);
+//			LOGGER.info("Request json : {}", json);
 		} catch (Exception exception) {
 			LOGGER.error(exception.getMessage());
-			return false;
+			return null;
 		}
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(url);
 		httpPost.setEntity(new StringEntity(json, ContentType.APPLICATION_JSON));
 		try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
 			String responseBody = EntityUtils.toString(response.getEntity());
-			LOGGER.info("Response json : {}", responseBody);
+			LOGGER.info("Response json length : {}", responseBody.length());
+
 			// 处理返回结果
-			List<RpaRequestBean> rpaRequestBeanList = result2KRpaRequestBean(responseBody);
+			List<RpaRequestBean> rpaRequestBeanList = RpaUtil.result2KRpaRequestBean(responseBody);
+
+			// 匹配返回内容
 			if (RpaUtil.callFunStatus(rpaRequestBeanList)) {
 				LOGGER.info(RpaUtil.getRpaResponseRes(rpaRequestBeanList));
-				return true;
+				return rpaRequestBeanList;
 			} else {
 				LOGGER.error(RpaUtil.getRpaResponseRes(rpaRequestBeanList));
-				return false;
+				return null;
 			}
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
-			return false;
-		}
-	}
-
-	private List<RpaRequestBean> result2KRpaRequestBean(String json) {
-		ObjectMapper objectMapper = new ObjectMapper().setPropertyNamingStrategy(new PascalCaseNamingStrategy());
-		List<RpaRequestBean> rpaRequestBeanList;
-		try {
-			rpaRequestBeanList = objectMapper.readValue(json, new TypeReference<List<RpaRequestBean>>() {
-			});
-		} catch (JsonProcessingException e) {
-			LOGGER.error("Parse Rpa response to json fail :{}", json);
 			return null;
 		}
-		return rpaRequestBeanList;
 	}
 
 	public String getHost() {
