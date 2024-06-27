@@ -2,6 +2,8 @@ package com.bob.ktssts.controller;
 
 import com.bob.ktssts.entity.ApiUser;
 import com.bob.ktssts.entity.ResponseBean;
+import com.bob.ktssts.entity.TsExecuter;
+import com.bob.ktssts.mapper.TsExecuterMapper;
 import com.bob.ktssts.service.ApiUserService;
 import com.bob.ktssts.util.JsonUtil;
 import com.bob.ktssts.util.TokenUtil;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+
 @RestController
 @RequestMapping("/api")
 public class ApiUserRestController {
@@ -24,6 +28,9 @@ public class ApiUserRestController {
 
 	@Resource
 	ApiUserService apiUserService;
+
+	@Autowired
+	TsExecuterMapper tsExecuterMapper;
 
 	/**
 	 * 登录
@@ -46,13 +53,18 @@ public class ApiUserRestController {
 
 	@RequestMapping("/test")
 	public ResponseBean test(HttpServletRequest request) {
-		String userId = TokenUtil.getUserId(request.getHeader("Authorization"));
-		boolean bo = apiUserService.verifyTokenUser(userId);
-		if(bo)
-			return new ResponseBean(ResponseBean.ECode.SUCCESS.getCode(), "test scuess .", "test");
-		else
-			return new ResponseBean(ResponseBean.ECode.SUCCESS.getCode(), "user id not exist .", "test");
+		String exec_name = "测试执行器";
+		String exec_addr = "10.1.20.7,10.1.20.8,10.1.20.47";
+		String exec_type = "KTSSTS";
+		String exec_available = "1";
+		String exec_monopoly = "1";
+		Date exec_register = new Date();
+		String exec_version = "1.0.0";
 
+		TsExecuter tsExecuter = new TsExecuter(exec_name, exec_addr, exec_type, exec_available, exec_monopoly, exec_register, exec_version);
+		int num = tsExecuterMapper.insertSelective(tsExecuter);
+		LOGGER.info("插入执行器信息："+num);
+		return new ResponseBean(ResponseBean.ECode.SUCCESS.getCode(), "test scuess .", "test scuess .");
 	}
 
 

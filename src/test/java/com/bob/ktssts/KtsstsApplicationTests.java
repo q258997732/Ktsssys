@@ -1,21 +1,18 @@
 package com.bob.ktssts;
 
-import com.bob.ktssts.entity.KAgentBean;
-import com.bob.ktssts.entity.RpaRequestBean;
-import com.bob.ktssts.util.*;
+import com.bob.ktssts.entity.TsExecuter;
+import com.bob.ktssts.mapper.TsExecuterMapper;
+import com.bob.ktssts.util.RpaExecuter;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
-import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Date;
 
 @SpringBootTest
 class KtsstsApplicationTests {
@@ -25,16 +22,27 @@ class KtsstsApplicationTests {
 	@Autowired
 	public RpaExecuter rpaExecuter;
 
+	@Autowired
+	private TsExecuterMapper tsExecuterMapper;
+
 	@Test
 	void contextLoads() throws JsonProcessingException {
 
-		List<String> params = new ArrayList<>();
 
-		params.add("111");
-		params.add("222");
-		String script = "测试API组件调用";
-		String agentIp = "10.1.20.7,10.1.20.8,10.1.20.47";
-		String originalString = "{\"rpa_task_ID\":\"61454376BEE947C48316737FCD7099DD\",\"端口\":\"6006\",\"密码\":\"RSTH1XCI96716\",\"服务器ip\":\"113.140.71.252\",\"tmsId\":\"45b730fe344940e68997559d6881f6dc\",\"用户名\":\"盛世腾辉3\",\"siteId\":\"46738887e2534e21a6100af6881cc8f6\"}";
+
+
+
+
+
+
+//		List<String> params = new ArrayList<>();
+//
+//		params.add("111");
+//		params.add("222");
+//		String script = "测试API组件调用";
+//		String agentIp = "10.1.20.7,10.1.20.8,10.1.20.47";
+//		String originalString = "{\"rpa_task_ID\":\"61454376BEE947C48316737FCD7099DD\",\"端口\":\"6006\",\"密码\":\"RSTH1XCI96716\",\"服务器ip\":\"113.140.71.252\",\"tmsId\":\"45b730fe344940e68997559d6881f6dc\",\"用户名\":\"盛世腾辉3\",\"siteId\":\"46738887e2534e21a6100af6881cc8f6\"}";
+
 
 
 

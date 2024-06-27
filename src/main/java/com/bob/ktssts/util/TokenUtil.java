@@ -124,7 +124,11 @@ public class TokenUtil {
 	 * @throws Exception 异常信息
 	 */
 	public static boolean VerifyJWTToken(String webToken) {
-		webToken = webToken.replaceFirst("Bearer ", "");
+		if(webToken == null)
+			return false;
+		if(webToken.startsWith("Bearer "))
+			webToken = webToken.replaceFirst("Bearer ", "");
+
 		JWTVerifier verifier = JWT.require(TokenUtil.ALGORITHM).withIssuer(TokenUtil.ISSUER).build();
 		try {
 			DecodedJWT jwt = verifier.verify(webToken);

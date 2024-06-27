@@ -12,7 +12,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(new JWTInterceptor())
 				.addPathPatterns("/**")//全部路径
-				.excludePathPatterns("/api/login");// 登陆不需要token认证
+				.excludePathPatterns("/api/login")// 登陆不需要token认证
+				.excludePathPatterns("/api/test");
 	}
 }
 
