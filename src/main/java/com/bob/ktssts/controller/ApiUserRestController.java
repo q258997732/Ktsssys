@@ -25,6 +25,11 @@ public class ApiUserRestController {
 	@Resource
 	ApiUserService apiUserService;
 
+	/**
+	 * 登录
+	 * @param jsonNode
+	 * @return
+	 */
 	@PostMapping("/login")
 	public ResponseBean login(@RequestBody JsonNode jsonNode) {
 		if (JsonUtil.userInfoNotNull(jsonNode)) {

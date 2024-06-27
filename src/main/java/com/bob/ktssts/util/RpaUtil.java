@@ -4,15 +4,14 @@ import com.bob.ktssts.entity.KAgentBean;
 import com.bob.ktssts.entity.RpaRequestBean;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RpaUtil {
 
@@ -82,22 +81,13 @@ public class RpaUtil {
 	public static String getSXFAgentFlowQueryRes(List<RpaRequestBean> rpaRequestBeanList) {
 		if (rpaRequestBeanList == null || rpaRequestBeanList.isEmpty()) return null;
 		Object error = getRpaResponseValue("{50043442-8A69-4A6B-A8B5-61F882EDE4F3}", rpaRequestBeanList);
-		Object bDate = getRpaResponseValue("BDate", rpaRequestBeanList);
-		Object eDate = getRpaResponseValue("EDate", rpaRequestBeanList);
-		return String.format("K-RPA任务执行: 获取 %s 至 %s 期间执行的任务 %s",bDate,eDate,"".equals(error)?"成功":"失败");
+		return String.format("K-RPA当天任务获取: 执行%s","".equals(error)?"成功":"失败");
 	}
 
 	public static boolean callFunStatus(List<RpaRequestBean> rpaRequestBeanList) {
 		if (rpaRequestBeanList == null || rpaRequestBeanList.isEmpty()) return false;
 		Object Level = getRpaResponseValue("{50043442-8A69-4A6B-A8B5-61F882EDE4F3}", rpaRequestBeanList);
 		return "".equals(Level);
-	}
-
-	public static List<KAgentBean> getRpaResAgentList(List<RpaRequestBean> rpaRequestBeanList) {
-		if (rpaRequestBeanList == null || rpaRequestBeanList.isEmpty()) return null;
-		String kAgentObject = getRpaResponseValue("k_agent_object",rpaRequestBeanList).toString();
-//		LOGGER.info("kAgentObject: {}", kAgentObject);
-		return result2KAgentRequestBean(kAgentObject);
 	}
 
 	public static List<RpaRequestBean> result2KRpaRequestBean(String json) {
@@ -114,19 +104,45 @@ public class RpaUtil {
 		return rpaRequestBeanList;
 	}
 
-	public static List<KAgentBean> result2KAgentRequestBean(String json) {
-//		json = json.substring(1, json.length() - 1);
-		System.out.println("json: " + json);
-		ObjectMapper objectMapper = new ObjectMapper();
-		try {
-			JsonNode jsonNode = objectMapper.readTree(json);
-			LOGGER.info("length: {}",jsonNode.size());
-			LOGGER.info("node 1: {}",jsonNode.get(0).toString());
-		} catch (JsonProcessingException e) {
-			LOGGER.error("Parse Rpa Agent String to json fail .");
+	/** 写完发现这玩意儿用不上
+	 *  将K-RPA API返回的内容转换为KAgentBean数组，只适用于K-RPA接口的getSXFAgentFlowQuery方法
+	 * @param rpaRequestBeanList 接口返回的内容
+	 * @return KAgent数组
+	 */
+	public static List<KAgentBean> result2KAgent(List<RpaRequestBean> rpaRequestBeanList) {
+		if (rpaRequestBeanList == null || rpaRequestBeanList.isEmpty()) return null;
+
+		Map<Integer, String> KAgentInvMap = new HashMap<Integer, String>();
+		List<KAgentBean> kAgentBeanList = new ArrayList<>();
+
+		for(RpaRequestBean rpaRequestBean : rpaRequestBeanList) {
+			if("k_agent_object".equals(rpaRequestBean.getName())) {
+				List<List<Map<String,String>>> KAgentList = (List<List<Map<String, String>>>) rpaRequestBean.getValue();
+				for(int i = 0 ;i<KAgentList.size();i++) {
+					if(i==0){
+						for(int j = 0 ;j<KAgentList.get(i).size();j++) {
+							Map<String,String> KAgentMap = KAgentList.get(i).get(j);
+							KAgentMap.get("Name");
+							String name = KAgentMap.get("Name");
+							if(!"".equals(name) && !name.isEmpty()){
+								KAgentInvMap.put( j,name);
+							}
+						}
+					}else{
+						Map<String,Object> beanParamMap = new HashMap<>();
+						String[] beanList = new String[KAgentInvMap.size()];
+						for(int j = 0 ;j<KAgentList.get(i).size();j++) {
+							beanParamMap.put(KAgentInvMap.get(j),KAgentList.get(i).get(j).get("Value"));
+						}
+						KAgentBean kAgentBean = new KAgentBean(beanParamMap);
+						kAgentBeanList.add(kAgentBean);
+					}
+				}
+				break;
+			}
 		}
 
-		return null;
+		return kAgentBeanList;
 	}
 
 }

@@ -22,10 +22,10 @@ public interface ApiUserMapper {
 
 	int updateByPrimaryKey(ApiUser record);
 
-	@Select("SELECT permission from restful.ktssts_user where user = #{username}")
+	@Select("SELECT permission from ktssts.ts_apiuser where user = #{username}")
 	String getPermissionByUserString(String username);
 
-	@Select("SELECT role from restful.ktssts_user where user = #{username}")
+	@Select("SELECT role from ktssts.ts_apiuser where user = #{username}")
 	String getRoleByUserString(String username);
 
 	ApiUser getUserByUsername(String username);

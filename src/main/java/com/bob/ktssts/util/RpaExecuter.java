@@ -1,8 +1,7 @@
 package com.bob.ktssts.util;
 
+import com.bob.ktssts.entity.KAgentBean;
 import com.bob.ktssts.entity.RpaRequestBean;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
@@ -22,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class RpaExecuter {
@@ -117,7 +117,7 @@ public class RpaExecuter {
 		return RpaUtil.callFunStatus(rpaRequestBeanList);
 	}
 
-	public List<RpaRequestBean> getSXFAgentFlowQuery(){
+	public List<KAgentBean> getSXFAgentFlowQuery(){
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String date = simpleDateFormat.format(new Date());
 		/* 拼接请求主体 */
@@ -128,7 +128,7 @@ public class RpaExecuter {
 		rpaRequestBeans.add(new RpaRequestBean(getUser(), 4, "AppName"));
 		rpaRequestBeans.add(new RpaRequestBean(getPass(), 4, "AppPass"));
 		rpaRequestBeans.add(new RpaRequestBean("GetSXFAgentFlowQuery", 4, "{2881E26D-62CE-4937-B4BB-8998440417C4}"));
-		return sendKRpaRequest(rpaRequestBeans);
+		return RpaUtil.result2KAgent(Objects.requireNonNull(sendKRpaRequest(rpaRequestBeans)));
 	}
 
 	/**
@@ -168,6 +168,8 @@ public class RpaExecuter {
 			return null;
 		}
 	}
+
+
 
 	public String getHost() {
 		return host;

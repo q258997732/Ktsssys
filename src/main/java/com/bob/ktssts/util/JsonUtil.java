@@ -1,9 +1,15 @@
 package com.bob.ktssts.util;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import java.util.regex.Pattern;
 
 public class JsonUtil {
 
+	private static final Pattern KEY_PATTERN = Pattern.compile("(\\w+)=");
 	public static boolean userInfoNotNull(JsonNode jsonNode) {
 		try {
 			String user = jsonNode.get("user").textValue();
@@ -33,27 +39,4 @@ public class JsonUtil {
 		}
 	}
 
-	public static String formatKAgent(String json){
-
-		// 替换所有的Name=和Value=，并将它们放在双引号中
-		String[] objects = json.split("}, \\{");
-
-		// 构建标准的JSON字符串
-		StringBuilder jsonBuilder = new StringBuilder("[");
-		for (int i = 0; i < objects.length; i++) {
-			if (i > 0) {
-				jsonBuilder.append(",\n ");
-			}
-			// 替换每个键，将其放在双引号中
-			String obj = objects[i].replaceAll("(\\w+)=", "\"$1\":");
-			// 将整个键值对放在花括号中
-			jsonBuilder.append("{").append(obj).append("}");
-		}
-		jsonBuilder.append("]");
-
-		// 输出转换后的JSON字符串
-		String standardJson = jsonBuilder.toString();
-		System.out.println(standardJson);
-		return standardJson;
-	}
 }

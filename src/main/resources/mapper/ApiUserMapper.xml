@@ -3,7 +3,7 @@
 <mapper namespace="com.bob.ktssts.mapper.ApiUserMapper">
 	<resultMap id="BaseResultMap" type="com.bob.ktssts.entity.ApiUser">
 		<!--@mbg.generated-->
-		<!--@Table api_user-->
+		<!--@Table ts_apiuser-->
 		<id column="id" jdbcType="VARCHAR" property="id" />
 		<result column="user" jdbcType="VARCHAR" property="user" />
 		<result column="pass" jdbcType="VARCHAR" property="pass" />
@@ -19,7 +19,7 @@
 	<select id="getUser" parameterType="java.lang.String" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
-		from ktssts_user
+		from ts_apiuser
 		where user = #{user,jdbcType=VARCHAR} and `pass` = #{pass,jdbcType=VARCHAR}
 	</select>
 
@@ -27,23 +27,23 @@
 		<!--@mbg.generated-->
 		select
 		<include refid="Base_Column_List" />
-		from ktssts_user
+		from ts_apiuser
 		where id = #{id,jdbcType=VARCHAR}
 	</select>
 	<select id="getUserByUsername" parameterType="java.lang.String" resultType="com.bob.ktssts.entity.ApiUser">
 		select
 		<include refid="Base_Column_List" />
-		from ktssts_user
+		from ts_apiuser
 		where user = #{username,jdbcType=VARCHAR}
 	</select>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		<!--@mbg.generated-->
-		delete from ktssts_user
+		delete from ts_apiuser
 		where id = #{id,jdbcType=VARCHAR}
 	</delete>
 	<insert id="insert" parameterType="com.bob.ktssts.entity.ApiUser">
 		<!--@mbg.generated-->
-		insert into ktssts_user (id, `user`, pass,
+		insert into ts_apiuser (id, `user`, pass,
 		token, expire, `role`,
 		permission)
 		values (#{id,jdbcType=VARCHAR}, #{user,jdbcType=VARCHAR}, #{pass,jdbcType=VARCHAR},
@@ -52,7 +52,7 @@
 	</insert>
 	<insert id="insertSelective" parameterType="com.bob.ktssts.entity.ApiUser">
 		<!--@mbg.generated-->
-		insert into ktssts_user
+		insert into ts_apiuser
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">
 				id,
@@ -102,7 +102,7 @@
 	</insert>
 	<update id="updateByPrimaryKeySelective" parameterType="com.bob.ktssts.entity.ApiUser">
 		<!--@mbg.generated-->
-		update ktssts_user
+		update ts_apiuser
 		<set>
 			<if test="user != null">
 				`user` = #{user,jdbcType=VARCHAR},
@@ -127,7 +127,7 @@
 	</update>
 	<update id="updateByPrimaryKey" parameterType="com.bob.ktssts.entity.ApiUser">
 		<!--@mbg.generated-->
-		update ktssts_user
+		update ts_apiuser
 		set `user` = #{user,jdbcType=VARCHAR},
 		pass = #{pass,jdbcType=VARCHAR},
 		token = #{token,jdbcType=VARCHAR},

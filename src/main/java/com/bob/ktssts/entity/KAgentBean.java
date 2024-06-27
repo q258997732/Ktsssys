@@ -12,6 +12,7 @@ public class KAgentBean {
 	private String BeginTime;
 	private String EndTime;
 	private String Remark;
+	// ExecState :执行状态（-1: 正在执行; 0: 手动停止; 1: 执行成功; 2: 执行超时）
 	private String ExecState;
 	private String IP;
 	private String AgentName;
