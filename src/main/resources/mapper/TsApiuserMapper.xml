@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bob.ktssts.mapper.TsApiuserMapper">
+
+    <resultMap id="BaseResultMap" type="com.bob.ktssts.entity.TsApiuser">
+            <id property="id" column="id" jdbcType="VARCHAR"/>
+            <result property="user" column="user" jdbcType="VARCHAR"/>
+            <result property="pass" column="pass" jdbcType="VARCHAR"/>
+            <result property="token" column="token" jdbcType="VARCHAR"/>
+            <result property="expire" column="expire" jdbcType="TIMESTAMP"/>
+            <result property="role" column="role" jdbcType="VARCHAR"/>
+            <result property="permission" column="permission" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user,pass,
+        token,expire,role,
+        permission
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ts_apiuser
+        where  id = #{id,jdbcType=VARCHAR} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete from ts_apiuser
+        where  id = #{id,jdbcType=VARCHAR} 
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.TsApiuser" useGeneratedKeys="true">
+        insert into ts_apiuser
+        ( id,user,pass
+        ,token,expire,role
+        ,permission)
+        values (#{id,jdbcType=VARCHAR},#{user,jdbcType=VARCHAR},#{pass,jdbcType=VARCHAR}
+        ,#{token,jdbcType=VARCHAR},#{expire,jdbcType=TIMESTAMP},#{role,jdbcType=VARCHAR}
+        ,#{permission,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.TsApiuser" useGeneratedKeys="true">
+        insert into ts_apiuser
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="id != null">id,</if>
+                <if test="user != null">user,</if>
+                <if test="pass != null">pass,</if>
+                <if test="token != null">token,</if>
+                <if test="expire != null">expire,</if>
+                <if test="role != null">role,</if>
+                <if test="permission != null">permission,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="id != null">#{id,jdbcType=VARCHAR},</if>
+                <if test="user != null">#{user,jdbcType=VARCHAR},</if>
+                <if test="pass != null">#{pass,jdbcType=VARCHAR},</if>
+                <if test="token != null">#{token,jdbcType=VARCHAR},</if>
+                <if test="expire != null">#{expire,jdbcType=TIMESTAMP},</if>
+                <if test="role != null">#{role,jdbcType=VARCHAR},</if>
+                <if test="permission != null">#{permission,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bob.ktssts.entity.TsApiuser">
+        update ts_apiuser
+        <set>
+                <if test="user != null">
+                    user = #{user,jdbcType=VARCHAR},
+                </if>
+                <if test="pass != null">
+                    pass = #{pass,jdbcType=VARCHAR},
+                </if>
+                <if test="token != null">
+                    token = #{token,jdbcType=VARCHAR},
+                </if>
+                <if test="expire != null">
+                    expire = #{expire,jdbcType=TIMESTAMP},
+                </if>
+                <if test="role != null">
+                    role = #{role,jdbcType=VARCHAR},
+                </if>
+                <if test="permission != null">
+                    permission = #{permission,jdbcType=VARCHAR},
+                </if>
+        </set>
+        where   id = #{id,jdbcType=VARCHAR} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.bob.ktssts.entity.TsApiuser">
+        update ts_apiuser
+        set 
+            user =  #{user,jdbcType=VARCHAR},
+            pass =  #{pass,jdbcType=VARCHAR},
+            token =  #{token,jdbcType=VARCHAR},
+            expire =  #{expire,jdbcType=TIMESTAMP},
+            role =  #{role,jdbcType=VARCHAR},
+            permission =  #{permission,jdbcType=VARCHAR}
+        where   id = #{id,jdbcType=VARCHAR} 
+    </update>
+</mapper>

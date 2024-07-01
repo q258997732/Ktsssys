@@ -1,6 +1,7 @@
 package com.bob.ktssts.util;
 
 import com.bob.ktssts.entity.KAgentBean;
+import com.bob.ktssts.entity.KSxfAgentBean;
 import com.bob.ktssts.entity.RpaRequestBean;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -109,14 +110,50 @@ public class RpaUtil {
 	 * @param rpaRequestBeanList 接口返回的内容
 	 * @return KAgent数组
 	 */
-	public static List<KAgentBean> result2KAgent(List<RpaRequestBean> rpaRequestBeanList) {
+	public static List<KSxfAgentBean> result2KSxfAgent(List<RpaRequestBean> rpaRequestBeanList) {
+		if (rpaRequestBeanList == null || rpaRequestBeanList.isEmpty()) return null;
+
+		Map<Integer, String> KAgentInvMap = new HashMap<Integer, String>();
+		List<KSxfAgentBean> kSxfAgentBeanList = new ArrayList<>();
+
+		for(RpaRequestBean rpaRequestBean : rpaRequestBeanList) {
+			if("k_agent_object".equals(rpaRequestBean.getName())) {
+				List<List<Map<String,String>>> KAgentList = (List<List<Map<String, String>>>) rpaRequestBean.getValue();
+				for(int i = 0 ;i<KAgentList.size();i++) {
+					if(i==0){
+						for(int j = 0 ;j<KAgentList.get(i).size();j++) {
+							Map<String,String> KAgentMap = KAgentList.get(i).get(j);
+							KAgentMap.get("Name");
+							String name = KAgentMap.get("Name");
+							if(!"".equals(name) && !name.isEmpty()){
+								KAgentInvMap.put( j,name);
+							}
+						}
+					}else{
+						Map<String,Object> beanParamMap = new HashMap<>();
+						String[] beanList = new String[KAgentInvMap.size()];
+						for(int j = 0 ;j<KAgentList.get(i).size();j++) {
+							beanParamMap.put(KAgentInvMap.get(j),KAgentList.get(i).get(j).get("Value"));
+						}
+						KSxfAgentBean kSxfAgentBean = new KSxfAgentBean(beanParamMap);
+						kSxfAgentBeanList.add(kSxfAgentBean);
+					}
+				}
+				break;
+			}
+		}
+
+		return kSxfAgentBeanList;
+	}
+
+	public static List<KAgentBean> result2KAgentList(List<RpaRequestBean> rpaRequestBeanList) {
 		if (rpaRequestBeanList == null || rpaRequestBeanList.isEmpty()) return null;
 
 		Map<Integer, String> KAgentInvMap = new HashMap<Integer, String>();
 		List<KAgentBean> kAgentBeanList = new ArrayList<>();
 
 		for(RpaRequestBean rpaRequestBean : rpaRequestBeanList) {
-			if("k_agent_object".equals(rpaRequestBean.getName())) {
+			if("k_agent".equals(rpaRequestBean.getName())) {
 				List<List<Map<String,String>>> KAgentList = (List<List<Map<String, String>>>) rpaRequestBean.getValue();
 				for(int i = 0 ;i<KAgentList.size();i++) {
 					if(i==0){

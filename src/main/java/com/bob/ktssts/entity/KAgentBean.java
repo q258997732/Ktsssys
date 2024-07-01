@@ -1,157 +1,106 @@
 package com.bob.ktssts.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Map;
-import java.util.Objects;
+import java.util.UUID;
 
+@Setter
+@Getter
 public class KAgentBean {
-
-	private String FlowID;
-	private String FlowName;
-	private String Department;
-	private String ScenesName;
-	private String BeginTime;
-	private String EndTime;
-	private String Remark;
-	// ExecState :执行状态（-1: 正在执行; 0: 手动停止; 1: 执行成功; 2: 执行超时）
-	private String ExecState;
-	private String IP;
-	private String AgentName;
-	private String ExecTime;
 
 	public KAgentBean() {
 	}
 
-	public KAgentBean(Map<String,Object> beanParamsMap){
-		this.FlowID = beanParamsMap.get("FlowID").toString();
-		this.FlowName = beanParamsMap.get("FlowName").toString();
-		this.Department = beanParamsMap.get("Department").toString();
-		this.ScenesName = beanParamsMap.get("ScenesName").toString();
-		this.BeginTime = beanParamsMap.get("BeginTime").toString();
-		this.EndTime = beanParamsMap.get("EndTime").toString();
-		this.Remark = beanParamsMap.get("Remark").toString();
-		this.ExecState = beanParamsMap.get("ExecState").toString();
-		this.IP = beanParamsMap.get("IP").toString();
-		this.AgentName = beanParamsMap.get("AgentName").toString();
-		this.ExecTime = beanParamsMap.get("ExecTime").toString();
-
+	public KAgentBean(int online, String id, String pid, String ip, String name, String version, String system, int offNotice, String noticeUser, int emptyNotify, int synTime, int music, String remark, String sysUser, String muTagId, String biosSN, String serverInstance, int iPause, int iUpdate) {
+		this.online = online;
+		this.id = id;
+		this.pid = pid;
+		this.ip = ip;
+		this.name = name;
+		this.version = version;
+		this.system = system;
+		this.offNotice = offNotice;
+		this.noticeUser = noticeUser;
+		this.emptyNotify = emptyNotify;
+		this.synTime = synTime;
+		this.music = music;
+		this.remark = remark;
+		this.sysUser = sysUser;
+		this.muTagId = muTagId;
+		this.biosSN = biosSN;
+		this.serverInstance = serverInstance;
+		this.iPause = iPause;
+		this.iUpdate = iUpdate;
 	}
 
-	public KAgentBean(String flowID, String flowName, String department, String scenesName, String beginTime, String endTime, String remark, String execState, String IP, String agentName, String execTime) {
-		FlowID = flowID;
-		FlowName = flowName;
-		Department = department;
-		ScenesName = scenesName;
-		BeginTime = beginTime;
-		EndTime = endTime;
-		Remark = remark;
-		ExecState = execState;
-		this.IP = IP;
-		AgentName = agentName;
-		ExecTime = execTime;
-	}
+	public KAgentBean(Map<String,Object> beanParamsMap) {
+		this.id = beanParamsMap.get("ID").toString();
+		this.pid = beanParamsMap.get("PID").toString();
+		this.ip = beanParamsMap.get("IP").toString();
+		this.name = beanParamsMap.get("Name").toString();
+		this.online = Integer.parseInt(beanParamsMap.get("Online").toString());
+		this.version = beanParamsMap.get("Version").toString();
+		this.system = beanParamsMap.get("System").toString();
+		this.offNotice = Integer.parseInt(beanParamsMap.get("OffNotice").toString());
+		this.noticeUser = beanParamsMap.get("NoticeUser").toString();
+		this.emptyNotify = Integer.parseInt(beanParamsMap.get("EmptyNotify").toString());
+		this.synTime = Integer.parseInt(beanParamsMap.get("SynTime").toString());
+		this.music = Integer.parseInt(beanParamsMap.get("Music").toString());
+		this.remark = beanParamsMap.get("Remark").toString();
+		this.sysUser = beanParamsMap.get("sysUser").toString();
+		this.muTagId = beanParamsMap.get("MUTagID").toString();
+		this.biosSN = beanParamsMap.get("BiosSN").toString();
+		this.serverInstance = beanParamsMap.get("ServerInstance").toString();
+		this.iPause = Integer.parseInt(beanParamsMap.get("iPause").toString());
+		this.iUpdate = Integer.parseInt(beanParamsMap.get("iUpdate").toString());
+}
 
-	public String getFlowID() {
-		return FlowID;
-	}
+	private String id; // 代理端标识
 
-	public void setFlowID(String flowID) {
-		FlowID = flowID;
-	}
+	private String pid; // 父级 ID
 
-	public String getFlowName() {
-		return FlowName;
-	}
+	private String ip; // 代理端 IP
 
-	public void setFlowName(String flowName) {
-		FlowName = flowName;
-	}
+	private String name; // 机器名称
 
-	public String getDepartment() {
-		return Department;
-	}
+	private int online; // 是否在线
 
-	public void setDepartment(String department) {
-		Department = department;
-	}
+	private String version; // 版本号
 
-	public String getScenesName() {
-		return ScenesName;
-	}
+	private String system; // 操作系统
 
-	public void setScenesName(String scenesName) {
-		ScenesName = scenesName;
-	}
+	private int offNotice; // 离线通知
 
-	public String getBeginTime() {
-		return BeginTime;
-	}
+	private String noticeUser; // 通知人员(LoginID)
 
-	public void setBeginTime(String beginTime) {
-		BeginTime = beginTime;
-	}
+	private int emptyNotify; // 不通知人员
 
-	public String getEndTime() {
-		return EndTime;
-	}
+	private int synTime; // 同步时间
 
-	public void setEndTime(String endTime) {
-		EndTime = endTime;
-	}
+	private int music; // 声音禁用
 
-	public String getRemark() {
-		return Remark;
-	}
+	private String remark; // 备注
 
-	public void setRemark(String remark) {
-		Remark = remark;
-	}
+	private String sysUser; // 系统用户
 
-	public String getExecState() {
-		return ExecState;
-	}
+	private String muTagId; // 机器补丁标签 ID
 
-	public void setExecState(String execState) {
-		ExecState = execState;
-	}
+	private String biosSN; // Bios 序列号
 
-	public String getIP() {
-		return IP;
-	}
+	private String serverInstance; // 服务器实例
 
-	public void setIP(String IP) {
-		this.IP = IP;
-	}
+	private int iPause; // 是否停用
 
-	public String getAgentName() {
-		return AgentName;
-	}
+	private int iUpdate; // 需要更新
 
-	public void setAgentName(String agentName) {
-		AgentName = agentName;
-	}
-
-	public String getExecTime() {
-		return ExecTime;
-	}
-
-	public void setExecTime(String execTime) {
-		ExecTime = execTime;
-	}
-
-	@Override
 	public String toString() {
-		return String.format("flowID: %s, flowName: %s, department: %s, scenesName: %s, beginTime: %s, endTime: %s, remark: %s, execState: %s, IP: %s, agentName: %s, execTime: %s",
-				getFlowID(),
-				getFlowName(),
-				getDepartment(),
-				getScenesName(),
-				getBeginTime(),
-				getEndTime(),
-				getRemark(),
-				Objects.requireNonNull(ExecStateEnum.fromCode(getExecState())).getDescription(),
-				getIP(),
-				getAgentName(),
-				getExecTime());
+		return "KAgentBean [id=" + id + ", pid=" + pid + ", ip=" + ip + ", name=" + name + ", online=" + online
+				+ ", version=" + version + ", system=" + system + ", offNotice=" + offNotice + ", noticeUser="
+				+ noticeUser + ", emptyNotify=" + emptyNotify + ", synTime=" + synTime + ", music=" + music + ", remark="
+				+ remark + ", sysUser=" + sysUser + ", muTagId=" + muTagId + ", biosSN=" + biosSN + ", serverInstance="
+				+ serverInstance + ", iPause=" + iPause + ", iUpdate=" + iUpdate + "]";
 	}
 
 }

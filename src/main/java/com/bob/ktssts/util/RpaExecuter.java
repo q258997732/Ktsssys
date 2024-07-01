@@ -1,10 +1,12 @@
 package com.bob.ktssts.util;
 
 import com.bob.ktssts.entity.KAgentBean;
+import com.bob.ktssts.entity.KSxfAgentBean;
 import com.bob.ktssts.entity.RpaRequestBean;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
@@ -28,17 +30,22 @@ public class RpaExecuter {
 
 	private static final Logger LOGGER = LogManager.getLogger(RpaExecuter.class);
 
+	@Getter
 	private String url;
 
+	@Getter
 	@Value("${RPA.HOST}")
 	private String host;
 
+	@Getter
 	@Value("${RPA.PORT}")
 	private int port;
 
+	@Getter
 	@Value("${RPA.USER}")
 	private String user;
 
+	@Getter
 	@Value("${RPA.PASS}")
 	private String pass;
 
@@ -117,7 +124,7 @@ public class RpaExecuter {
 		return RpaUtil.callFunStatus(rpaRequestBeanList);
 	}
 
-	public List<KAgentBean> getSXFAgentFlowQuery(){
+	public List<KSxfAgentBean> getSXFAgentFlowQuery(){
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String date = simpleDateFormat.format(new Date());
 		/* 拼接请求主体 */
@@ -128,7 +135,7 @@ public class RpaExecuter {
 		rpaRequestBeans.add(new RpaRequestBean(getUser(), 4, "AppName"));
 		rpaRequestBeans.add(new RpaRequestBean(getPass(), 4, "AppPass"));
 		rpaRequestBeans.add(new RpaRequestBean("GetSXFAgentFlowQuery", 4, "{2881E26D-62CE-4937-B4BB-8998440417C4}"));
-		return RpaUtil.result2KAgent(Objects.requireNonNull(sendKRpaRequest(rpaRequestBeans)));
+		return RpaUtil.result2KSxfAgent(Objects.requireNonNull(sendKRpaRequest(rpaRequestBeans)));
 	}
 
 	/**
@@ -169,25 +176,15 @@ public class RpaExecuter {
 		}
 	}
 
+	public List<KAgentBean> getKRpaAgentList(){
+		List<RpaRequestBean> rpaRequestBeanList = new ArrayList<RpaRequestBean>();
+		rpaRequestBeanList.add(new RpaRequestBean("TCoreDM", 4, "{9F8E5ECB-5976-4315-B8F3-43B8502B694D}"));
+		rpaRequestBeanList.add(new RpaRequestBean("HWB", 4, "AppName"));
+		rpaRequestBeanList.add(new RpaRequestBean("02B28D991C7B4F0BA8897F4E517DAA9E", 4, "AppPass"));
+		rpaRequestBeanList.add(new RpaRequestBean("GetAgentList", 4, "{2881E26D-62CE-4937-B4BB-8998440417C4}"));
+		return RpaUtil.result2KAgentList(Objects.requireNonNull(sendKRpaRequest(rpaRequestBeanList)));
 
-
-	public String getHost() {
-		return host;
 	}
 
-	public int getPort() {
-		return port;
-	}
 
-	public String getUser() {
-		return user;
-	}
-
-	public String getPass() {
-		return pass;
-	}
-
-	public String getUrl() {
-		return url;
-	}
 }

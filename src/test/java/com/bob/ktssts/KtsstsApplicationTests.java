@@ -1,6 +1,8 @@
 package com.bob.ktssts;
 
-import com.bob.ktssts.entity.TsExecuter;
+import com.bob.ktssts.entity.KAgentBean;
+import com.bob.ktssts.entity.TsApiuser;
+import com.bob.ktssts.mapper.TsApiuserMapper;
 import com.bob.ktssts.mapper.TsExecuterMapper;
 import com.bob.ktssts.util.RpaExecuter;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -8,11 +10,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.scheduling.annotation.EnableScheduling;
 
-import java.util.Date;
+import java.util.List;
 
 @SpringBootTest
 class KtsstsApplicationTests {
@@ -25,9 +25,13 @@ class KtsstsApplicationTests {
 	@Autowired
 	private TsExecuterMapper tsExecuterMapper;
 
+	@Autowired
+	private TsApiuserMapper tsApiuserMapper;
+
 	@Test
 	void contextLoads() throws JsonProcessingException {
-
+		List<KAgentBean> kAgentBeanList = rpaExecuter.getKRpaAgentList();
+		LOGGER.info("KAgentBeanList size: {}",kAgentBeanList.size());
 
 
 
