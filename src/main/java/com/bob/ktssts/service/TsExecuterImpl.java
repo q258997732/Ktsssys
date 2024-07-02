@@ -34,25 +34,29 @@ public class TsExecuterImpl implements TsExecuterService {
 	@Override
 	public boolean syncKRpaAgent() {
 		List<KAgentBean> kAgentBeanList = rpaExecuter.getKRpaAgentList();
-		LOGGER.info("K-Agent list size : {}", kAgentBeanList.size());
 		List<TsExecuter> tsExecuterList = tsExecuterMapper.selectAll();
-		ListIterator<TsExecuter> tsExecuterListIterator = tsExecuterList.listIterator();
+
+		/* 将所有状态设置为不可用 */
+		tsExecuterList.forEach(tsExecuter -> tsExecuter.setExec_available("0"));
 		if (!kAgentBeanList.isEmpty() && !tsExecuterList.isEmpty()) {
 			boolean targetIsFind;
 			for (KAgentBean kAgentBean : kAgentBeanList) {
+				ListIterator<TsExecuter> tsExecuterListIterator = tsExecuterList.listIterator();
 				targetIsFind = false;
 				/* 遍历目标列表 */
 				while (tsExecuterListIterator.hasNext()) {
 					TsExecuter tsExecuter = tsExecuterListIterator.next();
 					// 比较
 					if (kAgentBean.getId().equals(tsExecuter.getId())) {
-						LOGGER.info("k-agent 存在于 ts-executer 中");
 						tsExecuter.setExec_online(kAgentBean.getOnline() == 1 ? "1" : "0");
 						tsExecuter.setExec_available(kAgentBean.getIPause() == 1 ? "0" : "1");
 						tsExecuter.setUpdate_by("ktssts");
 						tsExecuter.setUpdate_time(new Date());
 						tsExecuter.setExec_type("K-RPA");
 						tsExecuter.setExec_version(kAgentBean.getVersion());
+						tsExecuter.setId(kAgentBean.getId());
+						tsExecuter.setExec_name(kAgentBean.getName());
+						tsExecuter.setExec_addr(kAgentBean.getIp());
 						tsExecuterListIterator.set(tsExecuter);
 						targetIsFind = true;
 						break;
