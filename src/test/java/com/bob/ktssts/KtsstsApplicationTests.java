@@ -2,8 +2,10 @@ package com.bob.ktssts;
 
 import com.bob.ktssts.entity.KAgentBean;
 import com.bob.ktssts.entity.TsApiuser;
+import com.bob.ktssts.entity.TsExecuter;
 import com.bob.ktssts.mapper.TsApiuserMapper;
 import com.bob.ktssts.mapper.TsExecuterMapper;
+import com.bob.ktssts.service.TsExecuterService;
 import com.bob.ktssts.util.RpaExecuter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.logging.log4j.LogManager;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.ListIterator;
 
 @SpringBootTest
 class KtsstsApplicationTests {
@@ -28,11 +31,19 @@ class KtsstsApplicationTests {
 	@Autowired
 	private TsApiuserMapper tsApiuserMapper;
 
+	@Autowired
+	TsExecuterService tsExecuterService;
+
 	@Test
 	void contextLoads() throws JsonProcessingException {
-		List<KAgentBean> kAgentBeanList = rpaExecuter.getKRpaAgentList();
-		LOGGER.info("KAgentBeanList size: {}",kAgentBeanList.size());
 
+		/* 同步K-RPA执行器（机器人）信息 */
+//		List<KAgentBean> kAgentBeanList = rpaExecuter.getKRpaAgentList();
+//		LOGGER.info("KAgentBeanList size: {}",kAgentBeanList.size());
+//		for(KAgentBean kAgentBean : kAgentBeanList){
+//			LOGGER.info("KAgentBean: {}",kAgentBean.toString());
+//		}
+		LOGGER.info("sync k-rpg agent : {}",tsExecuterService.syncKRpaAgent());
 
 
 

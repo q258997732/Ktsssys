@@ -3,6 +3,8 @@ package com.bob.ktssts.mapper;
 import com.bob.ktssts.entity.TsExecuter;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
 * @author Huang
 * @description 针对表【ts_executer(ts_executer)】的数据库操作Mapper
@@ -60,5 +62,8 @@ public interface TsExecuterMapper {
      * @return 受影响的行数。
      */
     int updateByPrimaryKey(TsExecuter record);
+
+    // 返回所有记录
+    List<TsExecuter> selectAll();
 
 }

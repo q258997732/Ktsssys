@@ -1,123 +1,138 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bob.ktssts.mapper.TsExecuterMapper">
 
-    <resultMap id="BaseResultMap" type="com.bob.ktssts.entity.TsExecuter">
-            <id property="id" column="id" jdbcType="VARCHAR"/>
-            <result property="update_by" column="update_by" jdbcType="VARCHAR"/>
-            <result property="update_time" column="update_time" jdbcType="TIMESTAMP"/>
-            <result property="exec_name" column="exec_name" jdbcType="VARCHAR"/>
-            <result property="exec_addr" column="exec_addr" jdbcType="VARCHAR"/>
-            <result property="exec_type" column="exec_type" jdbcType="VARCHAR"/>
-            <result property="exec_available" column="exec_available" jdbcType="VARCHAR"/>
-            <result property="exec_monopoly" column="exec_monopoly" jdbcType="VARCHAR"/>
-            <result property="exec_register" column="exec_register" jdbcType="TIMESTAMP"/>
-            <result property="exec_version" column="exec_version" jdbcType="VARCHAR"/>
-    </resultMap>
+	<resultMap id="BaseResultMap" type="com.bob.ktssts.entity.TsExecuter">
+		<id property="id" column="id" jdbcType="VARCHAR"/>
+		<result property="update_by" column="update_by" jdbcType="VARCHAR"/>
+		<result property="update_time" column="update_time" jdbcType="TIMESTAMP"/>
+		<result property="exec_name" column="exec_name" jdbcType="VARCHAR"/>
+		<result property="exec_addr" column="exec_addr" jdbcType="VARCHAR"/>
+		<result property="exec_type" column="exec_type" jdbcType="VARCHAR"/>
+		<result property="exec_available" column="exec_available" jdbcType="VARCHAR"/>
+		<result property="exec_monopoly" column="exec_monopoly" jdbcType="VARCHAR"/>
+		<result property="exec_register" column="exec_register" jdbcType="TIMESTAMP"/>
+		<result property="exec_version" column="exec_version" jdbcType="VARCHAR"/>
+		<result property="exec_online" column="exec_online" jdbcType="VARCHAR"/>
+	</resultMap>
 
-    <sql id="Base_Column_List">
-        id,update_by,update_time,
+	<sql id="Base_Column_List">
+		id,update_by,update_time,
         exec_name,exec_addr,exec_type,
         exec_available,exec_monopoly,exec_register,
-        exec_version
-    </sql>
+        exec_version,exec_online
+	</sql>
 
-    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List" />
-        from ts_executer
-        where  id = #{id,jdbcType=VARCHAR} 
-    </select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from ts_executer
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+	<select id="selectAll" resultType="com.bob.ktssts.entity.TsExecuter">
+		select
+		<include refid="Base_Column_List"/>
+		from ts_executer
+	</select>
 
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-        delete from ts_executer
-        where  id = #{id,jdbcType=VARCHAR} 
-    </delete>
-    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.TsExecuter" useGeneratedKeys="true">
-        insert into ts_executer
-        ( id,update_by,update_time
-        ,exec_name,exec_addr,exec_type
-        ,exec_available,exec_monopoly,exec_register
-        ,exec_version)
-        values (#{id,jdbcType=VARCHAR},#{update_by,jdbcType=VARCHAR},#{update_time,jdbcType=TIMESTAMP}
-        ,#{exec_name,jdbcType=VARCHAR},#{exec_addr,jdbcType=VARCHAR},#{exec_type,jdbcType=VARCHAR}
-        ,#{exec_available,jdbcType=VARCHAR},#{exec_monopoly,jdbcType=VARCHAR},#{exec_register,jdbcType=TIMESTAMP}
-        ,#{exec_version,jdbcType=VARCHAR})
-    </insert>
-    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.TsExecuter" useGeneratedKeys="true">
-        insert into ts_executer
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="id != null">id,</if>
-                <if test="update_by != null">update_by,</if>
-                <if test="update_time != null">update_time,</if>
-                <if test="exec_name != null">exec_name,</if>
-                <if test="exec_addr != null">exec_addr,</if>
-                <if test="exec_type != null">exec_type,</if>
-                <if test="exec_available != null">exec_available,</if>
-                <if test="exec_monopoly != null">exec_monopoly,</if>
-                <if test="exec_register != null">exec_register,</if>
-                <if test="exec_version != null">exec_version,</if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="id != null">#{id,jdbcType=VARCHAR},</if>
-                <if test="update_by != null">#{update_by,jdbcType=VARCHAR},</if>
-                <if test="update_time != null">#{update_time,jdbcType=TIMESTAMP},</if>
-                <if test="exec_name != null">#{exec_name,jdbcType=VARCHAR},</if>
-                <if test="exec_addr != null">#{exec_addr,jdbcType=VARCHAR},</if>
-                <if test="exec_type != null">#{exec_type,jdbcType=VARCHAR},</if>
-                <if test="exec_available != null">#{exec_available,jdbcType=VARCHAR},</if>
-                <if test="exec_monopoly != null">#{exec_monopoly,jdbcType=VARCHAR},</if>
-                <if test="exec_register != null">#{exec_register,jdbcType=TIMESTAMP},</if>
-                <if test="exec_version != null">#{exec_version,jdbcType=VARCHAR},</if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.bob.ktssts.entity.TsExecuter">
-        update ts_executer
-        <set>
-                <if test="update_by != null">
-                    update_by = #{update_by,jdbcType=VARCHAR},
-                </if>
-                <if test="update_time != null">
-                    update_time = #{update_time,jdbcType=TIMESTAMP},
-                </if>
-                <if test="exec_name != null">
-                    exec_name = #{exec_name,jdbcType=VARCHAR},
-                </if>
-                <if test="exec_addr != null">
-                    exec_addr = #{exec_addr,jdbcType=VARCHAR},
-                </if>
-                <if test="exec_type != null">
-                    exec_type = #{exec_type,jdbcType=VARCHAR},
-                </if>
-                <if test="exec_available != null">
-                    exec_available = #{exec_available,jdbcType=VARCHAR},
-                </if>
-                <if test="exec_monopoly != null">
-                    exec_monopoly = #{exec_monopoly,jdbcType=VARCHAR},
-                </if>
-                <if test="exec_register != null">
-                    exec_register = #{exec_register,jdbcType=TIMESTAMP},
-                </if>
-                <if test="exec_version != null">
-                    exec_version = #{exec_version,jdbcType=VARCHAR},
-                </if>
-        </set>
-        where   id = #{id,jdbcType=VARCHAR} 
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.bob.ktssts.entity.TsExecuter">
-        update ts_executer
-        set 
-            update_by =  #{update_by,jdbcType=VARCHAR},
-            update_time =  #{update_time,jdbcType=TIMESTAMP},
-            exec_name =  #{exec_name,jdbcType=VARCHAR},
-            exec_addr =  #{exec_addr,jdbcType=VARCHAR},
-            exec_type =  #{exec_type,jdbcType=VARCHAR},
-            exec_available =  #{exec_available,jdbcType=VARCHAR},
-            exec_monopoly =  #{exec_monopoly,jdbcType=VARCHAR},
-            exec_register =  #{exec_register,jdbcType=TIMESTAMP},
-            exec_version =  #{exec_version,jdbcType=VARCHAR}
-        where   id = #{id,jdbcType=VARCHAR} 
-    </update>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete
+		from ts_executer
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.TsExecuter"
+			useGeneratedKeys="true">
+		insert into ts_executer
+		( id, update_by, update_time
+		, exec_name, exec_addr, exec_type
+		, exec_available, exec_monopoly, exec_register
+		, exec_version, exec_online)
+		values ( #{id,jdbcType=VARCHAR}, #{update_by,jdbcType=VARCHAR}, #{update_time,jdbcType=TIMESTAMP}
+			   , #{exec_name,jdbcType=VARCHAR}, #{exec_addr,jdbcType=VARCHAR}, #{exec_type,jdbcType=VARCHAR}
+			   , #{exec_available,jdbcType=VARCHAR}, #{exec_monopoly,jdbcType=VARCHAR}
+			   , #{exec_register,jdbcType=TIMESTAMP}
+			   , #{exec_version,jdbcType=VARCHAR}, #{exec_online,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.TsExecuter"
+			useGeneratedKeys="true">
+		insert into ts_executer
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="update_by != null">update_by,</if>
+			<if test="update_time != null">update_time,</if>
+			<if test="exec_name != null">exec_name,</if>
+			<if test="exec_addr != null">exec_addr,</if>
+			<if test="exec_type != null">exec_type,</if>
+			<if test="exec_available != null">exec_available,</if>
+			<if test="exec_monopoly != null">exec_monopoly,</if>
+			<if test="exec_register != null">exec_register,</if>
+			<if test="exec_version != null">exec_version,</if>
+			<if test="exec_online != null">exec_online,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id,jdbcType=VARCHAR},</if>
+			<if test="update_by != null">#{update_by,jdbcType=VARCHAR},</if>
+			<if test="update_time != null">#{update_time,jdbcType=TIMESTAMP},</if>
+			<if test="exec_name != null">#{exec_name,jdbcType=VARCHAR},</if>
+			<if test="exec_addr != null">#{exec_addr,jdbcType=VARCHAR},</if>
+			<if test="exec_type != null">#{exec_type,jdbcType=VARCHAR},</if>
+			<if test="exec_available != null">#{exec_available,jdbcType=VARCHAR},</if>
+			<if test="exec_monopoly != null">#{exec_monopoly,jdbcType=VARCHAR},</if>
+			<if test="exec_register != null">#{exec_register,jdbcType=TIMESTAMP},</if>
+			<if test="exec_version != null">#{exec_version,jdbcType=VARCHAR},</if>
+			<if test="exec_online != null">#{exec_online,jdbcType=VARCHAR},</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.bob.ktssts.entity.TsExecuter">
+		update ts_executer
+		<set>
+			<if test="update_by != null">
+				update_by = #{update_by,jdbcType=VARCHAR},
+			</if>
+			<if test="update_time != null">
+				update_time = #{update_time,jdbcType=TIMESTAMP},
+			</if>
+			<if test="exec_name != null">
+				exec_name = #{exec_name,jdbcType=VARCHAR},
+			</if>
+			<if test="exec_addr != null">
+				exec_addr = #{exec_addr,jdbcType=VARCHAR},
+			</if>
+			<if test="exec_type != null">
+				exec_type = #{exec_type,jdbcType=VARCHAR},
+			</if>
+			<if test="exec_available != null">
+				exec_available = #{exec_available,jdbcType=VARCHAR},
+			</if>
+			<if test="exec_monopoly != null">
+				exec_monopoly = #{exec_monopoly,jdbcType=VARCHAR},
+			</if>
+			<if test="exec_register != null">
+				exec_register = #{exec_register,jdbcType=TIMESTAMP},
+			</if>
+			<if test="exec_version != null">
+				exec_version = #{exec_version,jdbcType=VARCHAR},
+			</if>
+			<if test="exec_online != null">
+				exec_online = #{exec_online,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.bob.ktssts.entity.TsExecuter">
+		update ts_executer
+		set update_by      = #{update_by,jdbcType=VARCHAR},
+			update_time    = #{update_time,jdbcType=TIMESTAMP},
+			exec_name      = #{exec_name,jdbcType=VARCHAR},
+			exec_addr      = #{exec_addr,jdbcType=VARCHAR},
+			exec_type      = #{exec_type,jdbcType=VARCHAR},
+			exec_available = #{exec_available,jdbcType=VARCHAR},
+			exec_monopoly  = #{exec_monopoly,jdbcType=VARCHAR},
+			exec_register  = #{exec_register,jdbcType=TIMESTAMP},
+			exec_version   = #{exec_version,jdbcType=VARCHAR},
+			exec_online    = #{exec_online,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
 </mapper>

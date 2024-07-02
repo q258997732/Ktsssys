@@ -7,6 +7,7 @@ public interface TsExecuterService {
 
 	public int cleanKRpaAgent();
 
+	public boolean syncKRpaAgent();
 
 
 

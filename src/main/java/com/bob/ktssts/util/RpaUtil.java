@@ -3,6 +3,7 @@ package com.bob.ktssts.util;
 import com.bob.ktssts.entity.KAgentBean;
 import com.bob.ktssts.entity.KSxfAgentBean;
 import com.bob.ktssts.entity.RpaRequestBean;
+import com.bob.ktssts.entity.TsExecuter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,7 +39,7 @@ public class RpaUtil {
 	/**
 	 * @param target             VCLAgentIP:执行agentIP Value:执行结果 VCLName:调用组件 Description:描述 Level:级别
 	 * @param rpaRequestBeanList K-RPA API返回的内容
-	 * @return	返回内容中提取target的值
+	 * @return 返回内容中提取target的值
 	 */
 	public static Object getRpaResponseValue(String target, List<RpaRequestBean> rpaRequestBeanList) {
 		Object Result = null;
@@ -61,7 +62,7 @@ public class RpaUtil {
 		};
 	}
 
-	public static String getKRpaCallComponentRes(List<RpaRequestBean> rpaRequestBeanList){
+	public static String getKRpaCallComponentRes(List<RpaRequestBean> rpaRequestBeanList) {
 		if (rpaRequestBeanList == null || rpaRequestBeanList.isEmpty()) return null;
 		Object Result = getRpaResponseValue("Value", rpaRequestBeanList);
 		Object Level = getRpaResponseValue("Level", rpaRequestBeanList);
@@ -76,13 +77,13 @@ public class RpaUtil {
 		Object flowName = getRpaResponseValue("FlowName", rpaRequestBeanList);
 		Object robot = getRpaResponseValue("Robot", rpaRequestBeanList);
 		Object error = getRpaResponseValue("{50043442-8A69-4A6B-A8B5-61F882EDE4F3}", rpaRequestBeanList);
-		return String.format("K-RPA任务队列： 添加 %s 任务 %s , 分配机器人为: %s",flowName,"".equals(error)?"成功":"失败",robot);
+		return String.format("K-RPA任务队列： 添加 %s 任务 %s , 分配机器人为: %s", flowName, "".equals(error) ? "成功" : "失败", robot);
 	}
 
 	public static String getSXFAgentFlowQueryRes(List<RpaRequestBean> rpaRequestBeanList) {
 		if (rpaRequestBeanList == null || rpaRequestBeanList.isEmpty()) return null;
 		Object error = getRpaResponseValue("{50043442-8A69-4A6B-A8B5-61F882EDE4F3}", rpaRequestBeanList);
-		return String.format("K-RPA当天任务获取: 执行%s","".equals(error)?"成功":"失败");
+		return String.format("K-RPA当天任务获取: 执行%s", "".equals(error) ? "成功" : "失败");
 	}
 
 	public static boolean callFunStatus(List<RpaRequestBean> rpaRequestBeanList) {
@@ -105,8 +106,10 @@ public class RpaUtil {
 		return rpaRequestBeanList;
 	}
 
-	/** 写完发现这玩意儿用不上
-	 *  将K-RPA API返回的内容转换为KAgentBean数组，只适用于K-RPA接口的getSXFAgentFlowQuery方法
+	/**
+	 * 写完发现这玩意儿用不上
+	 * 将K-RPA API返回的内容转换为KAgentBean数组，只适用于K-RPA接口的getSXFAgentFlowQuery方法
+	 *
 	 * @param rpaRequestBeanList 接口返回的内容
 	 * @return KAgent数组
 	 */
@@ -116,24 +119,24 @@ public class RpaUtil {
 		Map<Integer, String> KAgentInvMap = new HashMap<Integer, String>();
 		List<KSxfAgentBean> kSxfAgentBeanList = new ArrayList<>();
 
-		for(RpaRequestBean rpaRequestBean : rpaRequestBeanList) {
-			if("k_agent_object".equals(rpaRequestBean.getName())) {
-				List<List<Map<String,String>>> KAgentList = (List<List<Map<String, String>>>) rpaRequestBean.getValue();
-				for(int i = 0 ;i<KAgentList.size();i++) {
-					if(i==0){
-						for(int j = 0 ;j<KAgentList.get(i).size();j++) {
-							Map<String,String> KAgentMap = KAgentList.get(i).get(j);
+		for (RpaRequestBean rpaRequestBean : rpaRequestBeanList) {
+			if ("k_agent_object".equals(rpaRequestBean.getName())) {
+				List<List<Map<String, String>>> KAgentList = (List<List<Map<String, String>>>) rpaRequestBean.getValue();
+				for (int i = 0; i < KAgentList.size(); i++) {
+					if (i == 0) {
+						for (int j = 0; j < KAgentList.get(i).size(); j++) {
+							Map<String, String> KAgentMap = KAgentList.get(i).get(j);
 							KAgentMap.get("Name");
 							String name = KAgentMap.get("Name");
-							if(!"".equals(name) && !name.isEmpty()){
-								KAgentInvMap.put( j,name);
+							if (!"".equals(name) && !name.isEmpty()) {
+								KAgentInvMap.put(j, name);
 							}
 						}
-					}else{
-						Map<String,Object> beanParamMap = new HashMap<>();
+					} else {
+						Map<String, Object> beanParamMap = new HashMap<>();
 						String[] beanList = new String[KAgentInvMap.size()];
-						for(int j = 0 ;j<KAgentList.get(i).size();j++) {
-							beanParamMap.put(KAgentInvMap.get(j),KAgentList.get(i).get(j).get("Value"));
+						for (int j = 0; j < KAgentList.get(i).size(); j++) {
+							beanParamMap.put(KAgentInvMap.get(j), KAgentList.get(i).get(j).get("Value"));
 						}
 						KSxfAgentBean kSxfAgentBean = new KSxfAgentBean(beanParamMap);
 						kSxfAgentBeanList.add(kSxfAgentBean);
@@ -152,24 +155,24 @@ public class RpaUtil {
 		Map<Integer, String> KAgentInvMap = new HashMap<Integer, String>();
 		List<KAgentBean> kAgentBeanList = new ArrayList<>();
 
-		for(RpaRequestBean rpaRequestBean : rpaRequestBeanList) {
-			if("k_agent".equals(rpaRequestBean.getName())) {
-				List<List<Map<String,String>>> KAgentList = (List<List<Map<String, String>>>) rpaRequestBean.getValue();
-				for(int i = 0 ;i<KAgentList.size();i++) {
-					if(i==0){
-						for(int j = 0 ;j<KAgentList.get(i).size();j++) {
-							Map<String,String> KAgentMap = KAgentList.get(i).get(j);
+		for (RpaRequestBean rpaRequestBean : rpaRequestBeanList) {
+			if ("k_agent".equals(rpaRequestBean.getName())) {
+				List<List<Map<String, String>>> KAgentList = (List<List<Map<String, String>>>) rpaRequestBean.getValue();
+				for (int i = 0; i < KAgentList.size(); i++) {
+					if (i == 0) {
+						for (int j = 0; j < KAgentList.get(i).size(); j++) {
+							Map<String, String> KAgentMap = KAgentList.get(i).get(j);
 							KAgentMap.get("Name");
 							String name = KAgentMap.get("Name");
-							if(!"".equals(name) && !name.isEmpty()){
-								KAgentInvMap.put( j,name);
+							if (!"".equals(name) && !name.isEmpty()) {
+								KAgentInvMap.put(j, name);
 							}
 						}
-					}else{
-						Map<String,Object> beanParamMap = new HashMap<>();
+					} else {
+						Map<String, Object> beanParamMap = new HashMap<>();
 						String[] beanList = new String[KAgentInvMap.size()];
-						for(int j = 0 ;j<KAgentList.get(i).size();j++) {
-							beanParamMap.put(KAgentInvMap.get(j),KAgentList.get(i).get(j).get("Value"));
+						for (int j = 0; j < KAgentList.get(i).size(); j++) {
+							beanParamMap.put(KAgentInvMap.get(j), KAgentList.get(i).get(j).get("Value"));
 						}
 						KAgentBean kAgentBean = new KAgentBean(beanParamMap);
 						kAgentBeanList.add(kAgentBean);
@@ -179,7 +182,10 @@ public class RpaUtil {
 			}
 		}
 
+		LOGGER.info("result2KAgentList size : {}", kAgentBeanList.size());
+
 		return kAgentBeanList;
 	}
 
 }
+
