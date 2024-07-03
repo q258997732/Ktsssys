@@ -105,4 +105,10 @@ public class TsExecuterImpl implements TsExecuterService {
 		return true;
 	}
 
+	@Override
+	public List<TsExecuter> getFreeExecuter(String execType, int num) {
+		return tsExecuterMapper.selectFreeExecuter(execType,num);
+	}
+
+
 }

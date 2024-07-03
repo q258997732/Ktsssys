@@ -36,6 +36,15 @@
 		<include refid="Base_Column_List"/>
 		from ts_executer
 	</select>
+	<select id="selectFreeExecuter" resultType="com.bob.ktssts.entity.TsExecuter">
+		select
+		<include refid="Base_Column_List"/>
+		from ts_executer
+		where id not in (select exec_id from ts_executer_task)
+		  and exec_type = #{execType,jdbcType=VARCHAR}
+		  and exec_monopoly = false
+		limit #{num,jdbcType=INTEGER};
+	</select>
 
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		delete

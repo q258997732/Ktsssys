@@ -1,6 +1,9 @@
 package com.bob.ktssts.service;
 
+import com.bob.ktssts.entity.TsExecuter;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public interface TsExecuterService {
@@ -9,6 +12,7 @@ public interface TsExecuterService {
 
 	public boolean syncKRpaAgent();
 
+	public List<TsExecuter> getFreeExecuter(String execType, int num);
 
 
 }

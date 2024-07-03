@@ -2,6 +2,7 @@ package com.bob.ktssts.mapper;
 
 import com.bob.ktssts.entity.TsExecuter;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -65,5 +66,7 @@ public interface TsExecuterMapper {
 
     // 返回所有记录
     List<TsExecuter> selectAll();
+
+    List<TsExecuter> selectFreeExecuter(String execType,int num);
 
 }
