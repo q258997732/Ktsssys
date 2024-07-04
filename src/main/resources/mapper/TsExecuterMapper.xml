@@ -45,6 +45,12 @@
 		  and exec_monopoly = false
 		limit #{num,jdbcType=INTEGER};
 	</select>
+	<select id="getExecuterId" resultType="java.lang.String">
+		select id from ts_executer
+		where exec_type = #{execType,jdbcType=VARCHAR}
+		  and exec_addr = #{execAddr,jdbcType=VARCHAR}
+		limit 1;
+	</select>
 
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		delete

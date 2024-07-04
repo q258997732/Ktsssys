@@ -1,28 +1,35 @@
 package com.bob.ktssts.service;
 
 import com.bob.ktssts.entity.TmsTaskBean;
+import com.bob.ktssts.entity.TsExecuter;
 import com.bob.ktssts.entity.TsTask;
+import com.bob.ktssts.mapper.TsExecuterMapper;
 import com.bob.ktssts.mapper.TsTaskMapper;
 import com.bob.ktssts.util.RpaExecuter;
 import com.bob.ktssts.util.TaskUtil;
+import jakarta.annotation.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
-public class TsTaskImpl implements TsTaskService{
-
-	private static final Logger LOGGER = LogManager.getLogger(TsTaskImpl.class);
+public class TsTaskImpl implements TsTaskService {
 
 	final static String ADD_BY = "ktssts";
 
-	@Autowired
+	private static final Logger LOGGER = LogManager.getLogger(TsTaskImpl.class);
+
+	@Resource
 	TsTaskMapper tsTaskMapper;
+
+	@Resource
+	private TsExecuterService tsExecuterService;
+	@Autowired
+	private TsExecuterMapper tsExecuterMapper;
 
 	@Override
 	public int syncEventSolveTask() {
@@ -35,7 +42,7 @@ public class TsTaskImpl implements TsTaskService{
 		for (TmsTaskBean tmsTaskBean : ktssTmsTask) {
 			boolean isFind = false;
 			for (TsTask tsTask : tsTaskList) {
-				if(TaskUtil.compareTsTaskTmsTask(tsTask, tmsTaskBean) && !"1".equals(tsTask.getExecMonopoly())){
+				if (TaskUtil.compareTsTaskTmsTask(tsTask, tmsTaskBean) && !"1".equals(tsTask.getExecMonopoly())) {
 //					tsTask.setUpdateTime(new Date());
 //					tsTask.setTaskName("K-TSS 自动处理事件");
 //					tsTask.setTaskDesc("K-TSS 自动处理事件:"+tmsTaskBean.getUsername());
@@ -55,15 +62,15 @@ public class TsTaskImpl implements TsTaskService{
 					break;
 				}
 			}
-			if(!isFind){
+			if (!isFind) {
 				TsTask tsTask = new TsTask();
-				tsTask.setId(UUID.randomUUID().toString().replace("-",""));
+				tsTask.setId(UUID.randomUUID().toString().replace("-", ""));
 				tsTask.setAddBy(ADD_BY);
 				tsTask.setAddTime(new Date());
 				tsTask.setUpdateTime(new Date());
 				tsTask.setUpdateBy(ADD_BY);
 				tsTask.setTaskName("K-TSS 自动处理事件");
-				tsTask.setTaskDesc("K-TSS 自动处理事件:"+tmsTaskBean.getUsername());
+				tsTask.setTaskDesc("K-TSS 自动处理事件:" + tmsTaskBean.getUsername());
 				tsTask.setScheduleType("CYCLE");
 				tsTask.setScheduleConf("10");
 				tsTask.setExecParam(tmsTaskBean.toKRpaString());
@@ -73,9 +80,10 @@ public class TsTaskImpl implements TsTaskService{
 				tsTask.setClone("1");
 				tsTask.setExecMonopoly("0");
 				tsTask.setExecAppoint("");
+				tsTask.setAvailable("1");
 				int res = tsTaskMapper.insert(tsTask);
 //				LOGGER.info("insert tsTask:{}",res);
-				if(res >0)
+				if (res > 0)
 					effectCount++;
 
 			}
@@ -88,11 +96,58 @@ public class TsTaskImpl implements TsTaskService{
 
 		int effectCount = 0;
 		for (TsTask tsTask : tsTaskList) {
-			if(TaskUtil.isDistributeRpaTask(tsTask)){
+			if (TaskUtil.isDistributeRpaTask(tsTask)) {
+				// 创建插入的Executer_task的基本map
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("id", UUID.randomUUID().toString().replace("-", ""));
+				map.put("updateBy", "ktssts");
+				map.put("updateTime", new Date());
+				map.put("taskId", tsTask.getId());
+				map.put("execId", "");
+				map.put("priority", "9");
+				map.put("available", "1");
+
+				// 检查是否已经分配任务
 				int count = tsTaskMapper.countExecTask(tsTask.getId());
-				if(count == 0){
-					// 将tsTask写入ts_executer_task
-					effectCount += tsTaskMapper.insert(tsTask);
+				if (count <= 0 || (!"".equals(tsTask.getExecAppoint()) && tsTask.getExecAppoint() != null)) {
+					// 判断是否有指定的IP,有指定IP则直接写入指定IP,无指定则获取一个空闲的执行器
+					String appoint = tsTask.getExecAppoint();
+					if (!"".equals(appoint) && appoint != null) {
+						// 若Task指定了执行器IP，将Executer_Task表中的相关记录删除
+						tsTaskMapper.clearExecTaskByTaskId(tsTask.getId());
+						String[] appointList = appoint.split(",");
+						if (appointList.length >= 1) {
+							for (String ip : appointList) {
+								// 根据类型获取Executer的ID
+								LOGGER.info("给 {} 任务分配指定的执行器: {}", tsTask.getTaskDesc(),ip);
+								String execId = tsExecuterMapper.getExecuterId("K-RPA", ip);
+								if("".equals(execId) || execId == null) {
+									LOGGER.warn("没有找到K-RPA的执行器：{}",ip);
+									continue;
+								}
+
+								map.put("id", UUID.randomUUID().toString().replace("-", ""));
+								map.put("execId", execId);
+								if (tsTaskMapper.insertExecuterTask(map) > 0) {
+									effectCount++;
+								}
+							}
+						}
+					} else {
+						// 获取一个空闲的执行器
+						List<TsExecuter> executerList = tsExecuterService.getFreeExecuter("K-RPA", 1);
+						if (executerList.isEmpty()) {
+							LOGGER.warn("没有了空闲K-RPA的执行器！");
+							return effectCount;
+						}
+						LOGGER.info("给 {} 任务分配空闲的执行器: {}", tsTask.getTaskDesc(),executerList.get(0).getExec_addr());
+						map.put("execId", executerList.get(0).getId());
+						// 将tsTask写入ts_executer_task
+						effectCount += tsTaskMapper.insertExecuterTask(map);
+					}
+
+				} else {
+					LOGGER.info("{} 已经分配执行器，不自动同步", tsTask.getTaskDesc());
 				}
 			}
 		}

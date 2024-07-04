@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bob.ktssts.mapper.TsTaskMapper">
+
+	<resultMap id="BaseResultMap" type="com.bob.ktssts.entity.TsTask">
+		<id property="id" column="id" jdbcType="VARCHAR"/>
+		<result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+		<result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+		<result property="addBy" column="add_by" jdbcType="VARCHAR"/>
+		<result property="addTime" column="add_time" jdbcType="TIMESTAMP"/>
+		<result property="taskName" column="task_name" jdbcType="VARCHAR"/>
+		<result property="taskDesc" column="task_desc" jdbcType="VARCHAR"/>
+		<result property="scheduleType" column="schedule_type" jdbcType="VARCHAR"/>
+		<result property="scheduleConf" column="schedule_conf" jdbcType="VARCHAR"/>
+		<result property="execParam" column="exec_param" jdbcType="VARCHAR"/>
+		<result property="execTimeout" column="exec_timeout" jdbcType="INTEGER"/>
+		<result property="execRetry" column="exec_retry" jdbcType="INTEGER"/>
+		<result property="execMonopoly" column="exec_monopoly" jdbcType="VARCHAR"/>
+		<result property="execType" column="exec_type" jdbcType="VARCHAR"/>
+		<result property="execAppoint" column="exec_appoint" jdbcType="VARCHAR"/>
+		<result property="clone" column="clone" jdbcType="VARCHAR"/>
+		<result property="executerId" column="executer_id" jdbcType="VARCHAR"/>
+		<result property="available" column="available" jdbcType="VARCHAR"/>
+
+	</resultMap>
+
+	<resultMap id="TmsTaskMap" type="com.bob.ktssts.entity.TmsTaskBean">
+		<result column="tms_name" property="tmsName"/>
+		<result column="ip" property="ip"/>
+		<result column="port" property="port"/>
+		<result column="site_id" property="siteId"/>
+		<result column="tms_id" property="tmsId"/>
+		<result column="username" property="username"/>
+		<result column="password" property="password"/>
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,update_by,update_time,
+        add_by,add_time,task_name,
+        task_desc,schedule_type,schedule_conf,
+        exec_param,exec_timeout,exec_retry,
+        exec_monopoly,exec_type,exec_appoint,
+        clone,executer_id,available
+	</sql>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from ts_task
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete
+		from ts_task
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deleteTaskByAddBy" parameterType="java.lang.String">
+		delete
+		from ts_task
+		where add_by = #{add_by,jdbcType=VARCHAR}
+	</delete>
+	<delete id="clearExecTaskByTaskId">
+		delete
+		from ts_executer_task
+		where task_id = #{id,jdbcType=VARCHAR};
+	</delete>
+	<insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.TsTask"
+			useGeneratedKeys="true">
+		insert into ts_task(<include refid="Base_Column_List"/>)
+		values ( #{id,jdbcType=VARCHAR}, #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
+			   , #{addBy,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, #{taskName,jdbcType=VARCHAR}
+			   , #{taskDesc,jdbcType=VARCHAR}, #{scheduleType,jdbcType=VARCHAR}, #{scheduleConf,jdbcType=VARCHAR}
+			   , #{execParam,jdbcType=VARCHAR}, #{execTimeout,jdbcType=INTEGER}, #{execRetry,jdbcType=INTEGER}
+			   , #{execMonopoly,jdbcType=VARCHAR}, #{execType,jdbcType=VARCHAR}, #{execAppoint,jdbcType=VARCHAR}
+			   , #{clone,jdbcType=VARCHAR}, #{executerId,jdbcType=VARCHAR}, #{available,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.TsTask"
+			useGeneratedKeys="true">
+		insert into ts_task
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="updateBy != null">update_by,</if>
+			<if test="updateTime != null">update_time,</if>
+			<if test="addBy != null">add_by,</if>
+			<if test="addTime != null">add_time,</if>
+			<if test="taskName != null">task_name,</if>
+			<if test="taskDesc != null">task_desc,</if>
+			<if test="scheduleType != null">schedule_type,</if>
+			<if test="scheduleConf != null">schedule_conf,</if>
+			<if test="execParam != null">exec_param,</if>
+			<if test="execTimeout != null">exec_timeout,</if>
+			<if test="execRetry != null">exec_retry,</if>
+			<if test="execMonopoly != null">exec_monopoly,</if>
+			<if test="execType != null">exec_type,</if>
+			<if test="execAppoint != null">exec_appoint,</if>
+			<if test="clone != null">clone,</if>
+		    <if test="executerId != null">executer_id,</if>
+		    <if test="available != null">available,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id,jdbcType=VARCHAR},</if>
+			<if test="updateBy != null">#{updateBy,jdbcType=VARCHAR},</if>
+			<if test="updateTime != null">#{updateTime,jdbcType=TIMESTAMP},</if>
+			<if test="addBy != null">#{addBy,jdbcType=VARCHAR},</if>
+			<if test="addTime != null">#{addTime,jdbcType=TIMESTAMP},</if>
+			<if test="taskName != null">#{taskName,jdbcType=VARCHAR},</if>
+			<if test="taskDesc != null">#{taskDesc,jdbcType=VARCHAR},</if>
+			<if test="scheduleType != null">#{scheduleType,jdbcType=VARCHAR},</if>
+			<if test="scheduleConf != null">#{scheduleConf,jdbcType=VARCHAR},</if>
+			<if test="execParam != null">#{execParam,jdbcType=VARCHAR},</if>
+			<if test="execTimeout != null">#{execTimeout,jdbcType=INTEGER},</if>
+			<if test="execRetry != null">#{execRetry,jdbcType=INTEGER},</if>
+			<if test="execMonopoly != null">#{execMonopoly,jdbcType=VARCHAR},</if>
+			<if test="execType != null">#{execType,jdbcType=VARCHAR},</if>
+			<if test="execAppoint != null">#{execAppoint,jdbcType=VARCHAR},</if>
+			<if test="clone != null">#{clone,jdbcType=VARCHAR},</if>
+			<if test="executerId != null">#{executerId,jdbcType=VARCHAR},</if>
+			<if test="available != null">#{available,jdbcType=VARCHAR},</if>
+		</trim>
+	</insert>
+	<insert id="insertExecuterTask" parameterType="java.util.Map">
+		insert into ts_executer_task(id, update_by, update_time, task_id, exec_id, priority, available)
+		values (#{id,jdbcType=VARCHAR}, #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP},
+				#{taskId,jdbcType=VARCHAR}, #{execId,jdbcType=VARCHAR}, #{priority,jdbcType=VARCHAR},
+				#{available,jdbcType=VARCHAR});
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.bob.ktssts.entity.TsTask">
+		update ts_task
+		<set>
+			<if test="updateBy != null">
+				update_by = #{updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="addBy != null">
+				add_by = #{addBy,jdbcType=VARCHAR},
+			</if>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="taskName != null">
+				task_name = #{taskName,jdbcType=VARCHAR},
+			</if>
+			<if test="taskDesc != null">
+				task_desc = #{taskDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="scheduleType != null">
+				schedule_type = #{scheduleType,jdbcType=VARCHAR},
+			</if>
+			<if test="scheduleConf != null">
+				schedule_conf = #{scheduleConf,jdbcType=VARCHAR},
+			</if>
+			<if test="execParam != null">
+				exec_param = #{execParam,jdbcType=VARCHAR},
+			</if>
+			<if test="execTimeout != null">
+				exec_timeout = #{execTimeout,jdbcType=INTEGER},
+			</if>
+			<if test="execRetry != null">
+				exec_retry = #{execRetry,jdbcType=INTEGER},
+			</if>
+			<if test="execMonopoly != null">
+				exec_monopoly = #{execMonopoly,jdbcType=VARCHAR},
+			</if>
+			<if test="execType != null">
+				exec_type = #{execType,jdbcType=VARCHAR},
+			</if>
+			<if test="execAppoint != null">
+				exec_appoint = #{execAppoint,jdbcType=VARCHAR},
+			</if>
+			<if test="clone != null">
+				clone = #{clone,jdbcType=VARCHAR},
+			</if>
+			<if test="executerId != null">
+				executer_id = #{executerId,jdbcType=VARCHAR},
+			</if>
+			<if test="available != null">
+				available = #{available,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.bob.ktssts.entity.TsTask">
+		update ts_task
+		set update_by     = #{updateBy,jdbcType=VARCHAR},
+			update_time   = #{updateTime,jdbcType=TIMESTAMP},
+			add_by        = #{addBy,jdbcType=VARCHAR},
+			add_time      = #{addTime,jdbcType=TIMESTAMP},
+			task_name     = #{taskName,jdbcType=VARCHAR},
+			task_desc     = #{taskDesc,jdbcType=VARCHAR},
+			schedule_type = #{scheduleType,jdbcType=VARCHAR},
+			schedule_conf = #{scheduleConf,jdbcType=VARCHAR},
+			exec_param    = #{execParam,jdbcType=VARCHAR},
+			exec_timeout  = #{execTimeout,jdbcType=INTEGER},
+			exec_retry    = #{execRetry,jdbcType=INTEGER},
+			exec_monopoly = #{execMonopoly,jdbcType=VARCHAR},
+			exec_type     = #{execType,jdbcType=VARCHAR},
+			exec_appoint  = #{execAppoint,jdbcType=VARCHAR},
+			clone         = #{clone,jdbcType=VARCHAR},
+			executer_id   = #{executerId,jdbcType=VARCHAR},
+		    available     = #{available,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 获取K-TSS任务 -->
+	<select id="selectAllKtssTmsTask" resultMap="TmsTaskMap">
+		SELECT a.sys_name    AS tms_name,
+			   a.server_ip   AS ip,
+			   a.server_port AS port,
+			   b.site_id,
+			   b.tms_id,
+			   b.username,
+			   b.password
+		FROM tss_tms a,
+			 tss_tms_register b
+		WHERE a.id = b.tms_id
+		  AND b.status = '1'
+	</select>
+	<select id="selectAllTsTask" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM ts_task where clone=true and available=true;
+	</select>
+	<select id="countExecTask" resultType="java.lang.Integer">
+		select count(1)
+		from ts_executer_task
+		where task_id = #{id,jdbcType=VARCHAR};
+	</select>
+	<select id="selectTsTaskByExecType" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from ts_task
+		where exec_type = #{execType,jdbcType=VARCHAR}
+		and clone = true
+		and available = true;
+	</select>
+
+</mapper>

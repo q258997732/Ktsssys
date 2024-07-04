@@ -10,6 +10,10 @@ public interface TsExecuterService {
 
 	public int cleanKRpaAgent();
 
+	/**
+	 *
+	 * @return 执行结果
+	 */
 	public boolean syncKRpaAgent();
 
 	public List<TsExecuter> getFreeExecuter(String execType, int num);

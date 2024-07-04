@@ -4,7 +4,6 @@ import com.bob.ktssts.entity.KAgentBean;
 import com.bob.ktssts.entity.TsExecuter;
 import com.bob.ktssts.mapper.TsExecuterMapper;
 import com.bob.ktssts.util.RpaExecuter;
-import com.bob.ktssts.util.RpaUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,11 +80,11 @@ public class TsExecuterImpl implements TsExecuterService {
 			}
 		}
 
-		LOGGER.info("update tsExecuterList size : {}", tsExecuterList.size());
+//		LOGGER.info("执行器总数: {}", tsExecuterList.size());
 
 		// 遍历tsExecuterList，若数据库中存在记录则更新，不存在则插入
 		try {
-			LOGGER.info("update tsExecuterList start");
+//			LOGGER.info("update tsExecuterList start");
 			for (TsExecuter tsExecuter : tsExecuterList) {
 				if (tsExecuter.getExec_type().equals("K-RPA")) {
 					if (tsExecuter.getId() != null) {

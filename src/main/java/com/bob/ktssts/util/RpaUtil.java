@@ -58,6 +58,7 @@ public class RpaUtil {
 			case "CallComponent" -> getKRpaCallComponentRes(rpaRequestBeanList);
 			case "GetFlowIDByFullPath" -> getKRpaAddDataQueueRes(rpaRequestBeanList);
 			case "GetSXFAgentFlowQuery" -> getSXFAgentFlowQueryRes(rpaRequestBeanList);
+			case "GetAgentList" -> getKRpaAgentListRes(rpaRequestBeanList);
 			default -> "未匹配的K-RPA接口返回信息";
 		};
 	}
@@ -84,6 +85,12 @@ public class RpaUtil {
 		if (rpaRequestBeanList == null || rpaRequestBeanList.isEmpty()) return null;
 		Object error = getRpaResponseValue("{50043442-8A69-4A6B-A8B5-61F882EDE4F3}", rpaRequestBeanList);
 		return String.format("K-RPA当天任务获取: 执行%s", "".equals(error) ? "成功" : "失败");
+	}
+
+	public static String getKRpaAgentListRes(List<RpaRequestBean> rpaRequestBeanList) {
+		if (rpaRequestBeanList == null || rpaRequestBeanList.isEmpty()) return null;
+		Object error = getRpaResponseValue("{50043442-8A69-4A6B-A8B5-61F882EDE4F3}", rpaRequestBeanList);
+		return String.format("K-RPA获取Agent列表任务: 执行%s", "".equals(error) ? "成功" : "失败");
 	}
 
 	public static boolean callFunStatus(List<RpaRequestBean> rpaRequestBeanList) {
@@ -182,10 +189,11 @@ public class RpaUtil {
 			}
 		}
 
-		LOGGER.info("result2KAgentList size : {}", kAgentBeanList.size());
+		LOGGER.debug("result2KAgentList size : {}", kAgentBeanList.size());
 
 		return kAgentBeanList;
 	}
+
 
 }
 

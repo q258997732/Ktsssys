@@ -147,7 +147,7 @@ public class RpaExecuter {
 		try {
 			ObjectMapper objectMapper = new ObjectMapper().setPropertyNamingStrategy(new PascalCaseNamingStrategy());
 			json = objectMapper.writeValueAsString(rpaRequestBeans);
-//			LOGGER.info("Request json : {}", json);
+			LOGGER.debug("Request json : {}", json);
 		} catch (Exception exception) {
 			LOGGER.error(exception.getMessage());
 			return null;
@@ -157,14 +157,14 @@ public class RpaExecuter {
 		httpPost.setEntity(new StringEntity(json, ContentType.APPLICATION_JSON));
 		try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
 			String responseBody = EntityUtils.toString(response.getEntity());
-			LOGGER.info("Response json length : {}", responseBody.length());
+			LOGGER.debug("Response json length : {}", responseBody.length());
 
 			// 处理返回结果
 			List<RpaRequestBean> rpaRequestBeanList = RpaUtil.result2KRpaRequestBean(responseBody);
 
 			// 匹配返回内容
 			if (RpaUtil.callFunStatus(rpaRequestBeanList)) {
-				LOGGER.info(RpaUtil.getRpaResponseRes(rpaRequestBeanList));
+//				LOGGER.info(RpaUtil.getRpaResponseRes(rpaRequestBeanList));
 				return rpaRequestBeanList;
 			} else {
 				LOGGER.error(RpaUtil.getRpaResponseRes(rpaRequestBeanList));

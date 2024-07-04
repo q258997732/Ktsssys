@@ -69,4 +69,8 @@ public interface TsExecuterMapper {
 
     List<TsExecuter> selectFreeExecuter(String execType,int num);
 
+    String getExecuterId(String execType,String execAddr);
+
+
+
 }
