@@ -21,5 +21,8 @@ public class TsTaskController {
 	TsExecuterService tsExecuterService;
 
 	@PostMapping("/resetAutoRpaTask")
+	public String resetAutoRpaTask() {
+		return null;
+	}
 
 }

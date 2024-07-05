@@ -95,7 +95,7 @@ public class RpaExecuter {
 		return  RpaUtil.callFunStatus(rpaRequestBeanList);
 	}
 
-	public boolean addRpaProcess(String flowType, String flow, String data, String agentIp,int level) {
+	public boolean addRpaDataProcess(String flowType, String flow, String data, String agentIp, int level) {
 		/* 拼接请求主体 */
 		List<RpaRequestBean> rpaRequestBeans = new ArrayList<RpaRequestBean>();
 		// 执行任务的AgentIP

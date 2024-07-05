@@ -1,5 +1,6 @@
 package com.bob.ktssts.service;
 
+import com.bob.ktssts.entity.KRpaFlowDataBean;
 import com.bob.ktssts.entity.TmsTaskBean;
 import com.bob.ktssts.entity.TsExecuter;
 import com.bob.ktssts.entity.TsTask;
@@ -12,6 +13,10 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -67,8 +72,8 @@ public class TsTaskImpl implements TsTaskService {
 				tsTask.setAddTime(new Date());
 				tsTask.setUpdateTime(new Date());
 				tsTask.setUpdateBy(ADD_BY);
-				tsTask.setTaskName("K-TSS 自动处理事件");
-				tsTask.setTaskDesc("K-TSS 自动处理事件:" + tmsTaskBean.getUsername());
+				tsTask.setTaskName("XCI系统_报警信息处理");
+				tsTask.setTaskDesc("XCI系统_报警信息处理:" + tmsTaskBean.getUsername());
 				tsTask.setScheduleType("CYCLE");
 				tsTask.setScheduleConf("10");
 				tsTask.setExecParam(tmsTaskBean.toKRpaString());

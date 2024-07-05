@@ -1,5 +1,6 @@
 package com.bob.ktssts.mapper;
 
+import com.bob.ktssts.entity.KRpaFlowDataBean;
 import com.bob.ktssts.entity.TmsTaskBean;
 import com.bob.ktssts.entity.TsTask;
 import org.apache.ibatis.annotations.Mapper;
@@ -45,4 +46,6 @@ public interface TsTaskMapper {
 
     int deleteAutoRpaTask();
 
+    // 获取所有K-RPA待执行的任务
+    List<TsTask> selectKRpaExecutedTsTask();
 }

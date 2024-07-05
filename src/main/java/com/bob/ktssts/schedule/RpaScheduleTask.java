@@ -1,41 +1,65 @@
 package com.bob.ktssts.schedule;
 
-import com.bob.ktssts.service.TsExecuterService;
-import com.bob.ktssts.service.TsTaskService;
-import jakarta.annotation.Resource;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class RpaScheduleTask {
 
-	@Resource
-	TsTaskService tsTaskService;
-	@Resource
-	TsExecuterService tsExecuterService;
+	final Logger LOGGER = LogManager.getLogger(DefaultScheduleTask.class);
 
-	static Logger LOGGER = LogManager.getLogger(RpaScheduleTask.class);
+	private final int corePoolSize = 10;
+	private final int maxPoolSize = corePoolSize * 5;
 
-	@Value("${schedule.sync.KAgent}")
-	private long syncKAgent;
-	@Value("${rpa.fixedDelay}")
-	private long kAgentDelay;
-	@Value("${rpa.queue.limit}")
-	private int queueLimit;
+	// 设置核心线程池数量
+	ScheduledThreadPoolExecutor scheduler = new ScheduledThreadPoolExecutor(corePoolSize);
 
-
-	/* 执行任务 */
-	@Scheduled(fixedDelayString = "${schedule.sync.KAgent}")
-	public void syncKAgentStatus(){
-//		LOGGER.info("开始执行K-Agent同步任务");
-//		if(tsExecuterService.syncKRpaAgent())
-//			LOGGER.info("K-Agent同步任务执行成功");
-//		else
-//			LOGGER.info("K-Agent同步任务执行失败");
+	// 假设这是你的定时任务方法
+	public void performTask() {
+		// 任务逻辑
+		String a;
 	}
+
+	// 启动定时任务的方法
+	public void startScheduledTask(long initialDelay, long delay) {
+		scheduler.setMaximumPoolSize(maxPoolSize);
+		Runnable task = new Runnable() {
+			@Override
+			public void run() {
+				LOGGER.info("plan A");
+				// 重新调度自己，使用局部变量的延迟时间
+				scheduler.schedule(this, delay, TimeUnit.MILLISECONDS);
+			}
+		};
+		// 首次执行任务，使用初始延迟
+		scheduler.schedule(task, initialDelay, TimeUnit.MILLISECONDS);
+	}
+
+	public void startScheduledTask2(long initialDelay, long delay) {
+		scheduler.setMaximumPoolSize(maxPoolSize);
+		Runnable task = new Runnable() {
+			@Override
+			public void run() {
+				LOGGER.info("plan B");
+				// 重新调度自己，使用局部变量的延迟时间
+				scheduler.schedule(this, delay, TimeUnit.MILLISECONDS);
+			}
+		};
+		// 首次执行任务，使用初始延迟
+		scheduler.schedule(task, initialDelay, TimeUnit.MILLISECONDS);
+	}
+
+	// 停止定时任务的方法
+	public void stopScheduledTask() {
+		scheduler.shutdownNow();
+	}
+
 
 }

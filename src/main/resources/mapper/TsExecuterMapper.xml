@@ -41,12 +41,15 @@
 		<include refid="Base_Column_List"/>
 		from ts_executer
 		where id not in (select exec_id from ts_executer_task)
-		  and exec_type = #{execType,jdbcType=VARCHAR}
-		  and exec_monopoly = false
+		and exec_type = #{execType,jdbcType=VARCHAR}
+		and exec_monopoly = false
+		and exec_online = true
+		and exec_available = true
 		limit #{num,jdbcType=INTEGER};
 	</select>
 	<select id="getExecuterId" resultType="java.lang.String">
-		select id from ts_executer
+		select id
+		from ts_executer
 		where exec_type = #{execType,jdbcType=VARCHAR}
 		  and exec_addr = #{execAddr,jdbcType=VARCHAR}
 		limit 1;

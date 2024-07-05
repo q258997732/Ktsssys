@@ -7,6 +7,7 @@ import com.bob.ktssts.mapper.TsTaskMapper;
 import com.bob.ktssts.service.TsExecuterService;
 import com.bob.ktssts.service.TsTaskImpl;
 import com.bob.ktssts.service.TsTaskService;
+import com.bob.ktssts.util.Base64Util;
 import com.bob.ktssts.util.RpaExecuter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.logging.log4j.LogManager;
@@ -46,26 +47,32 @@ class KtsstsApplicationTests {
 
 //		int res = tsTaskService.syncEventSolveTask();
 //		LOGGER.info("res:{}",res);
+//		KRpaFlowDataBean kRpaFlowDataBean = new KRpaFlowDataBean();
+//		kRpaFlowDataBean.setId("1");
+//		kRpaFlowDataBean.setIp("192.168.1.1");
+//		kRpaFlowDataBean.setPort("5002");
+//		kRpaFlowDataBean.setTmsId("1");
+//		kRpaFlowDataBean.setSiteId("1");
+//		kRpaFlowDataBean.setTmsName("1");
+//		kRpaFlowDataBean.setUserName("1");
+//		kRpaFlowDataBean.setPassword("1");
+//		LOGGER.info("String:{}" ,kRpaFlowDataBean.toString());
+//		LOGGER.info("Base64String:{}" , Base64Util.String2Base64(kRpaFlowDataBean.toString()));
 
 
 
 
 //		int res = tsExecuterService.cleanKRpaAgent();
 //		LOGGER.info("res:{}",res);
-//
 //		res = tsTaskService.deleteAutoRpaTask();
 //		LOGGER.info("res:{}",res);
-//
-////		List<KSxfAgentBean> kSxfAgentBeans = rpaExecuter.getSXFAgentFlowQuery();
-////		LOGGER.info("res:{}",kSxfAgentBeans.get(0));
 //		if(tsExecuterService.syncKRpaAgent())
 //			LOGGER.info("同步完成");
+//		res = tsTaskService.syncEventSolveTask();
+//		LOGGER.info("res:{}",res);
+//		res = tsTaskService.distributeKRpaTask(tsTaskMapper.selectAllTsTask());
+//		LOGGER.info("res:{}",res);
 
-
-		int res = tsTaskService.syncEventSolveTask();
-		LOGGER.info("res:{}",res);
-		res = tsTaskService.distributeKRpaTask(tsTaskMapper.selectAllTsTask());
-		LOGGER.info("res:{}",res);
 
 
 //		TsTask tsTask = new TsTask();

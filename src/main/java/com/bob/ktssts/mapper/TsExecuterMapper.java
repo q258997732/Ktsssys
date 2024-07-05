@@ -66,6 +66,7 @@ public interface TsExecuterMapper {
     // 返回所有记录
     List<TsExecuter> selectAll();
 
+    // 获取一个空闲的K-RPA执行器
     List<TsExecuter> selectFreeExecuter(String execType,int num);
 
     String getExecuterId(String execType,String execAddr);
