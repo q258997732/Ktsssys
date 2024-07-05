@@ -12,4 +12,6 @@ public interface TsTaskService {
 	public int syncEventSolveTask();
 
 	public int distributeKRpaTask(List<TsTask> tsTaskList);
+
+	public int deleteAutoRpaTask();
 }

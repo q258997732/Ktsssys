@@ -41,6 +41,8 @@ public interface TsTaskMapper {
 
     int insertExecuterTask(Map<String,Object> map);
 
-    int clearExecTaskByTaskId(String id);
+    int deleteExecTaskByTaskId(String id);
+
+    int deleteAutoRpaTask();
 
 }

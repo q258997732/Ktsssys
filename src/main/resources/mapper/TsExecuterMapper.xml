@@ -57,6 +57,11 @@
 		from ts_executer
 		where id = #{id,jdbcType=VARCHAR}
 	</delete>
+	<delete id="deleteTaskByExecuterId" parameterType="java.lang.String">
+		delete
+		from ts_executer_task
+		where exec_id = #{executerId,jdbcType=VARCHAR}
+	</delete>
 	<insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.TsExecuter"
 			useGeneratedKeys="true">
 		insert into ts_executer

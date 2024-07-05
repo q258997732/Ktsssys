@@ -129,8 +129,8 @@ public class RpaExecuter {
 		String date = simpleDateFormat.format(new Date());
 		/* 拼接请求主体 */
 		List<RpaRequestBean> rpaRequestBeans = new ArrayList<RpaRequestBean>();
-		rpaRequestBeans.add(new RpaRequestBean(date, 4, "AppPass"));
-		rpaRequestBeans.add(new RpaRequestBean(date, 4, "AppPass"));
+		rpaRequestBeans.add(new RpaRequestBean(date, 4, "EDate"));
+		rpaRequestBeans.add(new RpaRequestBean(date, 4, "BDate"));
 		rpaRequestBeans.add(new RpaRequestBean("THomeDM", 4, "{9F8E5ECB-5976-4315-B8F3-43B8502B694D}"));
 		rpaRequestBeans.add(new RpaRequestBean(getUser(), 4, "AppName"));
 		rpaRequestBeans.add(new RpaRequestBean(getPass(), 4, "AppPass"));
@@ -179,11 +179,14 @@ public class RpaExecuter {
 	public List<KAgentBean> getKRpaAgentList(){
 		List<RpaRequestBean> rpaRequestBeanList = new ArrayList<RpaRequestBean>();
 		rpaRequestBeanList.add(new RpaRequestBean("TCoreDM", 4, "{9F8E5ECB-5976-4315-B8F3-43B8502B694D}"));
-		rpaRequestBeanList.add(new RpaRequestBean("HWB", 4, "AppName"));
-		rpaRequestBeanList.add(new RpaRequestBean("02B28D991C7B4F0BA8897F4E517DAA9E", 4, "AppPass"));
+		rpaRequestBeanList.add(new RpaRequestBean(getUser(), 4, "AppName"));
+		rpaRequestBeanList.add(new RpaRequestBean(getPass(), 4, "AppPass"));
 		rpaRequestBeanList.add(new RpaRequestBean("GetAgentList", 4, "{2881E26D-62CE-4937-B4BB-8998440417C4}"));
-		return RpaUtil.result2KAgentList(Objects.requireNonNull(sendKRpaRequest(rpaRequestBeanList)));
-
+		List<RpaRequestBean> rpaResponse = sendKRpaRequest(rpaRequestBeanList);
+		if(rpaResponse != null)
+			return RpaUtil.result2KAgentList(sendKRpaRequest(rpaRequestBeanList));
+		else return null;
 	}
+
 
 }

@@ -1,6 +1,5 @@
-package com.bob.ktssts.Task;
+package com.bob.ktssts.schedule;
 
-import com.bob.ktssts.mapper.TsTaskMapper;
 import com.bob.ktssts.service.TsExecuterService;
 import com.bob.ktssts.service.TsTaskService;
 import jakarta.annotation.Resource;
@@ -32,11 +31,11 @@ public class RpaScheduleTask {
 	/* 执行任务 */
 	@Scheduled(fixedDelayString = "${schedule.sync.KAgent}")
 	public void syncKAgentStatus(){
-		LOGGER.info("开始执行K-Agent同步任务");
-		if(tsExecuterService.syncKRpaAgent())
-			LOGGER.info("K-Agent同步任务执行成功");
-		else
-			LOGGER.info("K-Agent同步任务执行失败");
+//		LOGGER.info("开始执行K-Agent同步任务");
+//		if(tsExecuterService.syncKRpaAgent())
+//			LOGGER.info("K-Agent同步任务执行成功");
+//		else
+//			LOGGER.info("K-Agent同步任务执行失败");
 	}
 
 }

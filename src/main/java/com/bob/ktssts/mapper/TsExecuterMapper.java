@@ -2,7 +2,6 @@ package com.bob.ktssts.mapper;
 
 import com.bob.ktssts.entity.TsExecuter;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -71,6 +70,8 @@ public interface TsExecuterMapper {
 
     String getExecuterId(String execType,String execAddr);
 
+    // 根据ExecuterId删除记录
+    int deleteTaskByExecuterId(String executerId);
 
 
 }

@@ -62,20 +62,26 @@
 		from ts_task
 		where add_by = #{add_by,jdbcType=VARCHAR}
 	</delete>
-	<delete id="clearExecTaskByTaskId">
+	<delete id="deleteExecTaskByTaskId">
 		delete
 		from ts_executer_task
 		where task_id = #{id,jdbcType=VARCHAR};
+	</delete>
+	<delete id="deleteAutoRpaTask">
+		delete
+		from ts_task
+		where add_by = 'ktssts'
+		  and exec_type = 'K-RPA';
 	</delete>
 	<insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.TsTask"
 			useGeneratedKeys="true">
 		insert into ts_task(<include refid="Base_Column_List"/>)
 		values ( #{id,jdbcType=VARCHAR}, #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
-			   , #{addBy,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, #{taskName,jdbcType=VARCHAR}
-			   , #{taskDesc,jdbcType=VARCHAR}, #{scheduleType,jdbcType=VARCHAR}, #{scheduleConf,jdbcType=VARCHAR}
-			   , #{execParam,jdbcType=VARCHAR}, #{execTimeout,jdbcType=INTEGER}, #{execRetry,jdbcType=INTEGER}
-			   , #{execMonopoly,jdbcType=VARCHAR}, #{execType,jdbcType=VARCHAR}, #{execAppoint,jdbcType=VARCHAR}
-			   , #{clone,jdbcType=VARCHAR}, #{executerId,jdbcType=VARCHAR}, #{available,jdbcType=VARCHAR})
+		, #{addBy,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, #{taskName,jdbcType=VARCHAR}
+		, #{taskDesc,jdbcType=VARCHAR}, #{scheduleType,jdbcType=VARCHAR}, #{scheduleConf,jdbcType=VARCHAR}
+		, #{execParam,jdbcType=VARCHAR}, #{execTimeout,jdbcType=INTEGER}, #{execRetry,jdbcType=INTEGER}
+		, #{execMonopoly,jdbcType=VARCHAR}, #{execType,jdbcType=VARCHAR}, #{execAppoint,jdbcType=VARCHAR}
+		, #{clone,jdbcType=VARCHAR}, #{executerId,jdbcType=VARCHAR}, #{available,jdbcType=VARCHAR})
 	</insert>
 	<insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.TsTask"
 			useGeneratedKeys="true">
@@ -97,8 +103,8 @@
 			<if test="execType != null">exec_type,</if>
 			<if test="execAppoint != null">exec_appoint,</if>
 			<if test="clone != null">clone,</if>
-		    <if test="executerId != null">executer_id,</if>
-		    <if test="available != null">available,</if>
+			<if test="executerId != null">executer_id,</if>
+			<if test="available != null">available,</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="id != null">#{id,jdbcType=VARCHAR},</if>
@@ -202,7 +208,7 @@
 			exec_appoint  = #{execAppoint,jdbcType=VARCHAR},
 			clone         = #{clone,jdbcType=VARCHAR},
 			executer_id   = #{executerId,jdbcType=VARCHAR},
-		    available     = #{available,jdbcType=VARCHAR}
+			available     = #{available,jdbcType=VARCHAR}
 		where id = #{id,jdbcType=VARCHAR}
 	</update>
 
@@ -236,7 +242,8 @@
 		from ts_task
 		where exec_type = #{execType,jdbcType=VARCHAR}
 		and clone = true
-		and available = true;
+		and available = true
+		and add_by = 'ktssts';
 	</select>
 
 </mapper>

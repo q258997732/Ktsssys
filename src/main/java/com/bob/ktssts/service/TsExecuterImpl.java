@@ -4,9 +4,9 @@ import com.bob.ktssts.entity.KAgentBean;
 import com.bob.ktssts.entity.TsExecuter;
 import com.bob.ktssts.mapper.TsExecuterMapper;
 import com.bob.ktssts.util.RpaExecuter;
+import jakarta.annotation.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -18,15 +18,27 @@ public class TsExecuterImpl implements TsExecuterService {
 
 	private static final Logger LOGGER = LogManager.getLogger(RpaExecuter.class);
 
-	@Autowired
+	@Resource
 	private RpaExecuter rpaExecuter;
 
-	@Autowired
+	@Resource
 	private TsExecuterMapper tsExecuterMapper;
 
 	@Override
 	public int cleanKRpaAgent() {
-		return 0;
+		int effectNum = 0;
+		List<TsExecuter> tsExecuterList = tsExecuterMapper.selectAll();
+		if (tsExecuterList.isEmpty()) {
+			LOGGER.info("执行器列表为空");
+			return 0;
+		}
+		for (TsExecuter tsExecuter : tsExecuterList) {
+			if ("K-RPA".equals(tsExecuter.getExec_type()) && "ktssts".equals(tsExecuter.getUpdate_by())) {
+				tsExecuterMapper.deleteTaskByExecuterId(tsExecuter.getId());
+				effectNum += tsExecuterMapper.deleteByPrimaryKey(tsExecuter.getId());
+			}
+		}
+		return effectNum;
 	}
 
 	/* 同步K-RPA执行器（机器人）信息 */
@@ -37,7 +49,7 @@ public class TsExecuterImpl implements TsExecuterService {
 
 		/* 将所有状态设置为不可用 */
 		tsExecuterList.forEach(tsExecuter -> tsExecuter.setExec_available("0"));
-		if (!kAgentBeanList.isEmpty() && !tsExecuterList.isEmpty()) {
+		if (!kAgentBeanList.isEmpty()) {
 			boolean targetIsFind;
 			for (KAgentBean kAgentBean : kAgentBeanList) {
 				ListIterator<TsExecuter> tsExecuterListIterator = tsExecuterList.listIterator();
@@ -63,6 +75,7 @@ public class TsExecuterImpl implements TsExecuterService {
 				}
 				// 目标未找到时插入
 				if (!targetIsFind) {
+					LOGGER.debug("K-RPA执行器未找到，插入");
 					TsExecuter toInsert = new TsExecuter();
 					toInsert.setId(kAgentBean.getId());
 					toInsert.setExec_addr(kAgentBean.getIp());
@@ -80,7 +93,8 @@ public class TsExecuterImpl implements TsExecuterService {
 			}
 		}
 
-//		LOGGER.info("执行器总数: {}", tsExecuterList.size());
+//		LOGGER.info("K-RPA执行器总数: {}", kAgentBeanList.size());
+//		LOGGER.info(tsExecuterList.toString());
 
 		// 遍历tsExecuterList，若数据库中存在记录则更新，不存在则插入
 		try {
@@ -89,8 +103,10 @@ public class TsExecuterImpl implements TsExecuterService {
 				if (tsExecuter.getExec_type().equals("K-RPA")) {
 					if (tsExecuter.getId() != null) {
 						if (tsExecuterMapper.selectByPrimaryKey(tsExecuter.getId()) != null) {
+							LOGGER.debug("更新K-Agent:{}",tsExecuter.getExec_name());
 							tsExecuterMapper.updateByPrimaryKeySelective(tsExecuter);
 						} else {
+							LOGGER.debug("插入K-Agent:{}",tsExecuter.getExec_name());
 							tsExecuterMapper.insert(tsExecuter);
 						}
 					}
@@ -106,7 +122,7 @@ public class TsExecuterImpl implements TsExecuterService {
 
 	@Override
 	public List<TsExecuter> getFreeExecuter(String execType, int num) {
-		return tsExecuterMapper.selectFreeExecuter(execType,num);
+		return tsExecuterMapper.selectFreeExecuter(execType, num);
 	}
 
 

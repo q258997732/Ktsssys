@@ -5,13 +5,11 @@ import com.bob.ktssts.entity.TsExecuter;
 import com.bob.ktssts.entity.TsTask;
 import com.bob.ktssts.mapper.TsExecuterMapper;
 import com.bob.ktssts.mapper.TsTaskMapper;
-import com.bob.ktssts.util.RpaExecuter;
 import com.bob.ktssts.util.TaskUtil;
 import jakarta.annotation.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -114,7 +112,7 @@ public class TsTaskImpl implements TsTaskService {
 					String appoint = tsTask.getExecAppoint();
 					if (!"".equals(appoint) && appoint != null) {
 						// 若Task指定了执行器IP，将Executer_Task表中的相关记录删除
-						tsTaskMapper.clearExecTaskByTaskId(tsTask.getId());
+						tsTaskMapper.deleteExecTaskByTaskId(tsTask.getId());
 						String[] appointList = appoint.split(",");
 						if (appointList.length >= 1) {
 							for (String ip : appointList) {
@@ -152,6 +150,10 @@ public class TsTaskImpl implements TsTaskService {
 			}
 		}
 		return effectCount;
+	}
+
+	public int deleteAutoRpaTask() {
+		return tsTaskMapper.deleteAutoRpaTask();
 	}
 
 

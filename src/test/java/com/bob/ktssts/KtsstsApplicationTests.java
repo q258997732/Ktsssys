@@ -5,6 +5,7 @@ import com.bob.ktssts.mapper.TsApiuserMapper;
 import com.bob.ktssts.mapper.TsExecuterMapper;
 import com.bob.ktssts.mapper.TsTaskMapper;
 import com.bob.ktssts.service.TsExecuterService;
+import com.bob.ktssts.service.TsTaskImpl;
 import com.bob.ktssts.service.TsTaskService;
 import com.bob.ktssts.util.RpaExecuter;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -37,6 +38,8 @@ class KtsstsApplicationTests {
 	TsTaskMapper tsTaskMapper;
 	@Autowired
 	private TsTaskService tsTaskService;
+	@Autowired
+	private TsTaskImpl tsTaskImpl;
 
 	@Test
 	void contextLoads() throws JsonProcessingException {
@@ -44,14 +47,26 @@ class KtsstsApplicationTests {
 //		int res = tsTaskService.syncEventSolveTask();
 //		LOGGER.info("res:{}",res);
 
-//		boolean res = tsExecuterService.syncKRpaAgent();
-//		LOGGER.info("res:{}",res);
 
-//		List<KSxfAgentBean> kSxfAgentBeans = rpaExecuter.getSXFAgentFlowQuery();
-//		LOGGER.info("res:{}",kSxfAgentBeans.get(0));
+
+
+//		int res = tsExecuterService.cleanKRpaAgent();
+//		LOGGER.info("res:{}",res);
+//
+//		res = tsTaskService.deleteAutoRpaTask();
+//		LOGGER.info("res:{}",res);
+//
+////		List<KSxfAgentBean> kSxfAgentBeans = rpaExecuter.getSXFAgentFlowQuery();
+////		LOGGER.info("res:{}",kSxfAgentBeans.get(0));
+//		if(tsExecuterService.syncKRpaAgent())
+//			LOGGER.info("同步完成");
+
 
 		int res = tsTaskService.syncEventSolveTask();
 		LOGGER.info("res:{}",res);
+		res = tsTaskService.distributeKRpaTask(tsTaskMapper.selectAllTsTask());
+		LOGGER.info("res:{}",res);
+
 
 //		TsTask tsTask = new TsTask();
 //		tsTask.setId("1");
