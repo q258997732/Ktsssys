@@ -4,6 +4,7 @@ import com.bob.ktssts.entity.*;
 import com.bob.ktssts.mapper.TsApiuserMapper;
 import com.bob.ktssts.mapper.TsExecuterMapper;
 import com.bob.ktssts.mapper.TsTaskMapper;
+import com.bob.ktssts.schedule.RpaScheduleTask;
 import com.bob.ktssts.service.TsExecuterService;
 import com.bob.ktssts.service.TsTaskImpl;
 import com.bob.ktssts.service.TsTaskService;
@@ -25,53 +26,28 @@ class KtsstsApplicationTests {
 
 	@Autowired
 	public RpaExecuter rpaExecuter;
-
-	@Autowired
-	private TsExecuterMapper tsExecuterMapper;
-
-	@Autowired
-	private TsApiuserMapper tsApiuserMapper;
-
 	@Autowired
 	TsExecuterService tsExecuterService;
-
 	@Autowired
 	TsTaskMapper tsTaskMapper;
 	@Autowired
+	private TsExecuterMapper tsExecuterMapper;
+	@Autowired
+	private TsApiuserMapper tsApiuserMapper;
+	@Autowired
 	private TsTaskService tsTaskService;
 	@Autowired
-	private TsTaskImpl tsTaskImpl;
+	RpaScheduleTask rpaScheduleTask;
 
 	@Test
 	void contextLoads() throws JsonProcessingException {
 
-//		int res = tsTaskService.syncEventSolveTask();
+//		String res = tsTaskService.getKRpaTaskIdByFlowName("XCI系统_报警信息处理");
 //		LOGGER.info("res:{}",res);
-//		KRpaFlowDataBean kRpaFlowDataBean = new KRpaFlowDataBean();
-//		kRpaFlowDataBean.setId("1");
-//		kRpaFlowDataBean.setIp("192.168.1.1");
-//		kRpaFlowDataBean.setPort("5002");
-//		kRpaFlowDataBean.setTmsId("1");
-//		kRpaFlowDataBean.setSiteId("1");
-//		kRpaFlowDataBean.setTmsName("1");
-//		kRpaFlowDataBean.setUserName("1");
-//		kRpaFlowDataBean.setPassword("1");
-//		LOGGER.info("String:{}" ,kRpaFlowDataBean.toString());
-//		LOGGER.info("Base64String:{}" , Base64Util.String2Base64(kRpaFlowDataBean.toString()));
 
-
-
-
-//		int res = tsExecuterService.cleanKRpaAgent();
-//		LOGGER.info("res:{}",res);
-//		res = tsTaskService.deleteAutoRpaTask();
-//		LOGGER.info("res:{}",res);
-//		if(tsExecuterService.syncKRpaAgent())
-//			LOGGER.info("同步完成");
-//		res = tsTaskService.syncEventSolveTask();
-//		LOGGER.info("res:{}",res);
-//		res = tsTaskService.distributeKRpaTask(tsTaskMapper.selectAllTsTask());
-//		LOGGER.info("res:{}",res);
+//		List<Map<String,Object>> res = tsTaskMapper.selectKRpaExecutedTsTask();
+//		LOGGER.info("res:{}",res.size());
+		rpaScheduleTask.startTsTaskExecuter("XCI系统_报警信息处理",1000,3000);
 
 
 

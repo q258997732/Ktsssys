@@ -14,4 +14,8 @@ public interface TsTaskService {
 	public int distributeKRpaTask(List<TsTask> tsTaskList);
 
 	public int deleteAutoRpaTask();
+
+	public List<TsTask> getAllTsTask();
+
+	public String getKRpaTaskIdByFlowName(String flowName);
 }

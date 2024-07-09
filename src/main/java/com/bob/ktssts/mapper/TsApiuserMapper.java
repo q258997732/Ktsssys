@@ -18,4 +18,6 @@ public interface TsApiuserMapper {
 
     int updateByPrimaryKey(TsApiuser record);
 
+    TsApiuser verifyUser(String user, String pass);
+
 }

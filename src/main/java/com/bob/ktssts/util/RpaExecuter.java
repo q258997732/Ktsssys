@@ -1,6 +1,7 @@
 package com.bob.ktssts.util;
 
 import com.bob.ktssts.entity.KAgentBean;
+import com.bob.ktssts.entity.KFlowBean;
 import com.bob.ktssts.entity.KSxfAgentBean;
 import com.bob.ktssts.entity.RpaRequestBean;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -157,7 +158,8 @@ public class RpaExecuter {
 		httpPost.setEntity(new StringEntity(json, ContentType.APPLICATION_JSON));
 		try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
 			String responseBody = EntityUtils.toString(response.getEntity());
-			LOGGER.debug("Response json length : {}", responseBody.length());
+//			LOGGER.info("Response json length : {}", responseBody.length());
+//			LOGGER.info("Response json : {}", responseBody);
 
 			// 处理返回结果
 			List<RpaRequestBean> rpaRequestBeanList = RpaUtil.result2KRpaRequestBean(responseBody);
@@ -186,6 +188,17 @@ public class RpaExecuter {
 		if(rpaResponse != null)
 			return RpaUtil.result2KAgentList(sendKRpaRequest(rpaRequestBeanList));
 		else return null;
+	}
+
+	// 获取所有流程信息
+	public List<KFlowBean>	getKRpaFlowList(){
+		List<RpaRequestBean> rpaRequestBeanList = new ArrayList<RpaRequestBean>();
+		rpaRequestBeanList.add(new RpaRequestBean("TFlowDM", 4, "{9F8E5ECB-5976-4315-B8F3-43B8502B694D}"));
+		rpaRequestBeanList.add(new RpaRequestBean(getPass(), 4, "AppPass"));
+		rpaRequestBeanList.add(new RpaRequestBean(getUser(), 4, "AppName"));
+		rpaRequestBeanList.add(new RpaRequestBean("GetFlowList", 4, "{2881E26D-62CE-4937-B4BB-8998440417C4}"));
+		rpaRequestBeanList.add(new RpaRequestBean("", 4, "ConsumerID"));
+		return RpaUtil.result2KFlowtList(sendKRpaRequest(rpaRequestBeanList));
 	}
 
 

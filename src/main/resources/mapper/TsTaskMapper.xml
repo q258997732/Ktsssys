@@ -25,7 +25,6 @@
 		<result property="available" column="available" jdbcType="VARCHAR"/>
 
 	</resultMap>
-
 	<resultMap id="TmsTaskMap" type="com.bob.ktssts.entity.TmsTaskBean">
 		<result column="tms_name" property="tmsName"/>
 		<result column="ip" property="ip"/>
@@ -35,7 +34,6 @@
 		<result column="username" property="username"/>
 		<result column="password" property="password"/>
 	</resultMap>
-
 	<sql id="Base_Column_List">
 		id,update_by,update_time,
         add_by,add_time,task_name,
@@ -51,7 +49,6 @@
 		from ts_task
 		where id = #{id,jdbcType=VARCHAR}
 	</select>
-
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		delete
 		from ts_task
@@ -211,7 +208,6 @@
 			available     = #{available,jdbcType=VARCHAR}
 		where id = #{id,jdbcType=VARCHAR}
 	</update>
-
 	<!-- 获取K-TSS任务 -->
 	<select id="selectAllKtssTmsTask" resultMap="TmsTaskMap">
 		SELECT a.sys_name    AS tms_name,
@@ -244,6 +240,29 @@
 		and clone = true
 		and available = true
 		and add_by = 'ktssts';
+	</select>
+	<select id="selectKRpaExecutedTsTask" resultType="java.util.Map">
+		select tet.id, te.exec_addr, tt.task_name, tt.task_desc, tt.schedule_type, tt.schedule_conf, tt.exec_param
+		from ts_executer_task tet
+				 inner join ts_executer te on te.id = tet.exec_id
+				 inner join ts_task tt on tt.id = tet.task_id
+		where te.exec_online = true
+		  and tt.available = true
+		  and tet.available = true
+		  and tt.add_by = 'ktssts'
+		  and tt.exec_type = 'K-RPA';
+	</select>
+	<select id="selectKRpaExecutedTsTaskByFlowName" parameterType="java.lang.String" resultType="java.util.Map">
+		select tet.id, te.exec_addr, tt.task_name, tt.task_desc, tt.schedule_type, tt.schedule_conf, tt.exec_param
+		from ts_executer_task tet
+				 inner join ts_executer te on te.id = tet.exec_id
+				 inner join ts_task tt on tt.id = tet.task_id
+		where te.exec_online = true
+		  and tt.available = true
+		  and tet.available = true
+		  and tt.add_by = 'ktssts'
+		  and tt.exec_type = 'K-RPA'
+		  and tt.task_name = #{flowName,jdbcType=VARCHAR};
 	</select>
 
 </mapper>

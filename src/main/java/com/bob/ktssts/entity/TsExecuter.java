@@ -3,6 +3,7 @@ package com.bob.ktssts.entity;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 import lombok.Data;
 
@@ -64,6 +65,7 @@ public class TsExecuter implements Serializable {
 	}
 
 	public TsExecuter(String exec_name, String exec_addr, String exec_type, String exec_available, String exec_monopoly, Date exec_register, String exec_version) {
+		this.id = UUID.randomUUID().toString().replace("-","").toLowerCase();
 		this.exec_name = exec_name;
 		this.exec_addr = exec_addr;
 		this.exec_type = exec_type;

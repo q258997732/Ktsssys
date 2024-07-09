@@ -1,9 +1,9 @@
 package com.bob.ktssts.util;
 
 import com.bob.ktssts.entity.KAgentBean;
+import com.bob.ktssts.entity.KFlowBean;
 import com.bob.ktssts.entity.KSxfAgentBean;
 import com.bob.ktssts.entity.RpaRequestBean;
-import com.bob.ktssts.entity.TsExecuter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -59,6 +59,7 @@ public class RpaUtil {
 			case "GetFlowIDByFullPath" -> getKRpaAddDataQueueRes(rpaRequestBeanList);
 			case "GetSXFAgentFlowQuery" -> getSXFAgentFlowQueryRes(rpaRequestBeanList);
 			case "GetAgentList" -> getKRpaAgentListRes(rpaRequestBeanList);
+			case "GetSelfRole" -> getKRpaFlowListRes(rpaRequestBeanList);
 			default -> "未匹配的K-RPA接口返回信息";
 		};
 	}
@@ -97,6 +98,12 @@ public class RpaUtil {
 		if (rpaRequestBeanList == null || rpaRequestBeanList.isEmpty()) return false;
 		Object Level = getRpaResponseValue("{50043442-8A69-4A6B-A8B5-61F882EDE4F3}", rpaRequestBeanList);
 		return "".equals(Level);
+	}
+
+	public static String getKRpaFlowListRes(List<RpaRequestBean> rpaRequestBeanList){
+		if (rpaRequestBeanList == null || rpaRequestBeanList.isEmpty()) return null;
+		Object error = getRpaResponseValue("{50043442-8A69-4A6B-A8B5-61F882EDE4F3}", rpaRequestBeanList);
+		return String.format("K-RPA获取Flow列表任务: 执行%s", "".equals(error) ? "成功" : "失败");
 	}
 
 	public static List<RpaRequestBean> result2KRpaRequestBean(String json) {
@@ -194,6 +201,43 @@ public class RpaUtil {
 		return kAgentBeanList;
 	}
 
+	public static List<KFlowBean> result2KFlowtList(List<RpaRequestBean> rpaRequestBeanList) {
+		if (rpaRequestBeanList == null || rpaRequestBeanList.isEmpty()) return null;
+
+		Map<Integer, String> KFlowInvMap = new HashMap<Integer, String>();
+		List<KFlowBean> kFlowBeans = new ArrayList<>();
+
+		for (RpaRequestBean rpaRequestBean : rpaRequestBeanList) {
+			if ("k_flow_info".equals(rpaRequestBean.getName())) {
+				List<List<Map<String, String>>> KAgentList = (List<List<Map<String, String>>>) rpaRequestBean.getValue();
+				for (int i = 0; i < KAgentList.size(); i++) {
+					if (i == 0) {
+						for (int j = 0; j < KAgentList.get(i).size(); j++) {
+							Map<String, String> KAgentMap = KAgentList.get(i).get(j);
+							KAgentMap.get("Name");
+							String name = KAgentMap.get("Name");
+							if (!"".equals(name) && !name.isEmpty()) {
+								KFlowInvMap.put(j, name);
+							}
+						}
+					} else {
+						Map<String, Object> beanParamMap = new HashMap<>();
+						String[] beanList = new String[KFlowInvMap.size()];
+						for (int j = 0; j < KAgentList.get(i).size(); j++) {
+							beanParamMap.put(KFlowInvMap.get(j), KAgentList.get(i).get(j).get("Value"));
+						}
+						KFlowBean kFlowBean = new KFlowBean(beanParamMap);
+						kFlowBeans.add(kFlowBean);
+					}
+				}
+				break;
+			}
+		}
+
+		LOGGER.debug("result2KFlowList size : {}", kFlowBeans.size());
+
+		return kFlowBeans;
+	}
 
 }
 

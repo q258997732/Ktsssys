@@ -54,7 +54,6 @@
 		  and exec_addr = #{execAddr,jdbcType=VARCHAR}
 		limit 1;
 	</select>
-
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		delete
 		from ts_executer

@@ -1,11 +1,9 @@
 package com.bob.ktssts.service;
 
-import com.bob.ktssts.entity.KRpaFlowDataBean;
-import com.bob.ktssts.entity.TmsTaskBean;
-import com.bob.ktssts.entity.TsExecuter;
-import com.bob.ktssts.entity.TsTask;
+import com.bob.ktssts.entity.*;
 import com.bob.ktssts.mapper.TsExecuterMapper;
 import com.bob.ktssts.mapper.TsTaskMapper;
+import com.bob.ktssts.util.RpaExecuter;
 import com.bob.ktssts.util.TaskUtil;
 import jakarta.annotation.Resource;
 import org.apache.logging.log4j.LogManager;
@@ -28,10 +26,11 @@ public class TsTaskImpl implements TsTaskService {
 
 	@Resource
 	TsTaskMapper tsTaskMapper;
-
+	@Resource
+	RpaExecuter rpaExecuter;
 	@Resource
 	private TsExecuterService tsExecuterService;
-	@Autowired
+	@Resource
 	private TsExecuterMapper tsExecuterMapper;
 
 	@Override
@@ -161,5 +160,19 @@ public class TsTaskImpl implements TsTaskService {
 		return tsTaskMapper.deleteAutoRpaTask();
 	}
 
+	// 获取所有
+	public List<TsTask> getAllTsTask() {
+		return tsTaskMapper.selectAllTsTask();
+	}
 
+	// 根据K-RPA流程名称获取ID
+	public String getKRpaTaskIdByFlowName(String flowName) {
+		List<KFlowBean> kFlowBeanList = rpaExecuter.getKRpaFlowList();
+		for (KFlowBean kFlowBean : kFlowBeanList) {
+			if (kFlowBean.getFlowName().equals(flowName)) {
+				return kFlowBean.getFlowID();
+			}
+		}
+		return null;
+	}
 }
