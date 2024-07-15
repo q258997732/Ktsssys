@@ -43,38 +43,7 @@ public class ApiUserRestController {
 
 	@RequestMapping("/test")
 	public void test(HttpServletRequest request) {
-		rpaScheduleTask.startTsTaskExecuter("XCI系统_报警信息处理",1000,5000);
-//		String exec_name = "测试执行器";
-//		String exec_addr = "10.1.20.7,10.1.20.8,10.1.20.47";
-//		String exec_type = "KTSSTS";
-//		String exec_available = "1";
-//		String exec_monopoly = "1";
-//		Date exec_register = new Date();
-//		String exec_version = "1.0.0";
-//
-//
-//		TsExecuter tsExecuter = new TsExecuter(exec_name, exec_addr, exec_type, exec_available, exec_monopoly, exec_register, exec_version);
-//		tsExecuter.setExec_online("1");
-//
-//		int num = tsExecuterMapper.insertSelective(tsExecuter);
-//		LOGGER.info("插入执行器信息：{}", num);
-//		return new ResponseBean(ResponseBean.ECode.SUCCESS.getCode(), "test success .", "test success .");
+		rpaScheduleTask.startTsTaskExecuter("XCI系统_报警信息处理", 1000, 5000);
+		rpaScheduleTask.syncKAgentThreadTask(1000, 2000);
 	}
-
-//	@PostMapping("/getToken")
-//	public ResponseBean getToken(@RequestBody JsonNode jsonNode){
-//		String user = jsonNode.get("username").textValue();
-//		String password = jsonNode.get("password").textValue();
-//		String token = null;
-//		ApiUser apiUser = apiUserService.getUserByUserPass(user, password);
-//		if(apiUser != null){
-//			return new ResponseBean(ECode.SUCCESS.getCode(),"SUCCESS",JWTUtil.createJWT(user, password));
-//		}
-//		return new ResponseBean(ECode.CLIENT_ERROR.getCode(),"User Or Password Error .",null);
-//	}
-
-//	@PostMapping("/login")
-//	public ResponseBean login(@RequestBody("username") String username, @RequestParam("password") String password) {
-//		return null;
-//	}
 }

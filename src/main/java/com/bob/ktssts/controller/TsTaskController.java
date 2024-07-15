@@ -1,8 +1,10 @@
 package com.bob.ktssts.controller;
 
 import com.bob.ktssts.entity.ResponseBean;
+import com.bob.ktssts.schedule.RpaScheduleTask;
 import com.bob.ktssts.service.TsExecuterService;
 import com.bob.ktssts.service.TsTaskService;
+import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,6 +22,14 @@ public class TsTaskController {
 	TsTaskService tsTaskService;
 	@Resource
 	TsExecuterService tsExecuterService;
+	@Resource
+	RpaScheduleTask rpaScheduleTask;
+
+	@PostConstruct
+	public void init() {
+		// 初始化数据库状态
+		resetAutoRpaTask();
+	}
 
 	/**
 	 * 初始化TS模块
@@ -53,7 +63,7 @@ public class TsTaskController {
 		}
 
 		// 自动同步事件解决任务-XCI
-		if (tsTaskService.syncEventSolveTask() >= 0) {
+		if (tsTaskService.syncXciEventSolveTask() >= 0) {
 			LOGGER.info("自动同步事件解决任务-XCI成功");
 		}else{
 			LOGGER.info("自动同步事件解决任务-XCI失败");
@@ -67,8 +77,34 @@ public class TsTaskController {
 			LOGGER.info("任务分发执行器失败");
 			return new ResponseBean(ResponseBean.ECode.SERVER_ERROR.getCode(), "任务分发执行器失败", null);
 		}
+
+		// 刷新任务清单
+		LOGGER.info("刷新任务清单");
+		tsTaskService.refreshKRpaAgentThreadList();
+
 		return new ResponseBean(ResponseBean.ECode.SUCCESS.getCode(), "初始化TS模块成功", null);
 
+	}
+
+	@PostMapping("/startXciTask")
+	public ResponseBean startXciTask() {
+		try {
+			rpaScheduleTask.startTsTaskExecuter("XCI系统_报警信息处理", 1000, 5000);
+//			rpaScheduleTask.syncKAgentThreadTask(1000, 2000);
+		}catch(Exception e){
+			return new ResponseBean(ResponseBean.ECode.SERVER_ERROR.getCode(), "启动XCI任务失败", e.getStackTrace());
+		}
+		return new ResponseBean(ResponseBean.ECode.SUCCESS.getCode(), "启动XCI任务成功", null);
+	}
+
+	@PostMapping("/stopXciTask")
+	public ResponseBean stopXciTask() {
+		try {
+			rpaScheduleTask.stopScheduledTask();
+		}catch(Exception e){
+			return new ResponseBean(ResponseBean.ECode.SERVER_ERROR.getCode(), "停止XCI任务失败", e.getStackTrace());
+		}
+		return new ResponseBean(ResponseBean.ECode.SUCCESS.getCode(), "停止XCI任务成功", null);
 	}
 
 }

@@ -38,4 +38,16 @@ public class DefaultScheduleTask {
 //			LOGGER.info("K-Agent同步任务执行失败");
 	}
 
+	/* 定时同步Agent状态 */
+	@Scheduled(fixedDelayString = "${syncAgentStatus}")
+	public void syncAgentStatus(){
+//		LOGGER.info("开始执行Agent状态同步任务");
+		if(tsExecuterService.syncKRpaAgent())
+			LOGGER.info("Agent状态同步任务执行成功");
+		else
+			LOGGER.info("Agent状态同步任务执行失败");
+	}
+
+	/* 定时
+
 }

@@ -9,7 +9,7 @@ import java.util.Map;
 @Service
 public interface TsTaskService {
 
-	public int syncEventSolveTask();
+	public int syncXciEventSolveTask();
 
 	public int distributeKRpaTask(List<TsTask> tsTaskList);
 
@@ -18,4 +18,6 @@ public interface TsTaskService {
 	public List<TsTask> getAllTsTask();
 
 	public String getKRpaTaskIdByFlowName(String flowName);
+
+	void refreshKRpaAgentThreadList();
 }

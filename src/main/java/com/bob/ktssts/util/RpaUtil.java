@@ -1,9 +1,6 @@
 package com.bob.ktssts.util;
 
-import com.bob.ktssts.entity.KAgentBean;
-import com.bob.ktssts.entity.KFlowBean;
-import com.bob.ktssts.entity.KSxfAgentBean;
-import com.bob.ktssts.entity.RpaRequestBean;
+import com.bob.ktssts.entity.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -60,7 +57,7 @@ public class RpaUtil {
 			case "GetSXFAgentFlowQuery" -> getSXFAgentFlowQueryRes(rpaRequestBeanList);
 			case "GetAgentList" -> getKRpaAgentListRes(rpaRequestBeanList);
 			case "GetSelfRole" -> getKRpaFlowListRes(rpaRequestBeanList);
-			default -> "未匹配的K-RPA接口返回信息";
+			default -> "调用K-RPA接口后返回的错误信息未能解析:"+rpaRequestBeanList;
 		};
 	}
 
@@ -130,7 +127,7 @@ public class RpaUtil {
 	public static List<KSxfAgentBean> result2KSxfAgent(List<RpaRequestBean> rpaRequestBeanList) {
 		if (rpaRequestBeanList == null || rpaRequestBeanList.isEmpty()) return null;
 
-		Map<Integer, String> KAgentInvMap = new HashMap<Integer, String>();
+		Map<Integer, String> KAgentInvMap = new HashMap<>();
 		List<KSxfAgentBean> kSxfAgentBeanList = new ArrayList<>();
 
 		for (RpaRequestBean rpaRequestBean : rpaRequestBeanList) {
@@ -148,7 +145,6 @@ public class RpaUtil {
 						}
 					} else {
 						Map<String, Object> beanParamMap = new HashMap<>();
-						String[] beanList = new String[KAgentInvMap.size()];
 						for (int j = 0; j < KAgentList.get(i).size(); j++) {
 							beanParamMap.put(KAgentInvMap.get(j), KAgentList.get(i).get(j).get("Value"));
 						}
@@ -163,10 +159,43 @@ public class RpaUtil {
 		return kSxfAgentBeanList;
 	}
 
+	public static Map<String,KAgentThreadBean> result2KAgentThreadList(List<RpaRequestBean> rpaRequestBeanList) {
+		if (rpaRequestBeanList == null || rpaRequestBeanList.isEmpty()) return null;
+		Map<Integer, String> KAgentInvMap = new HashMap<>();
+		Map<String,KAgentThreadBean> kAgentThreadBeanMap = new HashMap<>();
+
+		for (RpaRequestBean rpaRequestBean : rpaRequestBeanList) {
+			if ("k_agent".equals(rpaRequestBean.getName())) {
+				List<List<Map<String, String>>> KAgentThreadList = (List<List<Map<String, String>>>) rpaRequestBean.getValue();
+				for (int i = 0; i < KAgentThreadList.size(); i++) {
+					if (i == 0) {
+						for (int j = 0; j < KAgentThreadList.get(i).size(); j++) {
+							Map<String, String> KAgentMap = KAgentThreadList.get(i).get(j);
+							KAgentMap.get("Name");
+							String name = KAgentMap.get("Name");
+							if (!"".equals(name) && !name.isEmpty()) {
+								KAgentInvMap.put(j, name);
+							}
+						}
+					} else {
+						Map<String, Object> beanParamMap = new HashMap<>();
+						for (int j = 0; j < KAgentThreadList.get(i).size(); j++) {
+							beanParamMap.put(KAgentInvMap.get(j), KAgentThreadList.get(i).get(j).get("Value"));
+						}
+						KAgentThreadBean kAgentThreadBean = new KAgentThreadBean(beanParamMap);
+						kAgentThreadBeanMap.put(kAgentThreadBean.getID(),kAgentThreadBean);
+					}
+				}
+				break;
+			}
+		}
+		return kAgentThreadBeanMap;
+	}
+
 	public static List<KAgentBean> result2KAgentList(List<RpaRequestBean> rpaRequestBeanList) {
 		if (rpaRequestBeanList == null || rpaRequestBeanList.isEmpty()) return null;
 
-		Map<Integer, String> KAgentInvMap = new HashMap<Integer, String>();
+		Map<Integer, String> KAgentInvMap = new HashMap<>();
 		List<KAgentBean> kAgentBeanList = new ArrayList<>();
 
 		for (RpaRequestBean rpaRequestBean : rpaRequestBeanList) {
@@ -184,7 +213,6 @@ public class RpaUtil {
 						}
 					} else {
 						Map<String, Object> beanParamMap = new HashMap<>();
-						String[] beanList = new String[KAgentInvMap.size()];
 						for (int j = 0; j < KAgentList.get(i).size(); j++) {
 							beanParamMap.put(KAgentInvMap.get(j), KAgentList.get(i).get(j).get("Value"));
 						}
@@ -204,7 +232,7 @@ public class RpaUtil {
 	public static List<KFlowBean> result2KFlowtList(List<RpaRequestBean> rpaRequestBeanList) {
 		if (rpaRequestBeanList == null || rpaRequestBeanList.isEmpty()) return null;
 
-		Map<Integer, String> KFlowInvMap = new HashMap<Integer, String>();
+		Map<Integer, String> KFlowInvMap = new HashMap<>();
 		List<KFlowBean> kFlowBeans = new ArrayList<>();
 
 		for (RpaRequestBean rpaRequestBean : rpaRequestBeanList) {
@@ -222,7 +250,6 @@ public class RpaUtil {
 						}
 					} else {
 						Map<String, Object> beanParamMap = new HashMap<>();
-						String[] beanList = new String[KFlowInvMap.size()];
 						for (int j = 0; j < KAgentList.get(i).size(); j++) {
 							beanParamMap.put(KFlowInvMap.get(j), KAgentList.get(i).get(j).get("Value"));
 						}
@@ -237,6 +264,15 @@ public class RpaUtil {
 		LOGGER.debug("result2KFlowList size : {}", kFlowBeans.size());
 
 		return kFlowBeans;
+	}
+
+	public static boolean kRpaIsAboveMaxThread(String id,Map<String,KAgentThreadBean> kAgentThreadBeanMap,int limit){
+		LOGGER.debug("id:{} map:{}",id,kAgentThreadBeanMap);
+		if(kAgentThreadBeanMap == null || kAgentThreadBeanMap.isEmpty() || limit <= 0 || id == null || id.isEmpty()) return false;
+		if(kAgentThreadBeanMap.get(id) == null) return false;
+		int agentExecThread = Integer.parseInt(kAgentThreadBeanMap.get(id).getExecCount());
+		int agentWaitThread = Integer.parseInt(kAgentThreadBeanMap.get(id).getWaitCount());
+		return agentExecThread + agentWaitThread < limit;
 	}
 
 }

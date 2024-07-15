@@ -1,9 +1,6 @@
 package com.bob.ktssts.util;
 
-import com.bob.ktssts.entity.KAgentBean;
-import com.bob.ktssts.entity.KFlowBean;
-import com.bob.ktssts.entity.KSxfAgentBean;
-import com.bob.ktssts.entity.RpaRequestBean;
+import com.bob.ktssts.entity.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
@@ -21,15 +18,21 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Component
 public class RpaExecuter {
 
 	private static final Logger LOGGER = LogManager.getLogger(RpaExecuter.class);
+
+	// 静态内部类实现单例模式
+	private static class fKAgentThreadHolder {
+		private static final Map<String, KAgentThreadBean> INSTANCE = new HashMap<>();
+	}
+	// 静态内部类获取
+	public static Map<String, KAgentThreadBean> getFkAgentThread() {
+		return fKAgentThreadHolder.INSTANCE;
+	}
 
 	@Getter
 	private String url;
@@ -158,7 +161,7 @@ public class RpaExecuter {
 		httpPost.setEntity(new StringEntity(json, ContentType.APPLICATION_JSON));
 		try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
 			String responseBody = EntityUtils.toString(response.getEntity());
-//			LOGGER.info("Response json length : {}", responseBody.length());
+//			LOGGER.info("调用K-RPA接口返回结果数:{}", responseBody.length());
 //			LOGGER.info("Response json : {}", responseBody);
 
 			// 处理返回结果
@@ -201,5 +204,18 @@ public class RpaExecuter {
 		return RpaUtil.result2KFlowtList(sendKRpaRequest(rpaRequestBeanList));
 	}
 
+	public Map<String,KAgentThreadBean> getKRpaAgentThreadMap(){
+		List<RpaRequestBean> rpaRequestBeans = new ArrayList<>();
+		rpaRequestBeans.add(new RpaRequestBean("TUserDM", 4, "{9F8E5ECB-5976-4315-B8F3-43B8502B694D}"));
+		rpaRequestBeans.add(new RpaRequestBean(getUser(), 4, "AppName"));
+		rpaRequestBeans.add(new RpaRequestBean(getPass(), 4, "AppPass"));
+		rpaRequestBeans.add(new RpaRequestBean("GetRobotExecStatus", 4, "{2881E26D-62CE-4937-B4BB-8998440417C4}"));
+		return RpaUtil.result2KAgentThreadList(sendKRpaRequest(rpaRequestBeans));
+	}
 
+	public void refreshKRpaAgentThreadList(){
+		Map<String,KAgentThreadBean> fKAgentThreadBeanMap = getFkAgentThread();
+		fKAgentThreadBeanMap.clear();
+		fKAgentThreadBeanMap.putAll(getKRpaAgentThreadMap());
+	}
 }

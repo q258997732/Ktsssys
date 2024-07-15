@@ -33,8 +33,9 @@ public class TsTaskImpl implements TsTaskService {
 	@Resource
 	private TsExecuterMapper tsExecuterMapper;
 
+	// 同步XCI报警处理任务
 	@Override
-	public int syncEventSolveTask() {
+	public int syncXciEventSolveTask() {
 		List<TmsTaskBean> ktssTmsTask = tsTaskMapper.selectAllKtssTmsTask();
 		List<TsTask> tsTaskList = tsTaskMapper.selectAllTsTask();
 //		LOGGER.info("tsTaskList size:{}", tsTaskList.size());
@@ -44,7 +45,8 @@ public class TsTaskImpl implements TsTaskService {
 		for (TmsTaskBean tmsTaskBean : ktssTmsTask) {
 			boolean isFind = false;
 			for (TsTask tsTask : tsTaskList) {
-				if (TaskUtil.compareTsTaskTmsTask(tsTask, tmsTaskBean) && !"1".equals(tsTask.getExecMonopoly())) {
+				// 找到Xci参数相同的任务则跳出，未找到则插入
+				if (TaskUtil.compareTsTaskTmsTask(tsTask, tmsTaskBean) && !"1".equals(tsTask.getExecMonopoly()) && tmsTaskBean.toKRpaString().equals(tsTask.getExecParam())) {
 //					tsTask.setUpdateTime(new Date());
 //					tsTask.setTaskName("K-TSS 自动处理事件");
 //					tsTask.setTaskDesc("K-TSS 自动处理事件:"+tmsTaskBean.getUsername());
@@ -90,6 +92,7 @@ public class TsTaskImpl implements TsTaskService {
 
 			}
 		}
+		LOGGER.info("同步K-TSS事件处理任务数量:{}", effectCount);
 		return effectCount;
 	}
 
@@ -174,5 +177,9 @@ public class TsTaskImpl implements TsTaskService {
 			}
 		}
 		return null;
+	}
+
+	public void refreshKRpaAgentThreadList() {
+		rpaExecuter.refreshKRpaAgentThreadList();
 	}
 }
