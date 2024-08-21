@@ -1,8 +1,8 @@
 package com.bob.ktssts.service;
 
-import com.bob.ktssts.entity.KAgentBean;
-import com.bob.ktssts.entity.TsExecuter;
-import com.bob.ktssts.mapper.TsExecuterMapper;
+import com.bob.ktssts.entity.ktss.KAgentBean;
+import com.bob.ktssts.entity.ktss.TsExecuter;
+import com.bob.ktssts.mapper.ktss.TsExecuterMapper;
 import com.bob.ktssts.util.RpaExecuter;
 import jakarta.annotation.Resource;
 import org.apache.logging.log4j.LogManager;

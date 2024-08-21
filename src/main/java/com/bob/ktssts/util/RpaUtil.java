@@ -1,6 +1,10 @@
 package com.bob.ktssts.util;
 
 import com.bob.ktssts.entity.*;
+import com.bob.ktssts.entity.ktss.KAgentBean;
+import com.bob.ktssts.entity.ktss.KAgentThreadBean;
+import com.bob.ktssts.entity.ktss.KFlowBean;
+import com.bob.ktssts.entity.ktss.KSxfAgentBean;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -266,7 +270,7 @@ public class RpaUtil {
 		return kFlowBeans;
 	}
 
-	public static boolean kRpaIsAboveMaxThread(String id,Map<String,KAgentThreadBean> kAgentThreadBeanMap,int limit){
+	public static boolean kRpaIsAboveMaxThread(String id, Map<String, KAgentThreadBean> kAgentThreadBeanMap, int limit){
 		LOGGER.debug("id:{} map:{}",id,kAgentThreadBeanMap);
 		if(kAgentThreadBeanMap == null || kAgentThreadBeanMap.isEmpty() || limit <= 0 || id == null || id.isEmpty()) return false;
 		if(kAgentThreadBeanMap.get(id) == null) return false;

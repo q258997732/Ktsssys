@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bob.ktssts.mapper.cz.OpertedLogMapper">
+
+    <resultMap id="BaseResultMap" type="com.bob.ktssts.entity.cz.OpertedLog">
+            <id property="id" column="id" jdbcType="VARCHAR"/>
+            <result property="operateUser" column="operate_user" jdbcType="VARCHAR"/>
+            <result property="operateTime" column="operate_time" jdbcType="TIMESTAMP"/>
+            <result property="operateDetail" column="operate_detail" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,operate_user,operate_time,
+        operate_detail
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from operted_log
+        where  id = #{id,jdbcType=VARCHAR} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from operted_log
+        where  id = #{id,jdbcType=VARCHAR} 
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.cz.OpertedLog" useGeneratedKeys="true">
+        insert into operted_log
+        ( id,operate_user,operate_time
+        ,operate_detail)
+        values (#{id,jdbcType=VARCHAR},#{operateUser,jdbcType=VARCHAR},#{operateTime,jdbcType=TIMESTAMP}
+        ,#{operateDetail,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.cz.OpertedLog" useGeneratedKeys="true">
+        insert into operted_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="id != null">id,</if>
+                <if test="operateUser != null">operate_user,</if>
+                <if test="operateTime != null">operate_time,</if>
+                <if test="operateDetail != null">operate_detail,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="id != null">#{id,jdbcType=VARCHAR},</if>
+                <if test="operateUser != null">#{operateUser,jdbcType=VARCHAR},</if>
+                <if test="operateTime != null">#{operateTime,jdbcType=TIMESTAMP},</if>
+                <if test="operateDetail != null">#{operateDetail,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bob.ktssts.entity.cz.OpertedLog">
+        update operted_log
+        <set>
+                <if test="operateUser != null">
+                    operate_user = #{operateUser,jdbcType=VARCHAR},
+                </if>
+                <if test="operateTime != null">
+                    operate_time = #{operateTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="operateDetail != null">
+                    operate_detail = #{operateDetail,jdbcType=VARCHAR},
+                </if>
+        </set>
+        where   id = #{id,jdbcType=VARCHAR} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.bob.ktssts.entity.cz.OpertedLog">
+        update operted_log
+        set 
+            operate_user =  #{operateUser,jdbcType=VARCHAR},
+            operate_time =  #{operateTime,jdbcType=TIMESTAMP},
+            operate_detail =  #{operateDetail,jdbcType=VARCHAR}
+        where   id = #{id,jdbcType=VARCHAR} 
+    </update>
+</mapper>

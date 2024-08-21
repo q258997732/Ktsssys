@@ -1,4 +1,4 @@
-package com.bob.ktssts.entity;
+package com.bob.ktssts.entity.ktss;
 
 import lombok.Data;
 

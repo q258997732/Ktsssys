@@ -134,12 +134,22 @@ public class TokenUtil {
 			return true;
 		} catch (AlgorithmMismatchException exception) {
 			LOGGER.error("Invalid JWT algorithm : {}", exception.getMessage());
+			throw new AlgorithmMismatchException("Token算法错误");
 		} catch (SignatureVerificationException exception) {
 			LOGGER.error("Invalid JWT signature : {}", exception.getMessage());
 		} catch (TokenExpiredException exception) {
 			LOGGER.error("Token has expired : {}", exception.getMessage());
+			throw new TokenExpiredException("Token过期", null);
 		}
 		return false;
+	}
+
+	// 获取token的过期日期
+	public static Date getExpireDate(String token) {
+		token = token.replaceFirst("Bearer ", "");
+		JWTVerifier verifier = JWT.require(TokenUtil.ALGORITHM).withIssuer(TokenUtil.ISSUER).build();
+		DecodedJWT jwt = verifier.verify(token);
+		return jwt.getExpiresAt();
 	}
 
 }

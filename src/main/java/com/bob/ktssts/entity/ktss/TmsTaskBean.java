@@ -1,4 +1,4 @@
-package com.bob.ktssts.entity;
+package com.bob.ktssts.entity.ktss;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +20,7 @@ public class TmsTaskBean {
 		this.password = password;
 		this.tmsId = tmsId;
 		this.siteId = siteId;
+		this.tmsName = "";
 	}
 
 	public TmsTaskBean(String tmsName, String ip, String port, String siteId, String tmsId, String username, String password) {

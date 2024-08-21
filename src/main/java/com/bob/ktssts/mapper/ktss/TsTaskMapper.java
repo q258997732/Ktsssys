@@ -1,7 +1,7 @@
-package com.bob.ktssts.mapper;
+package com.bob.ktssts.mapper.ktss;
 
-import com.bob.ktssts.entity.TmsTaskBean;
-import com.bob.ktssts.entity.TsTask;
+import com.bob.ktssts.entity.ktss.TmsTaskBean;
+import com.bob.ktssts.entity.ktss.TsTask;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,7 +12,7 @@ import java.util.Map;
 * @author Huang
 * @description 针对表【ts_task(ts_task)】的数据库操作Mapper
 * @createDate 2024-07-03 10:20:31
-* @Entity com.bob.ktssts.entity.TsTask
+* @Entity com.bob.ktssts.entity.ktss.TsTask
 */
 
 @Mapper

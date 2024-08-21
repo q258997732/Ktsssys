@@ -1,6 +1,6 @@
-package com.bob.ktssts.mapper;
+package com.bob.ktssts.mapper.ktss;
 
-import com.bob.ktssts.entity.TsApiuser;
+import com.bob.ktssts.entity.ktss.TsApiuser;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

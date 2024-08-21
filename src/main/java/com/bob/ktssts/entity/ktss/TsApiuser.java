@@ -1,9 +1,8 @@
-package com.bob.ktssts.entity;
+package com.bob.ktssts.entity.ktss;
 
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
-import org.apache.ibatis.annotations.Param;
 
 /**
  * 

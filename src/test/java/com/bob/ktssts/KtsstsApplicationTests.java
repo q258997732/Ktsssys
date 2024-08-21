@@ -1,14 +1,14 @@
 package com.bob.ktssts;
 
-import com.bob.ktssts.entity.*;
-import com.bob.ktssts.mapper.TsApiuserMapper;
-import com.bob.ktssts.mapper.TsExecuterMapper;
-import com.bob.ktssts.mapper.TsTaskMapper;
+import com.bob.ktssts.entity.ktss.TsTaskExecutionLog;
+import com.bob.ktssts.mapper.ktss.TsApiuserMapper;
+import com.bob.ktssts.mapper.ktss.TsExecuterMapper;
+import com.bob.ktssts.mapper.ktss.TsTaskExecutionLogMapper;
+import com.bob.ktssts.mapper.ktss.TsTaskMapper;
 import com.bob.ktssts.schedule.RpaScheduleTask;
 import com.bob.ktssts.service.TsExecuterService;
 import com.bob.ktssts.service.TsTaskService;
 import com.bob.ktssts.util.RpaExecuter;
-import com.bob.ktssts.util.RpaUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,6 +37,8 @@ class KtsstsApplicationTests {
 	private TsTaskService tsTaskService;
 	@Autowired
 	RpaScheduleTask rpaScheduleTask;
+	@Autowired
+	TsTaskExecutionLogMapper tsTaskExecutionLogMapper;
 
 	@Test
 	void contextLoads() throws JsonProcessingException {
@@ -47,9 +49,9 @@ class KtsstsApplicationTests {
 //		List<Map<String,Object>> res = tsTaskMapper.selectKRpaExecutedTsTask();
 //		LOGGER.info("res:{}",res.size());
 //		rpaScheduleTask.startTsTaskExecuter("XCI系统_报警信息处理",1000,3000);
-		rpaExecuter.refreshKRpaAgentThreadList();
-		LOGGER.info(RpaExecuter.getFkAgentThread());
-
+		// String id,String taskId,Date startTime,String status
+		TsTaskExecutionLog tsTaskExecutionLog = new TsTaskExecutionLog(UUID.randomUUID().toString().replace("-",""),"test",new Date(),"执行中");
+		tsTaskExecutionLogMapper.insert(tsTaskExecutionLog);
 
 
 //		TsTask tsTask = new TsTask();

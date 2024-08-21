@@ -1,6 +1,10 @@
 package com.bob.ktssts.util;
 
 import com.bob.ktssts.entity.*;
+import com.bob.ktssts.entity.ktss.KAgentBean;
+import com.bob.ktssts.entity.ktss.KAgentThreadBean;
+import com.bob.ktssts.entity.ktss.KFlowBean;
+import com.bob.ktssts.entity.ktss.KSxfAgentBean;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
@@ -124,6 +128,7 @@ public class RpaExecuter {
 		rpaRequestBeans.add(new RpaRequestBean(getUser(), 4, "AppName"));
 		rpaRequestBeans.add(new RpaRequestBean(getPass(), 4, "AppPass"));
 		rpaRequestBeans.add(new RpaRequestBean("AddDataQueue", 4, "{2881E26D-62CE-4937-B4BB-8998440417C4}"));
+//		LOGGER.info("request:{}",rpaRequestBeans.toString());
 		List<RpaRequestBean> rpaRequestBeanList = sendKRpaRequest(rpaRequestBeans);
 		return RpaUtil.callFunStatus(rpaRequestBeanList);
 	}
@@ -214,7 +219,7 @@ public class RpaExecuter {
 	}
 
 	public void refreshKRpaAgentThreadList(){
-		Map<String,KAgentThreadBean> fKAgentThreadBeanMap = getFkAgentThread();
+		Map<String, KAgentThreadBean> fKAgentThreadBeanMap = getFkAgentThread();
 		fKAgentThreadBeanMap.clear();
 		fKAgentThreadBeanMap.putAll(getKRpaAgentThreadMap());
 	}

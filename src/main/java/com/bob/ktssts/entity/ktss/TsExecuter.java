@@ -1,4 +1,4 @@
-package com.bob.ktssts.entity;
+package com.bob.ktssts.entity.ktss;
 
 import java.io.Serial;
 import java.io.Serializable;

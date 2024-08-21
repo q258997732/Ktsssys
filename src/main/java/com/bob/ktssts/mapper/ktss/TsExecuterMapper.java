@@ -1,6 +1,6 @@
-package com.bob.ktssts.mapper;
+package com.bob.ktssts.mapper.ktss;
 
-import com.bob.ktssts.entity.TsExecuter;
+import com.bob.ktssts.entity.ktss.TsExecuter;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 * @author Huang
 * @description 针对表【ts_executer(ts_executer)】的数据库操作Mapper
 * @createDate 2024-06-27 16:17:09
-* @Entity com.bob.ktssts.entity.TsExecuter
+* @Entity com.bob.ktssts.entity.ktss.TsExecuter
 */
 
 @Mapper

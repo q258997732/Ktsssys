@@ -1,13 +1,11 @@
 package com.bob.ktssts.service;
 
-import com.bob.ktssts.entity.TsApiuser;
-import com.bob.ktssts.mapper.TsApiuserMapper;
+import com.bob.ktssts.entity.ktss.TsApiuser;
+import com.bob.ktssts.mapper.ktss.TsApiuserMapper;
 import com.bob.ktssts.util.TokenUtil;
 import jakarta.annotation.Resource;
-import org.apache.el.parser.Token;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 

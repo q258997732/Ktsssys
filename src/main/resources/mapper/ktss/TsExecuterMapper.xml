@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bob.ktssts.mapper.TsExecuterMapper">
+<mapper namespace="com.bob.ktssts.mapper.ktss.TsExecuterMapper">
 
-	<resultMap id="BaseResultMap" type="com.bob.ktssts.entity.TsExecuter">
+	<resultMap id="BaseResultMap" type="com.bob.ktssts.entity.ktss.TsExecuter">
 		<id property="id" column="id" jdbcType="VARCHAR"/>
 		<result property="update_by" column="update_by" jdbcType="VARCHAR"/>
 		<result property="update_time" column="update_time" jdbcType="TIMESTAMP"/>
@@ -31,12 +31,12 @@
 		from ts_executer
 		where id = #{id,jdbcType=VARCHAR}
 	</select>
-	<select id="selectAll" resultType="com.bob.ktssts.entity.TsExecuter">
+	<select id="selectAll" resultType="com.bob.ktssts.entity.ktss.TsExecuter">
 		select
 		<include refid="Base_Column_List"/>
 		from ts_executer
 	</select>
-	<select id="selectFreeExecuter" resultType="com.bob.ktssts.entity.TsExecuter">
+	<select id="selectFreeExecuter" resultType="com.bob.ktssts.entity.ktss.TsExecuter">
 		select
 		<include refid="Base_Column_List"/>
 		from ts_executer
@@ -64,7 +64,7 @@
 		from ts_executer_task
 		where exec_id = #{executerId,jdbcType=VARCHAR}
 	</delete>
-	<insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.TsExecuter"
+	<insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.ktss.TsExecuter"
 			useGeneratedKeys="true">
 		insert into ts_executer
 		( id, update_by, update_time
@@ -77,7 +77,7 @@
 			   , #{exec_register,jdbcType=TIMESTAMP}
 			   , #{exec_version,jdbcType=VARCHAR}, #{exec_online,jdbcType=VARCHAR})
 	</insert>
-	<insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.TsExecuter"
+	<insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.ktss.TsExecuter"
 			useGeneratedKeys="true">
 		insert into ts_executer
 		<trim prefix="(" suffix=")" suffixOverrides=",">
@@ -107,7 +107,7 @@
 			<if test="exec_online != null">#{exec_online,jdbcType=VARCHAR},</if>
 		</trim>
 	</insert>
-	<update id="updateByPrimaryKeySelective" parameterType="com.bob.ktssts.entity.TsExecuter">
+	<update id="updateByPrimaryKeySelective" parameterType="com.bob.ktssts.entity.ktss.TsExecuter">
 		update ts_executer
 		<set>
 			<if test="update_by != null">
@@ -143,7 +143,7 @@
 		</set>
 		where id = #{id,jdbcType=VARCHAR}
 	</update>
-	<update id="updateByPrimaryKey" parameterType="com.bob.ktssts.entity.TsExecuter">
+	<update id="updateByPrimaryKey" parameterType="com.bob.ktssts.entity.ktss.TsExecuter">
 		update ts_executer
 		set update_by      = #{update_by,jdbcType=VARCHAR},
 			update_time    = #{update_time,jdbcType=TIMESTAMP},

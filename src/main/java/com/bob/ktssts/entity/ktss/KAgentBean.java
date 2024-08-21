@@ -1,10 +1,9 @@
-package com.bob.ktssts.entity;
+package com.bob.ktssts.entity.ktss;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Map;
-import java.util.UUID;
 
 @Setter
 @Getter

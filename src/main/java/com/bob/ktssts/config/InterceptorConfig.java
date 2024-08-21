@@ -13,6 +13,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
 		registry.addInterceptor(new JWTInterceptor()).addPathPatterns("/**")//全部路径
 				.excludePathPatterns("/api/login")// 登陆不需要token认证
 				.excludePathPatterns("/api/test")
+				.excludePathPatterns("/api/addRpaDataProcess")
 				.excludePathPatterns("/api/resetAutoRpaTask");
 	}
 }

@@ -1,20 +1,16 @@
 package com.bob.ktssts.service;
 
-import com.bob.ktssts.entity.*;
-import com.bob.ktssts.mapper.TsExecuterMapper;
-import com.bob.ktssts.mapper.TsTaskMapper;
+import com.bob.ktssts.entity.ktss.*;
+import com.bob.ktssts.mapper.ktss.TsExecuterMapper;
+import com.bob.ktssts.mapper.ktss.TsTaskExecutionLogMapper;
+import com.bob.ktssts.mapper.ktss.TsTaskMapper;
 import com.bob.ktssts.util.RpaExecuter;
 import com.bob.ktssts.util.TaskUtil;
 import jakarta.annotation.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -32,6 +28,8 @@ public class TsTaskImpl implements TsTaskService {
 	private TsExecuterService tsExecuterService;
 	@Resource
 	private TsExecuterMapper tsExecuterMapper;
+	@Resource
+	private TsTaskExecutionLogMapper tsTaskExecutionLogMapper;
 
 	// 同步XCI报警处理任务
 	@Override
@@ -181,5 +179,13 @@ public class TsTaskImpl implements TsTaskService {
 
 	public void refreshKRpaAgentThreadList() {
 		rpaExecuter.refreshKRpaAgentThreadList();
+	}
+
+	/* 新建任务日志 */
+	public boolean insertTaskLog(String taskId) {
+		if(taskId == null|| taskId.isEmpty())
+			return false;
+		return tsTaskExecutionLogMapper.insert(new TsTaskExecutionLog(UUID.randomUUID().toString().replace("-", "").toLowerCase(), taskId, new Date(), "发起执行")) >= 0;
+
 	}
 }

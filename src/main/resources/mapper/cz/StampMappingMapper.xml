@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bob.ktssts.mapper.cz.StampMappingMapper">
+
+    <resultMap id="BaseResultMap" type="com.bob.ktssts.entity.cz.StampMapping">
+            <id property="id" column="id" jdbcType="VARCHAR"/>
+            <result property="stampType" column="stamp_type" jdbcType="VARCHAR"/>
+            <result property="stampFileDetail" column="stamp_file_detail" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,stamp_type,stamp_file_detail
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from stamp_mapping
+        where  id = #{id,jdbcType=VARCHAR} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from stamp_mapping
+        where  id = #{id,jdbcType=VARCHAR} 
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.cz.StampMapping" useGeneratedKeys="true">
+        insert into stamp_mapping
+        ( id,stamp_type,stamp_file_detail
+        )
+        values (#{id,jdbcType=VARCHAR},#{stampType,jdbcType=VARCHAR},#{stampFileDetail,jdbcType=VARCHAR}
+        )
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.cz.StampMapping" useGeneratedKeys="true">
+        insert into stamp_mapping
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="id != null">id,</if>
+                <if test="stampType != null">stamp_type,</if>
+                <if test="stampFileDetail != null">stamp_file_detail,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="id != null">#{id,jdbcType=VARCHAR},</if>
+                <if test="stampType != null">#{stampType,jdbcType=VARCHAR},</if>
+                <if test="stampFileDetail != null">#{stampFileDetail,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bob.ktssts.entity.cz.StampMapping">
+        update stamp_mapping
+        <set>
+                <if test="stampType != null">
+                    stamp_type = #{stampType,jdbcType=VARCHAR},
+                </if>
+                <if test="stampFileDetail != null">
+                    stamp_file_detail = #{stampFileDetail,jdbcType=VARCHAR},
+                </if>
+        </set>
+        where   id = #{id,jdbcType=VARCHAR} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.bob.ktssts.entity.cz.StampMapping">
+        update stamp_mapping
+        set 
+            stamp_type =  #{stampType,jdbcType=VARCHAR},
+            stamp_file_detail =  #{stampFileDetail,jdbcType=VARCHAR}
+        where   id = #{id,jdbcType=VARCHAR} 
+    </update>
+</mapper>

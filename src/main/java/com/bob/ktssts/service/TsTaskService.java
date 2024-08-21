@@ -1,10 +1,9 @@
 package com.bob.ktssts.service;
 
-import com.bob.ktssts.entity.TsTask;
+import com.bob.ktssts.entity.ktss.TsTask;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public interface TsTaskService {
@@ -20,4 +19,6 @@ public interface TsTaskService {
 	public String getKRpaTaskIdByFlowName(String flowName);
 
 	void refreshKRpaAgentThreadList();
+
+	public boolean insertTaskLog(String taskId);
 }

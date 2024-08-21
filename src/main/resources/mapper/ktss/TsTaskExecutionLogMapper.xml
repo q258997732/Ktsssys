@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bob.ktssts.mapper.ktss.TsTaskExecutionLogMapper">
+
+    <resultMap id="BaseResultMap" type="com.bob.ktssts.entity.ktss.TsTaskExecutionLog">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="taskId" column="task_id" jdbcType="VARCHAR"/>
+            <result property="startTime" column="start_time" jdbcType="TIMESTAMP"/>
+            <result property="endTime" column="end_time" jdbcType="TIMESTAMP"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
+            <result property="resultData" column="result_data" jdbcType="VARCHAR"/>
+            <result property="errorMessage" column="error_message" jdbcType="VARCHAR"/>
+            <result property="duration" column="duration" jdbcType="INTEGER"/>
+            <result property="retryCount" column="retry_count" jdbcType="INTEGER"/>
+            <result property="executerId" column="executer_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,task_id,start_time,
+        end_time,status,result_data,
+        error_message,duration,retry_count,
+        executer_id
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ts_task_execution_log
+        where  id = #{id,jdbcType=BIGINT} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete from ts_task_execution_log
+        where  id = #{id,jdbcType=BIGINT} 
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.ktss.TsTaskExecutionLog" useGeneratedKeys="true">
+        insert into ts_task_execution_log
+        ( id,task_id,start_time
+        ,end_time,status,result_data
+        ,error_message,duration,retry_count
+        ,executer_id)
+        values (#{id,jdbcType=BIGINT},#{taskId,jdbcType=VARCHAR},#{startTime,jdbcType=TIMESTAMP}
+        ,#{endTime,jdbcType=TIMESTAMP},#{status,jdbcType=VARCHAR},#{resultData,jdbcType=VARCHAR}
+        ,#{errorMessage,jdbcType=VARCHAR},#{duration,jdbcType=INTEGER},#{retryCount,jdbcType=INTEGER}
+        ,#{executerId,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.ktss.TsTaskExecutionLog" useGeneratedKeys="true">
+        insert into ts_task_execution_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="id != null">id,</if>
+                <if test="taskId != null">task_id,</if>
+                <if test="startTime != null">start_time,</if>
+                <if test="endTime != null">end_time,</if>
+                <if test="status != null">status,</if>
+                <if test="resultData != null">result_data,</if>
+                <if test="errorMessage != null">error_message,</if>
+                <if test="duration != null">duration,</if>
+                <if test="retryCount != null">retry_count,</if>
+                <if test="executerId != null">executer_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="id != null">#{id,jdbcType=BIGINT},</if>
+                <if test="taskId != null">#{taskId,jdbcType=VARCHAR},</if>
+                <if test="startTime != null">#{startTime,jdbcType=TIMESTAMP},</if>
+                <if test="endTime != null">#{endTime,jdbcType=TIMESTAMP},</if>
+                <if test="status != null">#{status,jdbcType=VARCHAR},</if>
+                <if test="resultData != null">#{resultData,jdbcType=VARCHAR},</if>
+                <if test="errorMessage != null">#{errorMessage,jdbcType=VARCHAR},</if>
+                <if test="duration != null">#{duration,jdbcType=INTEGER},</if>
+                <if test="retryCount != null">#{retryCount,jdbcType=INTEGER},</if>
+                <if test="executerId != null">#{executerId,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bob.ktssts.entity.ktss.TsTaskExecutionLog">
+        update ts_task_execution_log
+        <set>
+                <if test="taskId != null">
+                    task_id = #{taskId,jdbcType=VARCHAR},
+                </if>
+                <if test="startTime != null">
+                    start_time = #{startTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="endTime != null">
+                    end_time = #{endTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="status != null">
+                    status = #{status,jdbcType=VARCHAR},
+                </if>
+                <if test="resultData != null">
+                    result_data = #{resultData,jdbcType=VARCHAR},
+                </if>
+                <if test="errorMessage != null">
+                    error_message = #{errorMessage,jdbcType=VARCHAR},
+                </if>
+                <if test="duration != null">
+                    duration = #{duration,jdbcType=INTEGER},
+                </if>
+                <if test="retryCount != null">
+                    retry_count = #{retryCount,jdbcType=INTEGER},
+                </if>
+                <if test="executerId != null">
+                    executer_id = #{executerId,jdbcType=VARCHAR},
+                </if>
+        </set>
+        where   id = #{id,jdbcType=BIGINT} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.bob.ktssts.entity.ktss.TsTaskExecutionLog">
+        update ts_task_execution_log
+        set 
+            task_id =  #{taskId,jdbcType=VARCHAR},
+            start_time =  #{startTime,jdbcType=TIMESTAMP},
+            end_time =  #{endTime,jdbcType=TIMESTAMP},
+            status =  #{status,jdbcType=VARCHAR},
+            result_data =  #{resultData,jdbcType=VARCHAR},
+            error_message =  #{errorMessage,jdbcType=VARCHAR},
+            duration =  #{duration,jdbcType=INTEGER},
+            retry_count =  #{retryCount,jdbcType=INTEGER},
+            executer_id =  #{executerId,jdbcType=VARCHAR}
+        where   id = #{id,jdbcType=BIGINT} 
+    </update>
+</mapper>
