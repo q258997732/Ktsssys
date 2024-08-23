@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bob.ktssts.mapper.cz.SealfixOaMappingMapper">
+
+    <resultMap id="BaseResultMap" type="com.bob.ktssts.entity.cz.SealfixOaMapping">
+            <id property="id" column="id" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="sealfixTradeno" column="sealfix_tradeno" jdbcType="VARCHAR"/>
+            <result property="oaBillcode" column="oa_billcode" jdbcType="VARCHAR"/>
+            <result property="sucess" column="sucess" jdbcType="TINYINT"/>
+            <result property="err" column="err" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,update_time,sealfix_tradeno,
+        oa_billcode,sucess,err
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from sealfix_oa_mapping
+        where  id = #{id,jdbcType=VARCHAR} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from sealfix_oa_mapping
+        where  id = #{id,jdbcType=VARCHAR} 
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.cz.SealfixOaMapping" useGeneratedKeys="true">
+        insert into sealfix_oa_mapping
+        ( id,update_time,sealfix_tradeno
+        ,oa_billcode,sucess,err
+        )
+        values (#{id,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{sealfixTradeno,jdbcType=VARCHAR}
+        ,#{oaBillcode,jdbcType=VARCHAR},#{sucess,jdbcType=TINYINT},#{err,jdbcType=VARCHAR}
+        )
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.cz.SealfixOaMapping" useGeneratedKeys="true">
+        insert into sealfix_oa_mapping
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="id != null">id,</if>
+                <if test="updateTime != null">update_time,</if>
+                <if test="sealfixTradeno != null">sealfix_tradeno,</if>
+                <if test="oaBillcode != null">oa_billcode,</if>
+                <if test="sucess != null">sucess,</if>
+                <if test="err != null">err,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="id != null">#{id,jdbcType=VARCHAR},</if>
+                <if test="updateTime != null">#{updateTime,jdbcType=TIMESTAMP},</if>
+                <if test="sealfixTradeno != null">#{sealfixTradeno,jdbcType=VARCHAR},</if>
+                <if test="oaBillcode != null">#{oaBillcode,jdbcType=VARCHAR},</if>
+                <if test="sucess != null">#{sucess,jdbcType=TINYINT},</if>
+                <if test="err != null">#{err,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bob.ktssts.entity.cz.SealfixOaMapping">
+        update sealfix_oa_mapping
+        <set>
+                <if test="updateTime != null">
+                    update_time = #{updateTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="sealfixTradeno != null">
+                    sealfix_tradeno = #{sealfixTradeno,jdbcType=VARCHAR},
+                </if>
+                <if test="oaBillcode != null">
+                    oa_billcode = #{oaBillcode,jdbcType=VARCHAR},
+                </if>
+                <if test="sucess != null">
+                    sucess = #{sucess,jdbcType=TINYINT},
+                </if>
+                <if test="err != null">
+                    err = #{err,jdbcType=VARCHAR},
+                </if>
+        </set>
+        where   id = #{id,jdbcType=VARCHAR} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.bob.ktssts.entity.cz.SealfixOaMapping">
+        update sealfix_oa_mapping
+        set 
+            update_time =  #{updateTime,jdbcType=TIMESTAMP},
+            sealfix_tradeno =  #{sealfixTradeno,jdbcType=VARCHAR},
+            oa_billcode =  #{oaBillcode,jdbcType=VARCHAR},
+            sucess =  #{sucess,jdbcType=TINYINT},
+            err =  #{err,jdbcType=VARCHAR}
+        where   id = #{id,jdbcType=VARCHAR} 
+    </update>
+</mapper>

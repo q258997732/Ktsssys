@@ -34,8 +34,6 @@ public class TsTaskController {
 	TsExecuterService tsExecuterService;
 	@Resource
 	RpaScheduleTask rpaScheduleTask;
-	@Resource
-	RpaExecuter rpaExecuter;
 
 	@PostConstruct
 	public void init() {
@@ -116,25 +114,6 @@ public class TsTaskController {
 			return ResponseEntity.badRequest().body(new ErrorResponseBean<>(500, "停止XCI任务失败",Arrays.toString(e.getStackTrace())));
 		}
 		return ResponseEntity.ok().body(new SuccessResponseBean<>("停止XCI任务成功"));
-	}
-
-	@PostMapping("/addRpaDataProcess")
-	public ResponseEntity<ResponseBean<Object>> addRpaDataProcess(@RequestBody JsonNode jsonNode) {
-		String flowName;
-		String agentIp;
-		String params;
-		try {
-			flowName = jsonNode.get("flowName").asText();
-			agentIp = jsonNode.get("agentIp").asText();
-			JsonNode paramNode = jsonNode.get("params");
-			params = paramNode.toString();
-		}catch(Exception e){
-			return ResponseEntity.badRequest().body(new ErrorResponseBean<>(400, "参数错误", e.getStackTrace()));
-		}
-		// String flowType, String flow, String data, String agentIp, int level
-		if(rpaExecuter.addRpaDataProcess("name",flowName, Base64Util.String2Base64(params), agentIp, 4))
-			return ResponseEntity.ok().body(new SuccessResponseBean<>("添加RPA数据处理成功"));
-		return ResponseEntity.badRequest().body(new ErrorResponseBean<>(500, "添加RPA数据处理失败", null));
 	}
 
 }
