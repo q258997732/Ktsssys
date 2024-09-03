@@ -4,7 +4,9 @@ import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * 
@@ -15,6 +17,14 @@ public class TsTaskExecutionLog implements Serializable {
 
     public TsTaskExecutionLog() {
         super();
+    }
+
+    public TsTaskExecutionLog(String taskId,String status,String executerId) {
+        this.id = UUID.randomUUID().toString().toLowerCase().replace("-", "");
+        this.taskId = taskId;
+        this.executerId = executerId;
+        this.status = status;
+        this.startTime = new Timestamp(System.currentTimeMillis());
     }
 
     /**
@@ -29,6 +39,14 @@ public class TsTaskExecutionLog implements Serializable {
         this.startTime = startTime;
         this.status = status;
         this.id = id;
+    }
+
+    public TsTaskExecutionLog(String id,String taskId,String status,String errorMessage,String executerId) {
+        this.id = id;
+        this.taskId = taskId;
+        this.status = status;
+        this.errorMessage = errorMessage;
+        this.executerId = executerId;
     }
 
     public TsTaskExecutionLog(String id, String taskId, Date startTime, Date endTime, String status, String resultData, String errorMessage, Integer duration, Integer retryCount, String executerId) {

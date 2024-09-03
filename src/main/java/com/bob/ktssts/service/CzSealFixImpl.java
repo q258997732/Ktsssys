@@ -3,12 +3,14 @@ package com.bob.ktssts.service;
 import com.bob.ktssts.entity.cz.SealfixOaMapping;
 import com.bob.ktssts.mapper.cz.SealfixOaMappingMapper;
 import jakarta.annotation.Resource;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.UUID;
 
 @Component
+@ConditionalOnProperty(name = "cz.enable", havingValue = "true")
 public class CzSealFixImpl implements CzSealFixService {
 
 	@Resource

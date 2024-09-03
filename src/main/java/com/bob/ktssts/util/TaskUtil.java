@@ -16,7 +16,7 @@ public class TaskUtil {
 		if (tsTask == null) {
 			return false;
 		}
-		return tsTask.getExecType().equals("K-RPA") && tsTask.getClone().equals("1");
+		return tsTask.getExecType().equals("K-RPA") && tsTask.getClone().equals("1") && tsTask.getAvailable().equals("1");
 	}
 
 	public static String xciParam2json(String param){
@@ -24,6 +24,13 @@ public class TaskUtil {
 		// 113.140.71.252|6006|光大外事|84500080@XCI96716|45b730fe344940e68997559d6881f6dc|d3f36acc71154ad186ff05de809dfbe8
 		TmsTaskBean tmsTaskBean = new TmsTaskBean(paramList[0], paramList[1], paramList[2], paramList[3], paramList[4], paramList[5]);
 		return tmsTaskBean.toJsonString();
+	}
+
+	public static String xciParam2json(String param,String addStr){
+		String[] paramList = param.split("\\|");
+		// 113.140.71.252|6006|光大外事|84500080@XCI96716|45b730fe344940e68997559d6881f6dc|d3f36acc71154ad186ff05de809dfbe8
+		TmsTaskBean tmsTaskBean = new TmsTaskBean(paramList[0], paramList[1], paramList[2], paramList[3], paramList[4], paramList[5]);
+		return tmsTaskBean.toJsonString(addStr);
 	}
 
 }

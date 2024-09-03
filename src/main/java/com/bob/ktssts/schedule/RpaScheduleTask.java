@@ -1,7 +1,9 @@
 package com.bob.ktssts.schedule;
 
 
+import com.bob.ktssts.entity.ktss.ExecStateEnum;
 import com.bob.ktssts.entity.ktss.KAgentThreadBean;
+import com.bob.ktssts.entity.ktss.TsTaskExecutionLog;
 import com.bob.ktssts.exception.RpaFlowNotFind;
 import com.bob.ktssts.mapper.ktss.TsTaskMapper;
 import com.bob.ktssts.service.TsExecuterService;
@@ -13,14 +15,17 @@ import com.bob.ktssts.util.TaskUtil;
 import jakarta.annotation.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 @Component
+@ConditionalOnProperty(name = "ktss.enable", havingValue = "true")
 public class RpaScheduleTask {
 
 	@Resource
@@ -65,14 +70,15 @@ public class RpaScheduleTask {
 					String taskid = (String) map.get("task_id");
 					LOGGER.debug("获取的ID{}",kAgentThreadBeanList.get(id));
 					if(RpaUtil.kRpaIsAboveMaxThread(id,kAgentThreadBeanList,maxDataQueueLimit)) {
-						// 写到这里，失败时回写没完成
-						if(!tsTaskService.insertTaskLog(taskid)){
-							LOGGER.warn("插入执行日志失败:{}",taskid);
-						}
-						String base64string = Base64Util.String2Base64(TaskUtil.xciParam2json(execParam));
+						String sUuid = UUID.randomUUID().toString().replace("-", "").toLowerCase();
+						String base64string = Base64Util.String2Base64(TaskUtil.xciParam2json(execParam,sUuid));
 						if (rpaExecuter.addRpaDataProcess("flowID", flowID, base64string, execAddr, 5)) {
+							if(!tsTaskService.insertTaskLog(sUuid,taskid,id)){
+								LOGGER.warn("插入执行日志失败:{}",taskid);
+							}
 							LOGGER.info("分发任务:{} {} 成功", execAddr, taskName);
 						} else {
+							tsTaskService.replaceIntoTaskExecutionLog(new TsTaskExecutionLog(sUuid, taskid, ExecStateEnum.DIST_FAIL.getDescription(),"",id));
 							LOGGER.error("分发任务:{} {} 失败", execAddr, taskName);
 						}
 					}else{
@@ -106,7 +112,7 @@ public class RpaScheduleTask {
 	// 停止定时任务的方法
 	public void stopScheduledTask() {
 		if(!scheduler.isShutdown())
-			scheduler.shutdownNow();
+			scheduler.shutdown();
 	}
 
 

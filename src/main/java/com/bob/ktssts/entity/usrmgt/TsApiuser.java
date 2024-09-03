@@ -1,5 +1,6 @@
-package com.bob.ktssts.entity.ktss;
+package com.bob.ktssts.entity.usrmgt;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
@@ -45,6 +46,7 @@ public class TsApiuser implements Serializable {
      */
     private String permission;
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -84,19 +86,17 @@ public class TsApiuser implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", user=").append(user);
-        sb.append(", pass=").append(pass);
-        sb.append(", token=").append(token);
-        sb.append(", expire=").append(expire);
-        sb.append(", role=").append(role);
-        sb.append(", permission=").append(permission);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
+		return getClass().getSimpleName() +
+				" [" +
+				"Hash = " + hashCode() +
+				", id=" + id +
+				", user=" + user +
+				", pass=" + pass +
+				", token=" + token +
+				", expire=" + expire +
+				", role=" + role +
+				", permission=" + permission +
+				", serialVersionUID=" + serialVersionUID +
+				"]";
     }
 }

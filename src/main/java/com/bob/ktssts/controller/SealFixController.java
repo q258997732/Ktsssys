@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.annotation.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
+@ConditionalOnProperty(name = "cz.enable", havingValue = "true")
 public class SealFixController {
 
 	private static final Logger LOGGER = LogManager.getLogger(SealFixController.class);

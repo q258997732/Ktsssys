@@ -23,14 +23,12 @@
         error_message,duration,retry_count,
         executer_id
     </sql>
-
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from ts_task_execution_log
         where  id = #{id,jdbcType=BIGINT} 
     </select>
-
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         delete from ts_task_execution_log
         where  id = #{id,jdbcType=BIGINT} 
@@ -73,7 +71,18 @@
                 <if test="executerId != null">#{executerId,jdbcType=VARCHAR},</if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.bob.ktssts.entity.ktss.TsTaskExecutionLog">
+	<insert id="replaceInto">
+        replace into ts_task_execution_log
+        ( id,task_id,start_time
+        ,end_time,status,result_data
+        ,error_message,duration,retry_count
+        ,executer_id)
+        values (#{id,jdbcType=BIGINT},#{taskId,jdbcType=VARCHAR},#{startTime,jdbcType=TIMESTAMP}
+        ,#{endTime,jdbcType=TIMESTAMP},#{status,jdbcType=VARCHAR},#{resultData,jdbcType=VARCHAR}
+        ,#{errorMessage,jdbcType=VARCHAR},#{duration,jdbcType=INTEGER},#{retryCount,jdbcType=INTEGER}
+        ,#{executerId,jdbcType=VARCHAR})
+    </insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.bob.ktssts.entity.ktss.TsTaskExecutionLog">
         update ts_task_execution_log
         <set>
                 <if test="taskId != null">
@@ -119,5 +128,16 @@
             retry_count =  #{retryCount,jdbcType=INTEGER},
             executer_id =  #{executerId,jdbcType=VARCHAR}
         where   id = #{id,jdbcType=BIGINT} 
+    </update>
+	<update id="updateTaskExecLog" parameterType="java.lang.String">
+        UPDATE
+            ts_task_execution_log
+        SET
+            end_time = #{endTime,jdbcType=VARCHAR},
+            status = #{status,jdbcType=VARCHAR},
+            result_data = #{data,jdbcType=VARCHAR},
+            error_message = #{errorMessage,jdbcType=VARCHAR}
+        WHERE
+            id = #{id,jdbcType=VARCHAR};
     </update>
 </mapper>

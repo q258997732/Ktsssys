@@ -9,7 +9,6 @@ import org.apache.ibatis.annotations.Mapper;
 * @createDate 2024-07-16 16:58:17
 * @Entity generator.domain.TsTaskExecutionLog
 */
-@Mapper
 public interface TsTaskExecutionLogMapper {
 
     int deleteByPrimaryKey(String id);
@@ -24,4 +23,7 @@ public interface TsTaskExecutionLogMapper {
 
     int updateByPrimaryKey(TsTaskExecutionLog record);
 
+	int replaceInto(TsTaskExecutionLog tsTaskExecutionLog);
+
+    int updateTaskExecLog(String id,String endTime, String status, String data, String errorMessage);
 }

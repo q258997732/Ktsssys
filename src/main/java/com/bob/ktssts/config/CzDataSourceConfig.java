@@ -1,11 +1,10 @@
 package com.bob.ktssts.config;
 
-
-
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -27,6 +26,7 @@ public class CzDataSourceConfig {
 
 	@Bean(name="czDataSource")
 	@Primary
+	@ConditionalOnProperty(name = "cz.enable", havingValue = "true")
 	public DataSource dataSource() {
 		HikariConfig hikariConfig = new HikariConfig();
 		hikariConfig.setJdbcUrl(url);

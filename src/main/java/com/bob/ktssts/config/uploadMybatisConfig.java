@@ -13,20 +13,20 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import javax.sql.DataSource;
 
 @Configuration
-@ConditionalOnProperty(name = "ktss.enable", havingValue = "true")
-@MapperScan(basePackages = "com.bob.ktssts.mapper.ktss", sqlSessionTemplateRef = "sqlSessionTemplateOne")
-public class KtssMybatisConfig {
+@ConditionalOnProperty(name = "cz.enable", havingValue = "true")
+@MapperScan(basePackages = "com.bob.ktssts.mapper.upload", sqlSessionTemplateRef = "sqlSessionTemplateUpload")
+public class uploadMybatisConfig {
 
 	@Bean
-	public SqlSessionFactory sqlSessionFactoryOne(@Qualifier("ktssDataSource") DataSource dataSource) throws Exception {
+	public SqlSessionFactory sqlSessionFactoryUpload(@Qualifier("uploadDataSource") DataSource dataSource) throws Exception {
 		SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
 		factory.setDataSource(dataSource);
-		factory.setMapperLocations( new PathMatchingResourcePatternResolver().getResources("classpath:mapper/ktss/*.xml"));
+		factory.setMapperLocations( new PathMatchingResourcePatternResolver().getResources("classpath:mapper/upload/*.xml"));
 		return factory.getObject();
 	}
 
 	@Bean
-	public SqlSessionTemplate sqlSessionTemplateOne(@Qualifier("sqlSessionFactoryOne") SqlSessionFactory sqlSessionFactory) {
+	public SqlSessionTemplate sqlSessionTemplateUpload(@Qualifier("sqlSessionFactoryUpload") SqlSessionFactory sqlSessionFactory) {
 		return new SqlSessionTemplate(sqlSessionFactory);
 	}
 

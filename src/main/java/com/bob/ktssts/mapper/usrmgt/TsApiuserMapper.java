@@ -1,9 +1,7 @@
-package com.bob.ktssts.mapper.ktss;
+package com.bob.ktssts.mapper.usrmgt;
 
-import com.bob.ktssts.entity.ktss.TsApiuser;
-import org.apache.ibatis.annotations.Mapper;
+import com.bob.ktssts.entity.usrmgt.TsApiuser;
 
-@Mapper
 public interface TsApiuserMapper {
 
     int deleteByPrimaryKey(String id);

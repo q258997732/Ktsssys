@@ -12,7 +12,6 @@ import java.util.List;
 * @Entity com.bob.ktssts.entity.ktss.TsExecuter
 */
 
-@Mapper
 public interface TsExecuterMapper {
 
     /**
@@ -74,5 +73,6 @@ public interface TsExecuterMapper {
     // 根据ExecuterId删除记录
     int deleteTaskByExecuterId(String executerId);
 
+    // 根据
 
 }

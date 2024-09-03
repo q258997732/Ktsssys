@@ -7,6 +7,7 @@ import com.bob.ktssts.util.RpaExecuter;
 import jakarta.annotation.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 @Component
+@ConditionalOnProperty(name = "ktss.enable", havingValue = "true")
 public class TsExecuterImpl implements TsExecuterService {
 
 	private static final Logger LOGGER = LogManager.getLogger(RpaExecuter.class);

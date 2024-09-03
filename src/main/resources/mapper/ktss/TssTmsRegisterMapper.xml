@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bob.ktssts.mapper.ktss.TssTmsRegisterMapper">
+
+    <resultMap id="BaseResultMap" type="com.bob.ktssts.entity.ktss.TssTmsRegister">
+            <id property="id" column="id" jdbcType="VARCHAR"/>
+            <result property="whoCreated" column="who_created" jdbcType="VARCHAR"/>
+            <result property="whenCreated" column="when_created" jdbcType="VARCHAR"/>
+            <result property="whoModified" column="who_modified" jdbcType="VARCHAR"/>
+            <result property="whenModified" column="when_modified" jdbcType="VARCHAR"/>
+            <result property="siteId" column="site_id" jdbcType="VARCHAR"/>
+            <result property="tmsId" column="tms_id" jdbcType="VARCHAR"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="username" column="username" jdbcType="VARCHAR"/>
+            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
+            <result property="describes" column="describes" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,who_created,when_created,
+        who_modified,when_modified,site_id,
+        tms_id,name,username,
+        password,status,describes
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from tss_tms_register
+        where  id = #{id,jdbcType=VARCHAR} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete from tss_tms_register
+        where  id = #{id,jdbcType=VARCHAR} 
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.ktss.TssTmsRegister" useGeneratedKeys="true">
+        insert into tss_tms_register
+        ( id,who_created,when_created
+        ,who_modified,when_modified,site_id
+        ,tms_id,name,username
+        ,password,status,describes
+        )
+        values (#{id,jdbcType=VARCHAR},#{whoCreated,jdbcType=VARCHAR},#{whenCreated,jdbcType=VARCHAR}
+        ,#{whoModified,jdbcType=VARCHAR},#{whenModified,jdbcType=VARCHAR},#{siteId,jdbcType=VARCHAR}
+        ,#{tmsId,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{username,jdbcType=VARCHAR}
+        ,#{password,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{describes,jdbcType=VARCHAR}
+        )
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.ktss.TssTmsRegister" useGeneratedKeys="true">
+        insert into tss_tms_register
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="id != null">id,</if>
+                <if test="whoCreated != null">who_created,</if>
+                <if test="whenCreated != null">when_created,</if>
+                <if test="whoModified != null">who_modified,</if>
+                <if test="whenModified != null">when_modified,</if>
+                <if test="siteId != null">site_id,</if>
+                <if test="tmsId != null">tms_id,</if>
+                <if test="name != null">name,</if>
+                <if test="username != null">username,</if>
+                <if test="password != null">password,</if>
+                <if test="status != null">status,</if>
+                <if test="describes != null">describes,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="id != null">#{id,jdbcType=VARCHAR},</if>
+                <if test="whoCreated != null">#{whoCreated,jdbcType=VARCHAR},</if>
+                <if test="whenCreated != null">#{whenCreated,jdbcType=VARCHAR},</if>
+                <if test="whoModified != null">#{whoModified,jdbcType=VARCHAR},</if>
+                <if test="whenModified != null">#{whenModified,jdbcType=VARCHAR},</if>
+                <if test="siteId != null">#{siteId,jdbcType=VARCHAR},</if>
+                <if test="tmsId != null">#{tmsId,jdbcType=VARCHAR},</if>
+                <if test="name != null">#{name,jdbcType=VARCHAR},</if>
+                <if test="username != null">#{username,jdbcType=VARCHAR},</if>
+                <if test="password != null">#{password,jdbcType=VARCHAR},</if>
+                <if test="status != null">#{status,jdbcType=VARCHAR},</if>
+                <if test="describes != null">#{describes,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bob.ktssts.entity.ktss.TssTmsRegister">
+        update tss_tms_register
+        <set>
+                <if test="whoCreated != null">
+                    who_created = #{whoCreated,jdbcType=VARCHAR},
+                </if>
+                <if test="whenCreated != null">
+                    when_created = #{whenCreated,jdbcType=VARCHAR},
+                </if>
+                <if test="whoModified != null">
+                    who_modified = #{whoModified,jdbcType=VARCHAR},
+                </if>
+                <if test="whenModified != null">
+                    when_modified = #{whenModified,jdbcType=VARCHAR},
+                </if>
+                <if test="siteId != null">
+                    site_id = #{siteId,jdbcType=VARCHAR},
+                </if>
+                <if test="tmsId != null">
+                    tms_id = #{tmsId,jdbcType=VARCHAR},
+                </if>
+                <if test="name != null">
+                    name = #{name,jdbcType=VARCHAR},
+                </if>
+                <if test="username != null">
+                    username = #{username,jdbcType=VARCHAR},
+                </if>
+                <if test="password != null">
+                    password = #{password,jdbcType=VARCHAR},
+                </if>
+                <if test="status != null">
+                    status = #{status,jdbcType=VARCHAR},
+                </if>
+                <if test="describes != null">
+                    describes = #{describes,jdbcType=VARCHAR},
+                </if>
+        </set>
+        where   id = #{id,jdbcType=VARCHAR} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.bob.ktssts.entity.ktss.TssTmsRegister">
+        update tss_tms_register
+        set 
+            who_created =  #{whoCreated,jdbcType=VARCHAR},
+            when_created =  #{whenCreated,jdbcType=VARCHAR},
+            who_modified =  #{whoModified,jdbcType=VARCHAR},
+            when_modified =  #{whenModified,jdbcType=VARCHAR},
+            site_id =  #{siteId,jdbcType=VARCHAR},
+            tms_id =  #{tmsId,jdbcType=VARCHAR},
+            name =  #{name,jdbcType=VARCHAR},
+            username =  #{username,jdbcType=VARCHAR},
+            password =  #{password,jdbcType=VARCHAR},
+            status =  #{status,jdbcType=VARCHAR},
+            describes =  #{describes,jdbcType=VARCHAR}
+        where   id = #{id,jdbcType=VARCHAR} 
+    </update>
+</mapper>

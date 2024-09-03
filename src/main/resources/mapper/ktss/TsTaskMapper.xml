@@ -70,6 +70,11 @@
 		where add_by = 'ktssts'
 		  and exec_type = 'K-RPA';
 	</delete>
+	<delete id="deleteExecuterTaskByTaskId">
+		delete
+		from ts_executer_task
+		where task_id = #{taskId,jdbcType=VARCHAR};
+	</delete>
 	<insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.bob.ktssts.entity.ktss.TsTask"
 			useGeneratedKeys="true">
 		insert into ts_task(<include refid="Base_Column_List"/>)
@@ -129,6 +134,52 @@
 		values (#{id,jdbcType=VARCHAR}, #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP},
 				#{taskId,jdbcType=VARCHAR}, #{execId,jdbcType=VARCHAR}, #{priority,jdbcType=VARCHAR},
 				#{available,jdbcType=VARCHAR});
+	</insert>
+	<insert id="insertTaskHistory">
+		REPLACE INTO
+			ts_task_history(
+			`id`,
+			`update_by`,
+			`update_time`,
+			`add_by`,
+			`add_time`,
+			`task_name`,
+			`task_desc`,
+			`schedule_type`,
+			`schedule_conf`,
+			`exec_param`,
+			`exec_timeout`,
+			`exec_retry`,
+			`exec_monopoly`,
+			`exec_type`,
+			`exec_appoint`,
+			`clone`,
+			`executer_id`,
+			`available`
+		)
+		SELECT
+			`id`,
+			`update_by`,
+			`update_time`,
+			`add_by`,
+			`add_time`,
+			`task_name`,
+			`task_desc`,
+			`schedule_type`,
+			`schedule_conf`,
+			`exec_param`,
+			`exec_timeout`,
+			`exec_retry`,
+			`exec_monopoly`,
+			`exec_type`,
+			`exec_appoint`,
+			`clone`,
+			`executer_id`,
+			`available`
+		FROM
+			ts_task
+		WHERE
+			id = #{id,jdbcType=VARCHAR};
 	</insert>
 	<update id="updateByPrimaryKeySelective" parameterType="com.bob.ktssts.entity.ktss.TsTask">
 		update ts_task

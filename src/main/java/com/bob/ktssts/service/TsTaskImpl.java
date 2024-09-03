@@ -4,16 +4,20 @@ import com.bob.ktssts.entity.ktss.*;
 import com.bob.ktssts.mapper.ktss.TsExecuterMapper;
 import com.bob.ktssts.mapper.ktss.TsTaskExecutionLogMapper;
 import com.bob.ktssts.mapper.ktss.TsTaskMapper;
+import com.bob.ktssts.mapper.ktss.TssTmsRegisterMapper;
 import com.bob.ktssts.util.RpaExecuter;
 import com.bob.ktssts.util.TaskUtil;
 import jakarta.annotation.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
+@ConditionalOnProperty(name = "ktss.enable", havingValue = "true")
 public class TsTaskImpl implements TsTaskService {
 
 	final static String ADD_BY = "ktssts";
@@ -30,6 +34,8 @@ public class TsTaskImpl implements TsTaskService {
 	private TsExecuterMapper tsExecuterMapper;
 	@Resource
 	private TsTaskExecutionLogMapper tsTaskExecutionLogMapper;
+	@Resource
+	private TssTmsRegisterMapper tssTmsRegisterMapper;
 
 	// 同步XCI报警处理任务
 	@Override
@@ -39,6 +45,22 @@ public class TsTaskImpl implements TsTaskService {
 //		LOGGER.info("tsTaskList size:{}", tsTaskList.size());
 		int effectCount = 0;
 
+		// 去除不存在的任务
+		for (TsTask tsTask : tsTaskList) {
+			boolean isFind = false;
+			for (TmsTaskBean tmsTaskBean : ktssTmsTask) {
+				if (TaskUtil.compareTsTaskTmsTask(tsTask, tmsTaskBean) && !"1".equals(tsTask.getExecMonopoly()) && tmsTaskBean.toKRpaString().equals(tsTask.getExecParam())) {
+					isFind = true;
+					break;
+				}
+			}
+			if(!isFind){
+				LOGGER.info("删除不存在的任务:{} {}", tsTask.getTaskName(),tsTask.getExecParam());
+				tsTaskMapper.insertTaskHistory(tsTask.getId());
+				tsTaskMapper.deleteExecTaskByTaskId(tsTask.getId());
+				tsTaskMapper.deleteByPrimaryKey(tsTask.getId());
+			}
+		}
 
 		for (TmsTaskBean tmsTaskBean : ktssTmsTask) {
 			boolean isFind = false;
@@ -122,10 +144,10 @@ public class TsTaskImpl implements TsTaskService {
 						if (appointList.length >= 1) {
 							for (String ip : appointList) {
 								// 根据类型获取Executer的ID
-								LOGGER.info("给 {} 任务分配指定的执行器: {}", tsTask.getTaskDesc(),ip);
+								LOGGER.info("给 {} 任务分配指定的执行器: {}", tsTask.getTaskDesc(), ip);
 								String execId = tsExecuterMapper.getExecuterId("K-RPA", ip);
-								if("".equals(execId) || execId == null) {
-									LOGGER.warn("没有找到K-RPA的执行器：{}",ip);
+								if ("".equals(execId) || execId == null) {
+									LOGGER.warn("没有找到K-RPA的执行器：{}", ip);
 									continue;
 								}
 
@@ -143,7 +165,7 @@ public class TsTaskImpl implements TsTaskService {
 							LOGGER.warn("没有了空闲K-RPA的执行器！");
 							return effectCount;
 						}
-						LOGGER.info("给 {} 任务分配空闲的执行器: {}", tsTask.getTaskDesc(),executerList.get(0).getExec_addr());
+						LOGGER.info("给 {} 任务分配空闲的执行器: {}", tsTask.getTaskDesc(), executerList.get(0).getExec_addr());
 						map.put("execId", executerList.get(0).getId());
 						// 将tsTask写入ts_executer_task
 						effectCount += tsTaskMapper.insertExecuterTask(map);
@@ -182,10 +204,38 @@ public class TsTaskImpl implements TsTaskService {
 	}
 
 	/* 新建任务日志 */
-	public boolean insertTaskLog(String taskId) {
-		if(taskId == null|| taskId.isEmpty())
+	public boolean insertTaskLog(String taskId,String executerId) {
+		if (taskId == null || taskId.isEmpty())
 			return false;
-		return tsTaskExecutionLogMapper.insert(new TsTaskExecutionLog(UUID.randomUUID().toString().replace("-", "").toLowerCase(), taskId, new Date(), "发起执行")) >= 0;
-
+		TsTaskExecutionLog tsTaskExecutionLog = new TsTaskExecutionLog(taskId,ExecStateEnum.DIST_SUCCESS.getDescription(),executerId);
+		return tsTaskExecutionLogMapper.insert(tsTaskExecutionLog) >= 0;
 	}
+
+	/* 新建任务日志-带ID */
+	public boolean insertTaskLog(String id,String taskId,String executerId) {
+		if (taskId == null || taskId.isEmpty())
+			return false;
+		if (id == null || id.isEmpty())
+			return false;
+		TsTaskExecutionLog tsTaskExecutionLog = new TsTaskExecutionLog(taskId,ExecStateEnum.DIST_SUCCESS.getDescription(),executerId);
+		tsTaskExecutionLog.setId(id);
+		return tsTaskExecutionLogMapper.insert(tsTaskExecutionLog) >= 0;
+	}
+
+	@Override
+	public boolean replaceIntoTaskExecutionLog(TsTaskExecutionLog tsTaskExecutionLog) {
+		return tsTaskExecutionLogMapper.replaceInto(tsTaskExecutionLog) > 0;
+	}
+
+	// 暂时用不上
+	public boolean updateTmsUserStatus(String id) {
+		TssTmsRegister tssTmsRegister = tssTmsRegisterMapper.selectByPrimaryKey(id);
+		return false;
+	}
+
+	// 更新task执行日志
+	public boolean updateTaskExecLog(String id,String endTime, String status, String data, String errorMessage) {
+		return tsTaskExecutionLogMapper.updateTaskExecLog(id,endTime,status,data,errorMessage) > 0;
+	}
+
 }

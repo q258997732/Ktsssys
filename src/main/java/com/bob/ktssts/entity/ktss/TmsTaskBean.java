@@ -61,4 +61,9 @@ public class TmsTaskBean {
 		return "{\"rpa_task_ID\":\"" + UUID.randomUUID().toString().replace("-", "") + "\",\"系统名称\":\""+tmsName+"\",\"服务器ip\":\""+ip+"\",\"端口\":\""+port+"\",\"siteId\":\""+siteId+"\",\"tmsId\":\""+tmsId+"\",\"用户名\":\""+username+"\",\"密码\":\""+password+"\"}";
 	}
 
+	// 转为Json字符串并增加task_exec_id
+	public String toJsonString(String taskExecId){
+		return "{\"rpa_task_ID\":\"" + UUID.randomUUID().toString().replace("-", "") + "\",\"系统名称\":\""+tmsName + "\",\"taskExecId\":\""+taskExecId+"\",\"服务器ip\":\""+ip+"\",\"端口\":\""+port+"\",\"siteId\":\""+siteId+"\",\"tmsId\":\""+tmsId+"\",\"用户名\":\""+username+"\",\"密码\":\""+password+"\"}";
+	}
+
 }

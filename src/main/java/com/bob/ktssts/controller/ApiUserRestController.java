@@ -3,8 +3,6 @@ package com.bob.ktssts.controller;
 import com.bob.ktssts.entity.resopnse.ErrorResponseBean;
 import com.bob.ktssts.entity.resopnse.ResponseBean;
 import com.bob.ktssts.entity.resopnse.SuccessResponseBean;
-import com.bob.ktssts.mapper.ktss.TsExecuterMapper;
-import com.bob.ktssts.schedule.RpaScheduleTask;
 import com.bob.ktssts.service.ApiUserService;
 import com.bob.ktssts.util.JsonUtil;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -25,11 +23,7 @@ public class ApiUserRestController {
 	private static final Logger LOGGER = LogManager.getLogger(ApiUserRestController.class);
 
 	@Resource
-	TsExecuterMapper tsExecuterMapper;
-	@Resource
 	ApiUserService apiUserService;
-	@Resource
-	RpaScheduleTask rpaScheduleTask;
 
 	@PostMapping("/login")
 	public ResponseEntity<ResponseBean<Object>> login(@RequestBody JsonNode jsonNode) {
@@ -37,6 +31,8 @@ public class ApiUserRestController {
 			return ResponseEntity.badRequest().body(new ErrorResponseBean<>("用户名或密码错误"));
 		}
 		String token = apiUserService.login(JsonUtil.getUserFromJson(jsonNode), JsonUtil.getPassFromJson(jsonNode));
+		if(token == null||token.isEmpty())
+			return ResponseEntity.badRequest().body(new ErrorResponseBean<>("用户名或密码错误"));
 		return ResponseEntity.ok(new SuccessResponseBean<>(token));
 	}
 

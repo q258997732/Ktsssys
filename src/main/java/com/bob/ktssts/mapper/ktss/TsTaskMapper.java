@@ -15,7 +15,6 @@ import java.util.Map;
 * @Entity com.bob.ktssts.entity.ktss.TsTask
 */
 
-@Mapper
 public interface TsTaskMapper {
 
     int deleteByPrimaryKey(String id);
@@ -52,4 +51,9 @@ public interface TsTaskMapper {
 
     @MapKey("id")
     List<Map<String,Object>> selectKRpaExecutedTsTaskByFlowName(String flowName);
+
+    // 根据taskid删除ts_executer_task内容
+    int deleteExecuterTaskByTaskId(String taskId);
+
+    int insertTaskHistory(String taskId);
 }

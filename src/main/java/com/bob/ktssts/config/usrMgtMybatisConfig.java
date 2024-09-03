@@ -13,20 +13,20 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import javax.sql.DataSource;
 
 @Configuration
-@ConditionalOnProperty(name = "ktss.enable", havingValue = "true")
-@MapperScan(basePackages = "com.bob.ktssts.mapper.ktss", sqlSessionTemplateRef = "sqlSessionTemplateOne")
-public class KtssMybatisConfig {
+@ConditionalOnProperty(name = "usrmgt.enable", havingValue = "true")
+@MapperScan(basePackages = "com.bob.ktssts.mapper.usrmgt", sqlSessionTemplateRef = "sqlSessionTemplateUsrMgt")
+public class usrMgtMybatisConfig {
 
 	@Bean
-	public SqlSessionFactory sqlSessionFactoryOne(@Qualifier("ktssDataSource") DataSource dataSource) throws Exception {
+	public SqlSessionFactory sqlSessionFactoryUsrMgt(@Qualifier("usrDataSource") DataSource dataSource) throws Exception {
 		SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
 		factory.setDataSource(dataSource);
-		factory.setMapperLocations( new PathMatchingResourcePatternResolver().getResources("classpath:mapper/ktss/*.xml"));
+		factory.setMapperLocations( new PathMatchingResourcePatternResolver().getResources("classpath:mapper/usrmgt/*.xml"));
 		return factory.getObject();
 	}
 
 	@Bean
-	public SqlSessionTemplate sqlSessionTemplateOne(@Qualifier("sqlSessionFactoryOne") SqlSessionFactory sqlSessionFactory) {
+	public SqlSessionTemplate sqlSessionTemplateUsrMgt(@Qualifier("sqlSessionFactoryUsrMgt") SqlSessionFactory sqlSessionFactory) {
 		return new SqlSessionTemplate(sqlSessionFactory);
 	}
 

@@ -1,6 +1,7 @@
 package com.bob.ktssts.mapper.cz;
 
 import com.bob.ktssts.entity.cz.OpertedLog;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
 * @author Huang
