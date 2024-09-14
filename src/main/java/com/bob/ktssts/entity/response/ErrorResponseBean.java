@@ -1,4 +1,4 @@
-package com.bob.ktssts.entity.resopnse;
+package com.bob.ktssts.entity.response;
 
 public class ErrorResponseBean<T> extends ResponseBean<T>{
 	public ErrorResponseBean(String message) {

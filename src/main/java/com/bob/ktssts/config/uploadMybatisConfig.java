@@ -13,7 +13,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import javax.sql.DataSource;
 
 @Configuration
-@ConditionalOnProperty(name = "cz.enable", havingValue = "true")
+@ConditionalOnProperty(name = "fileUpload.enable", havingValue = "true")
 @MapperScan(basePackages = "com.bob.ktssts.mapper.upload", sqlSessionTemplateRef = "sqlSessionTemplateUpload")
 public class uploadMybatisConfig {
 

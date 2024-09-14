@@ -5,6 +5,7 @@ import com.bob.ktssts.mapper.upload.FileDao;
 import com.bob.ktssts.model.File;
 import com.bob.ktssts.util.upload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,6 +13,7 @@ import static com.bob.ktssts.util.upload.FileUtils.generateFileName;
 import static com.bob.ktssts.util.upload.UploadUtils.*;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 
@@ -19,6 +21,7 @@ import java.util.Date;
  * 文件上传服务
  */
 @Service
+@ConditionalOnProperty(name = "fileUpload.enable", havingValue = "true")
 public class FileService {
     @Autowired
     private FileDao fileDao;
@@ -35,6 +38,17 @@ public class FileService {
         String path = UploadConfig.path + generateFileName();
         FileUtils.write(path, file.getInputStream());
         fileDao.save(new File(name, md5, path, new Date()));
+    }
+
+    public String upload(MultipartFile file) throws IOException, NoSuchAlgorithmException {
+        // 获取上传保存路径
+        String uuid = generateFileName();
+        String path = UploadConfig.path + uuid;
+        // 获取原始文件名
+        String fileName = file.getOriginalFilename();
+        FileUtils.write(path, file.getInputStream());
+        fileDao.save(new File(fileName, FileUtils.calculateMD5(file), path, new Date()));
+        return uuid;
     }
 
     /**
@@ -70,5 +84,10 @@ public class FileService {
         File file = new File();
         file.setMd5(md5);
         return fileDao.getByFile(file) == null;
+    }
+
+    public String getFileOriginName(String nowName) {
+        File file = fileDao.getByPath(UploadConfig.path+nowName);
+        return fileDao.getByFile(file).getName();
     }
 }

@@ -1,7 +1,6 @@
 package com.bob.ktssts.mapper.ktss;
 
 import com.bob.ktssts.entity.ktss.TsExecuter;
-import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 

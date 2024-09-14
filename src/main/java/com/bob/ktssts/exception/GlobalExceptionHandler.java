@@ -2,10 +2,11 @@ package com.bob.ktssts.exception;
 
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import com.bob.ktssts.entity.resopnse.ErrorResponseBean;
-import com.bob.ktssts.entity.resopnse.ResponseBean;
+import com.bob.ktssts.entity.response.ErrorResponseBean;
+import com.bob.ktssts.entity.response.ResponseBean;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -49,6 +51,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	@ResponseBody
 	public ResponseEntity<ResponseBean<Void>> handleUnauthorizedException(UnauthorizedException ex) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseBean<>(ex.getMessage()));
+	}
+
+	// 未匹配到路径处理
+	@ExceptionHandler(NoHandlerFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ResponseBody
+	public ResponseEntity<ResponseBean<Void>> handleNoHandlerFoundException(NoHandlerFoundException ex) {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseBean<>(ex.getMessage()));
 	}
 
 }

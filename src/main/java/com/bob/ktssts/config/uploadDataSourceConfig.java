@@ -26,7 +26,7 @@ public class uploadDataSourceConfig {
 
 	@Bean(name="uploadDataSource")
 	@Primary
-	@ConditionalOnProperty(name = "cz.enable", havingValue = "true")
+	@ConditionalOnProperty(name = "fileUpload.enable", havingValue = "true")
 	public DataSource dataSource() {
 		HikariConfig hikariConfig = new HikariConfig();
 		hikariConfig.setJdbcUrl(url);

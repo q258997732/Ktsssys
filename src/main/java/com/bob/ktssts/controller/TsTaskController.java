@@ -1,11 +1,9 @@
 package com.bob.ktssts.controller;
 
 
-import com.bob.ktssts.entity.ktss.TsTaskExecutionLog;
-import com.bob.ktssts.entity.resopnse.ErrorResponseBean;
-import com.bob.ktssts.entity.resopnse.ResponseBean;
-import com.bob.ktssts.entity.resopnse.SuccessResponseBean;
-import com.bob.ktssts.mapper.ktss.TsTaskExecutionLogMapper;
+import com.bob.ktssts.entity.response.ErrorResponseBean;
+import com.bob.ktssts.entity.response.ResponseBean;
+import com.bob.ktssts.entity.response.SuccessResponseBean;
 import com.bob.ktssts.schedule.RpaScheduleTask;
 import com.bob.ktssts.service.TsExecuterService;
 import com.bob.ktssts.service.TsTaskService;
@@ -71,7 +69,7 @@ public class TsTaskController {
 		if (tsExecuterService.syncKRpaAgent()) {
 			LOGGER.info("自动同步K-RPA Agent成功");
 		} else {
-			LOGGER.info("自动同步任务失败");
+			LOGGER.info("自动同步K-RPA Agent失败");
 			return ResponseEntity.badRequest().body(new ErrorResponseBean<>("自动同步任务失败"));
 		}
 

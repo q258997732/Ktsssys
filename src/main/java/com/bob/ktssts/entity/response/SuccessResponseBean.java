@@ -1,4 +1,4 @@
-package com.bob.ktssts.entity.resopnse;
+package com.bob.ktssts.entity.response;
 
 public class SuccessResponseBean<T> extends ResponseBean<T> {
 	public SuccessResponseBean(T data) {

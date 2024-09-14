@@ -17,15 +17,19 @@
         id,update_time,sealfix_tradeno,
         oa_billcode,sucess,err
     </sql>
-
-    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from sealfix_oa_mapping
         where  id = #{id,jdbcType=VARCHAR} 
     </select>
-
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <select id="selectByTradeNo" resultType="com.bob.ktssts.entity.cz.SealfixOaMapping" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from sealfix_oa_mapping
+        where  sealfix_tradeno = #{tradeNo,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         delete from sealfix_oa_mapping
         where  id = #{id,jdbcType=VARCHAR} 
     </delete>

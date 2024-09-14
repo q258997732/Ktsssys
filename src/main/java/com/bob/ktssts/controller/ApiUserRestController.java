@@ -1,13 +1,12 @@
 package com.bob.ktssts.controller;
 
-import com.bob.ktssts.entity.resopnse.ErrorResponseBean;
-import com.bob.ktssts.entity.resopnse.ResponseBean;
-import com.bob.ktssts.entity.resopnse.SuccessResponseBean;
+import com.bob.ktssts.entity.response.ErrorResponseBean;
+import com.bob.ktssts.entity.response.ResponseBean;
+import com.bob.ktssts.entity.response.SuccessResponseBean;
 import com.bob.ktssts.service.ApiUserService;
 import com.bob.ktssts.util.JsonUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
@@ -36,9 +35,4 @@ public class ApiUserRestController {
 		return ResponseEntity.ok(new SuccessResponseBean<>(token));
 	}
 
-	@RequestMapping("/test")
-	public void test(HttpServletRequest request) {
-//		rpaScheduleTask.startTsTaskExecuter("XCI系统_报警信息处理", 1000, 5000);
-//		rpaScheduleTask.syncKAgentThreadTask(1000, 2000);
-	}
 }

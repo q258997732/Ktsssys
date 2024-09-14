@@ -14,7 +14,7 @@
         id,name,md5,path,upload_time
     </sql>
 
-    <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <select id="getById" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from file
@@ -46,7 +46,7 @@
         </if>
     </update>
 
-    <delete id="deleteById" parameterType="java.lang.Long">
+    <delete id="deleteById" parameterType="java.lang.String">
         delete from file where id = #{id}
     </delete>
 
@@ -72,4 +72,11 @@
             </if>
         </where>
     </select>
+    <select id="getByPath" resultType="com.bob.ktssts.model.File">
+        select
+            <include refid="Base_Column_List" />
+            from file
+        where path = #{path};
+    </select>
+
 </mapper>

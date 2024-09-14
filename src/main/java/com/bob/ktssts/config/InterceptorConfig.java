@@ -10,11 +10,13 @@ public class InterceptorConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(new JWTInterceptor()).addPathPatterns("/**")//全部路径
-				.excludePathPatterns("/api/login")// 登陆不需要token认证
-				.excludePathPatterns("/api/test")
-				.excludePathPatterns("/api/addRpaDataProcess")
-				.excludePathPatterns("/api/resetAutoRpaTask");
+		registry.addInterceptor(new JWTInterceptor())
+				.addPathPatterns("/api/updateTaskExecLog")
+				.addPathPatterns("/api/updateAllXciUserStatus")
+				.addPathPatterns("/api/resetAutoRpaTask")
+				.addPathPatterns("/api/startXciTask")
+				.addPathPatterns("/api/stopXciTask");
+
 	}
 }
 

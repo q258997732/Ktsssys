@@ -1,7 +1,11 @@
 package com.bob.ktssts.util.upload;
 
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 /**
@@ -58,5 +62,23 @@ public class FileUtils {
      */
     public static String generateFileName() {
         return UUID.randomUUID().toString();
+    }
+
+    public static String calculateMD5(MultipartFile file) throws NoSuchAlgorithmException, IOException {
+        InputStream is = file.getInputStream();
+        MessageDigest md5 = MessageDigest.getInstance("MD5");
+        byte[] buffer = new byte[1024];
+        int numRead = 0;
+        while ((numRead = is.read(buffer)) > 0) {
+            md5.update(buffer, 0, numRead);
+        }
+        // 计算最终摘要值
+        byte[] digest = md5.digest();
+        StringBuilder sb = new StringBuilder();
+        // 将摘要值转换为十六进制字符串
+        for (byte b : digest) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
     }
 }

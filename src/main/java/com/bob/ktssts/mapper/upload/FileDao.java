@@ -1,9 +1,7 @@
 package com.bob.ktssts.mapper.upload;
 
 import com.bob.ktssts.model.File;
-import org.apache.ibatis.annotations.Mapper;
 
-@Mapper
 public interface FileDao {
     /**
      * 通过主键获取一行数据
@@ -38,4 +36,6 @@ public interface FileDao {
      * @return
      */
     File getByFile(File file);
+
+    File getByPath(String path);
 }
