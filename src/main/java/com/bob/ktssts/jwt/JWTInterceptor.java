@@ -5,10 +5,12 @@ import com.bob.ktssts.exception.UnauthorizedException;
 import com.bob.ktssts.util.TokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
+@ConditionalOnProperty(name = "usrmgt.enable", havingValue = "true")
 public class JWTInterceptor implements HandlerInterceptor
 {
 

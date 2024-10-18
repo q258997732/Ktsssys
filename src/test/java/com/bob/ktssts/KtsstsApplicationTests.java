@@ -1,25 +1,16 @@
 package com.bob.ktssts;
 
 
-import com.bob.ktssts.entity.cz.SealfixOaMapping;
-import com.bob.ktssts.service.CzSealFixService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import jakarta.annotation.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
-import java.util.Map;
-
 @SpringBootTest
 class KtsstsApplicationTests {
 
 	private static final Logger LOGGER = LogManager.getLogger(KtsstsApplicationTests.class);
-
-	@Resource
-	CzSealFixService czSealFixService;
 
 	@Test
 	void contextLoads() throws JsonProcessingException {
